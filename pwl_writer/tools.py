@@ -46,7 +46,7 @@ def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callabl
 
 class PWL():
 
-    _list_of_names: list[str] = []
+    _set_of_names: set[str] = []
 
     def __init__(self, t_step: float = 1e-9, name: str | None = None, verbose: bool = False) -> None:
         """
@@ -65,7 +65,7 @@ class PWL():
         # Check for nullable arguments
         if name is None:
             i: int = 0
-            while f"pwl{i}" in PWL._list_of_names:
+            while f"pwl{i}" in PWL._set_of_names:
                 i += 1
             name = f"pwl{i}"
 
@@ -89,7 +89,10 @@ class PWL():
         self.t_step = t_step
         self.name = name
         self.verbose = verbose
-        PWL._list_of_names.append(name)
+        PWL._set_of_names.add(name)
+
+    def __del__(self) -> None:
+        PWL._set_of_names.remove(self.name)
 
     def _add(self, t: float, x: float) -> None:
         if len(self.t_list) >= 1 and t <= self.t_list[-1]:
