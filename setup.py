@@ -1,4 +1,4 @@
-from setuptools import find_packages, setup, find_packages
+from setuptools import find_packages, setup
 
 setup(name="pwl_writer",
       version="1.0.0",
@@ -6,6 +6,5 @@ setup(name="pwl_writer",
       author="Victor Sabiá Pereira Carpes",
       url="https://github.com/victorscarpes/pwl_writer",
       packages=find_packages(),
-      install_requires=["numpy"],
-      zip_safe=False
+      install_requires=["numpy"]
       )
