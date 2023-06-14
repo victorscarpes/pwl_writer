@@ -445,7 +445,7 @@ class PWL():
         x_list = self._x_list
 
         with open(filename, "w") as file:
-            ti_str = numpy.format_float_scientific(t_list[0], precision-1, unique=False, sign=True)
+            ti_str = numpy.format_float_scientific(t_list[0], precision-1, unique=False, sign=False)
             xi_str = numpy.format_float_scientific(x_list[0], precision-1, unique=False, sign=True)
             file.write(f"{ti_str}    {xi_str}\n")
             last_t = ti_str
