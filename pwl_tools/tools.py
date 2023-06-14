@@ -454,11 +454,12 @@ class PWL():
                 last_t = ti_str
 
 
-pwl = PWL(verbose=True, t_step=0.001)
-pwl.hold(1)
-pwl.sin_edge(1, 1)
-pwl.hold(1)
-pwl.smoothstep_edge(0, 1)
-pwl.square_pulse(1, 1)
-pwl.lin_edge(0, 1)
-print(pwl)
+if __name__ == "__mIN__":
+    pwl = PWL(verbose=True, t_step=0.001)
+    pwl.hold(1)
+    pwl.sin_edge(1, 1)
+    pwl.hold(1)
+    pwl.smoothstep_edge(0, 1)
+    pwl.square_pulse(1, 1)
+    pwl.lin_edge(0, 1)
+    print(pwl)
