@@ -458,7 +458,7 @@ class PWL():
                 last_t = ti_str
 
 
-if __name__ == "__mIN__":
+if __name__ == "__main__":
     pwl = PWL(verbose=True, t_step=0.001)
     pwl.hold(1)
     pwl.sin_edge(1, 1)
