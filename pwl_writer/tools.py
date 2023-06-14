@@ -437,6 +437,10 @@ class PWL():
         if precision <= 0:
             raise ValueError(f"Argument 'precision' should be strictly positive but has value of {precision}.")
 
+        # Actual function
+        if self._verbose:
+            print(f"{self._name}: Writing PWL file to {filename}.")
+
         t_list = self._t_list
         x_list = self._x_list
 
