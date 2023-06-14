@@ -446,7 +446,7 @@ class PWL():
             file.write(f"{ti_str}    {xi_str}\n")
             last_t = ti_str
             for ti, xi in zip(t_list[1:], x_list[1:]):
-                ti_str = numpy.format_float_scientific(ti, precision-1, unique=False, sign=True)
+                ti_str = numpy.format_float_scientific(ti, precision-1, unique=False, sign=False)
                 xi_str = numpy.format_float_scientific(xi, precision-1, unique=False, sign=True)
                 if ti_str == last_t:
                     raise PrecisionError("The chosen precision level caused the written time coordinates to not be strictly increasing.")
