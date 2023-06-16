@@ -45,7 +45,10 @@ def _sin_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[floa
 def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
     """Private function that generates a smoothstep polynomial passing trough 2 fixed points."""
 
-    Am = numpy.array([[1, t1, t1**2, t1**3], [1, t2, t2**2, t2**3], [0, 1, 2*t1, 3*t1**2], [0, 1, 2*t2, 3*t2**2]])
+    Am = numpy.array([[1, t1, t1**2, t1**3],
+                      [1, t2, t2**2, t2**3],
+                      [0, 1, 2*t1, 3*t1**2],
+                      [0, 1, 2*t2, 3*t2**2]])
     Bm = numpy.array([f1, f2, 0, 0])
     A, B, C, D = numpy.linalg.solve(Am, Bm)
 
@@ -73,7 +76,8 @@ class PWL():
         if not isinstance(t_step, Real):
             raise TypeError(f"Argument 't_step' should be a real number but has type '{type(t_step).__name__}'.")
         if not isinstance(name, str):
-            raise TypeError(f"Argument 'name' should either be a string or be None but has type '{type(name).__name__}'.")
+            raise TypeError(
+                f"Argument 'name' should either be a string or be None but has type '{type(name).__name__}'.")
         if not isinstance(verbose, bool):
             raise TypeError(f"Argument 'verbose' should be a boolean but has type '{type(verbose).__name__}'.")
 
@@ -150,7 +154,8 @@ class PWL():
 
     def _add(self, t: float, x: float) -> None:
         if len(self._t_list) >= 1 and t <= self._t_list[-1]:
-            raise PrecisionError(f"Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to {self._name}.")
+            raise PrecisionError(
+                f"Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to {self._name}.")
 
         if len(self._t_list) == len(self._x_list) < 2:
             self._t_list.append(t)
@@ -210,7 +215,8 @@ class PWL():
         if not isinstance(duration, Real):
             raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(t_step, Real):
-            raise TypeError(f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
+            raise TypeError(
+                f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
@@ -230,15 +236,49 @@ class PWL():
 
         if len(self._t_list) == len(self._x_list) == 0:
             self._add(0, value)
+            last_t = 0
         else:
             last_t = self._t_list[-1]
             self._add(last_t+t_step, value)
 
-        last_t = self._t_list[-1]
         self._add(last_t+duration, value)
-        
- 
-        
+
+    def sawtooth_pulse(self, start: float, stop: float, duration: float, t_step: Optional[float] = None) -> None:
+
+        # Check for nullable arguments
+        if t_step is None:
+            t_step = self._t_step
+
+        # Check type of arguments
+        if not isinstance(start, Real):
+            raise TypeError(f"Argument 'start' should be a real number but has type '{type(start).__name__}'.")
+        if not isinstance(stop, Real):
+            raise TypeError(f"Argument 'stop' should be a real number but has type '{type(stop).__name__}'.")
+        if not isinstance(duration, Real):
+            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+        if not isinstance(t_step, Real):
+            raise TypeError(
+                f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
+
+        # Actual function
+        if self._verbose:
+            print(f"{self._name}: Adding sawtoth pulse from {start} to {stop} with duration of {duration} and time step of {t_step}.")
+
+        if duration <= t_step:
+            if self._verbose:
+                print(
+                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+            self._lin_edge(stop, t_step, 1)
+            return
+
+        if len(self._t_list) == len(self._x_list) == 0:
+            self._add(0, start)
+            last_t = 0
+        else:
+            last_t = self._t_list[-1]
+            self._add(last_t+t_step, start)
+
+        self._add(last_t+duration, stop)
 
     def lin_edge(self, target: float, duration: float) -> None:
         # Check type of arguments
@@ -283,7 +323,8 @@ class PWL():
         if not isinstance(tau, Real):
             raise TypeError(f"Argument 'tau' should be a real number but has type '{type(tau).__name__}'.")
         if not isinstance(t_step, Real):
-            raise TypeError(f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
+            raise TypeError(
+                f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
@@ -299,7 +340,8 @@ class PWL():
 
         if duration <= t_step:
             if self._verbose:
-                print(f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+                print(
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
             self._lin_edge(target, t_step, 2)
             return
 
@@ -330,7 +372,8 @@ class PWL():
         if not isinstance(duration, Real):
             raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(t_step, Real):
-            raise TypeError(f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
+            raise TypeError(
+                f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
@@ -344,7 +387,8 @@ class PWL():
 
         if duration <= t_step:
             if self._verbose:
-                print(f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+                print(
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
             self._lin_edge(target, t_step, n=2)
             return
 
@@ -375,7 +419,8 @@ class PWL():
         if not isinstance(duration, Real):
             raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(t_step, Real):
-            raise TypeError(f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
+            raise TypeError(
+                f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
@@ -389,7 +434,8 @@ class PWL():
 
         if duration <= t_step:
             if self._verbose:
-                print(f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+                print(
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
             self._lin_edge(target, t_step, n=2)
             return
 
@@ -436,7 +482,8 @@ class PWL():
                 ti_str = numpy.format_float_scientific(ti, precision-1, unique=False, sign=False)
                 xi_str = numpy.format_float_scientific(xi, precision-1, unique=False, sign=True)
                 if ti_str == last_t:
-                    raise PrecisionError("The chosen precision level caused the written time coordinates to not be strictly increasing.")
+                    raise PrecisionError(
+                        "The chosen precision level caused the written time coordinates to not be strictly increasing.")
                 file.write(f"{ti_str}    {xi_str}\n")
                 last_t = ti_str
 
