@@ -2,8 +2,8 @@
 """
 
 from numbers import Real
-from collections.abc import Callable
 import numpy
+from typing import Optional, List, Set, Callable
 
 
 class PrecisionError(Exception):
@@ -58,33 +58,9 @@ def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callabl
 class PWL():
     """Class defining a PWL object used to create a pwl file."""
 
-    _set_of_names: set[str] = set()
+    _set_of_names: Set[str] = set()
 
-    def __init__(self, t_step: float = 1e-9, name: str | None = None, verbose: bool = False) -> None:
-        """Initializer for the PWL class.
-
-        Parameters
-        ----------
-        `t_step` : float, optional
-            - Default time step for all operations. Defaults to `1e-9`.
-
-        `name` : str | None, optional
-            - Name for the PWL object. If set to `None`, autogenerates based on already created objects. Defaults to `None`.
-
-        `verbose` : bool, optional
-            - Flag indicating if verbose output should be printed. Defaults to `False`.
-
-        Raises
-        ------
-        `TypeError`
-            - If `t_step` is not a real number.
-            - If `name` is not a string.
-            - If `verbose` is not a boolean.
-
-        `ValueError`
-            - If `t_step` is not strictly positive.
-            - If `name` is an empty string.
-        """
+    def __init__(self, t_step: float = 1e-9, name: Optional[str] = None, verbose: bool = False) -> None:
 
         # Check for nullable arguments
         if name is None:
@@ -124,11 +100,11 @@ class PWL():
         return f"{self.name}: PWL object with {len(self.t_list)} points and duration of {self.t_list[-1]} seconds"
 
     @property
-    def t_list(self) -> list[float]:
+    def t_list(self) -> List[float]:
         return self._t_list
 
     @property
-    def x_list(self) -> list[float]:
+    def x_list(self) -> List[float]:
         return self._x_list
 
     @property
@@ -200,7 +176,6 @@ class PWL():
             self._x_list.append(x)
 
     def hold(self, duration: float) -> None:
-
         # Check type of arguments
         if not isinstance(duration, Real):
             raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
@@ -215,7 +190,7 @@ class PWL():
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print(f"{self._name}: Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point.")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -223,7 +198,7 @@ class PWL():
 
         self._add(last_t+duration, last_x)
 
-    def square_pulse(self, value: float, duration: float, t_step: float | None = None) -> None:
+    def square_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
 
         # Check for nullable arguments
         if t_step is None:
@@ -250,7 +225,7 @@ class PWL():
         if duration <= t_step:
             if self._verbose:
                 print(f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self.lin_edge(value, t_step)
+            self._lin_edge(value, t_step, 1)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
@@ -261,9 +236,11 @@ class PWL():
 
         last_t = self._t_list[-1]
         self._add(last_t+duration, value)
+        
+ 
+        
 
     def lin_edge(self, target: float, duration: float) -> None:
-
         # Check type of arguments
         if not isinstance(target, Real):
             raise TypeError(f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
@@ -275,18 +252,24 @@ class PWL():
             raise ValueError(f"Argument 'duration' should be strictly positive but has value of {duration}.")
 
         # Actual function
+        self._lin_edge(target, duration, 0)
+
+    def _lin_edge(self, target: float, duration: float, n: int) -> None:
         if self._verbose:
-            print(f"{self._name}: Adding linear edge with target of {target} and duration of {duration}.")
+            if n == 0:
+                print(f"{self._name}: Adding linear edge with target of {target} and duration of {duration}.")
+            else:
+                print(n*"    "+f"Adding linear edge with target of {target} and duration of {duration}.")
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print(f"{self._name}: Empty PWL object. Adding initial (0, 0) point.")
+                print((n+1)*"    "+"Empty PWL object. Adding initial (0, 0) point.")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
         self._add(last_t+duration, target)
 
-    def exp_edge(self, target: float, duration: float, tau: float, t_step: float | None = None) -> None:
+    def exp_edge(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
 
         # Check for nullable arguments
         if t_step is None:
@@ -316,13 +299,13 @@ class PWL():
 
         if duration <= t_step:
             if self._verbose:
-                print(f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self.lin_edge(target, t_step)
+                print(f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+            self._lin_edge(target, t_step, 2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print(f"{self._name}: Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point.")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -335,7 +318,7 @@ class PWL():
 
         self._add(last_t+duration, target)
 
-    def sin_edge(self, target: float, duration: float, t_step: float | None = None) -> None:
+    def sin_edge(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
 
         # Check for nullable arguments
         if t_step is None:
@@ -361,13 +344,13 @@ class PWL():
 
         if duration <= t_step:
             if self._verbose:
-                print(f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self.lin_edge(target, t_step)
+                print(f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+            self._lin_edge(target, t_step, n=2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print(f"{self._name}: Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point.")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -380,7 +363,7 @@ class PWL():
 
         self._add(last_t+duration, target)
 
-    def smoothstep_edge(self, target: float, duration: float, t_step: float | None = None) -> None:
+    def smoothstep_edge(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
 
         # Check for nullable arguments
         if t_step is None:
@@ -406,13 +389,13 @@ class PWL():
 
         if duration <= t_step:
             if self._verbose:
-                print(f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self.lin_edge(target, t_step)
+                print(f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+            self._lin_edge(target, t_step, n=2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print(f"{self._name}: Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point.")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -459,11 +442,13 @@ class PWL():
 
 
 if __name__ == "__main__":
-    pwl = PWL(verbose=True, t_step=0.001)
+    pwl = PWL(verbose=True, t_step=0.1)
     pwl.hold(1)
     pwl.sin_edge(1, 1)
     pwl.hold(1)
     pwl.smoothstep_edge(0, 1)
     pwl.square_pulse(1, 1)
     pwl.lin_edge(0, 1)
+    pwl.sin_edge(1, 0.01)
+    pwl.hold(1)
     print(pwl)
