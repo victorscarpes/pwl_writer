@@ -3,21 +3,18 @@
 
 from numbers import Real
 import numpy
-from typing import Optional, List, Set, Callable
+from typing import Optional, List,  Dict, Callable, TypeVar
 
 
 class PrecisionError(Exception):
     """Exception class for precision related errors."""
 
 
-class AttributeAssignmentError(Exception):
-    """Exception class for attribute assignment related errors."""
-
-
 def _exp_edge_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
     """Private function that generates an exponential function passing trough 2 fixed points."""
 
-    A = (f1*numpy.exp(t1/tau) - f2*numpy.exp(t2/tau))/(numpy.exp(t1/tau) - numpy.exp(t2/tau))
+    A = (f1*numpy.exp(t1/tau) - f2*numpy.exp(t2/tau)) / \
+        (numpy.exp(t1/tau) - numpy.exp(t2/tau))
     B = (f1 - f2)/(numpy.exp(-t1/tau) - numpy.exp(-t2/tau))
 
     def f(t: float) -> float:
@@ -61,95 +58,161 @@ def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callabl
 class PWL():
     """Class defining a PWL object used to create a pwl file."""
 
-    _set_of_names: Set[str] = set()
+    _dict_of_objects: Dict = {}
 
     def __init__(self, t_step: float = 1e-9, name: Optional[str] = None, verbose: bool = False) -> None:
+        """Initializer for the PWL class.
+
+        PWL objects are a fancy way of storing a list of time coordinates and another of dependent coordinates. It also stores some additional metadata to provide syntactic sugar when adding pulses and transitions to the PWL object.
+
+        Parameters
+        ----------
+        `t_step` : float, optional
+            Default timestep for the different types of pulses and transitions. Should be strictly positive. Defaults to `1e-9`.
+        `name` : Optional[str], optional
+            Name of the PWL object used for verbose output. If set to `None`, auto generates based on name of already created objects. Defaults to `None`.
+        `verbose` : bool, optional
+            Flag to control if verbose output should be printed or not. Defaults to `False`.
+
+        Raises
+        ------
+        `TypeError`
+            Raised if any of the type of any argument is not correct.
+        `ValueError`
+            Raised if `t_step` is non positive or if `name` is an empty string.
+        """
 
         # Check for nullable arguments
         if name is None:
             i: int = 0
-            while f"pwl_{i}" in PWL._set_of_names:
+            while f"pwl_{i}" in PWL._dict_of_objects:
                 i += 1
             name = f"pwl_{i}"
 
         # Check type of arguments
         if not isinstance(t_step, Real):
-            raise TypeError(f"Argument 't_step' should be a real number but has type '{type(t_step).__name__}'.")
+            raise TypeError(
+                f"Argument 't_step' should be a real number but has type '{type(t_step).__name__}'.")
         if not isinstance(name, str):
             raise TypeError(
                 f"Argument 'name' should either be a string or be None but has type '{type(name).__name__}'.")
         if not isinstance(verbose, bool):
-            raise TypeError(f"Argument 'verbose' should be a boolean but has type '{type(verbose).__name__}'.")
+            raise TypeError(
+                f"Argument 'verbose' should be a boolean but has type '{type(verbose).__name__}'.")
 
         # Check value of arguments
         if t_step <= 0:
-            raise ValueError(f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+            raise ValueError(
+                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
         if not name:
             raise ValueError("Argument 'name' should not be empty.")
 
         # Actual function
         self._t_list: list[float] = []
         self._x_list: list[float] = []
-        self._t_step = t_step
-        self._name = name
-        self._verbose = verbose
-        PWL._set_of_names.add(name)
+        self._t_step: float = t_step
+        self._name: str = name
+        self._verbose: bool = verbose
 
-    def __del__(self) -> None:
-        """Destructor for the PWL class."""
-        PWL._set_of_names.remove(self._name)
+        if name in PWL._dict_of_objects:
+            raise ValueError(f"Name '{name}' already in use.")
 
-    def __str__(self) -> None:
+        PWL._dict_of_objects[name] = self
+
+    def __str__(self) -> str:
         """String representation of PWL objects."""
         return f"{self.name}: PWL object with {len(self.t_list)} points and duration of {self.t_list[-1]} seconds"
 
     @property
     def t_list(self) -> List[float]:
+        """This read-only property is the list of all time coordinates."""
+
         return self._t_list
 
     @property
     def x_list(self) -> List[float]:
+        """This read-only property is the list of all dependent coordinates."""
+
         return self._x_list
 
     @property
     def t_step(self) -> float:
+        """This property is the default timestep for the different types of pulses and transitions.
+
+        Raises
+        ------
+        `TypeError`
+            Raised if the passed value is not a real number.
+        `ValueError`
+            Raised if the passed value is not strictly positive.
+        """
+
         return self._t_step
 
     @t_step.setter
     def t_step(self, new_t_step: float) -> None:
+        """Setter for the `t_step` property."""
+
         if not isinstance(new_t_step, Real):
-            raise TypeError(f"Attribute 't_step' should be a real number but has type '{type(new_t_step).__name__}'.")
+            raise TypeError(
+                f"Attribute 't_step' should be a real number but has type '{type(new_t_step).__name__}'.")
         if new_t_step <= 0:
-            raise ValueError(f"Attribute 't_step' should be strictly positive but has value of {new_t_step}.")
+            raise ValueError(
+                f"Attribute 't_step' should be strictly positive but has value of {new_t_step}.")
 
         self._t_step = new_t_step
 
     @property
     def name(self) -> str:
+        """This property is the name of the PWL object used for verbose output.
+
+        Raises
+        ------
+        `TypeError`
+            Raised if the passed name is not a string.
+        `ValueError`
+            Raised if the passed name is either empty or already in use.
+        """
+
         return self._name
 
     @name.setter
     def name(self, new_name: str) -> None:
+        """Setter for the `name` property."""
+
         if not isinstance(new_name, str):
-            raise TypeError(f"Attribute 'name' should be a string but has type '{type(new_name).__name__}'.")
+            raise TypeError(
+                f"Attribute 'name' should be a string but has type '{type(new_name).__name__}'.")
         if not new_name:
             raise ValueError("Attribute 'name' should not be an empty string.")
 
-        if new_name in PWL._set_of_names:
-            raise AttributeAssignmentError(f"Name '{new_name}' already in use.")
+        if new_name in PWL._dict_of_objects:
+            raise ValueError(f"Name '{new_name}' already in use.")
 
-        PWL._set_of_names.remove(self._name)
-        PWL._set_of_names.add(new_name)
+        PWL._dict_of_objects.pop(self._name)
+        PWL._dict_of_objects[new_name] = self
         self._name = new_name
 
     @property
     def verbose(self) -> bool:
+        """This property is a flag indicating if verbose output should be printed or not.
+
+        Raises
+        ------
+        `TypeError`
+            Raised if the passed flag is not a boolean.
+        `ValueError`
+        """
+
         return self._verbose
 
     @verbose.setter
     def verbose(self, new_verbose: bool) -> None:
+        """Setter for the `verbose` property."""
+
         if not isinstance(new_verbose, bool):
-            raise TypeError(f"Attribute 'verbose' should be a boolean but has type '{type(new_verbose).__name__}'.")
+            raise TypeError(
+                f"Attribute 'verbose' should be a boolean but has type '{type(new_verbose).__name__}'.")
         self._verbose = new_verbose
 
     def _add(self, t: float, x: float) -> None:
@@ -183,11 +246,13 @@ class PWL():
     def hold(self, duration: float) -> None:
         # Check type of arguments
         if not isinstance(duration, Real):
-            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
-            raise ValueError(f"Argument 'duration' should be strictly positive but has value of {duration}.")
+            raise ValueError(
+                f"Argument 'duration' should be strictly positive but has value of {duration}.")
 
         # Actual function
         if self._verbose:
@@ -211,18 +276,22 @@ class PWL():
 
         # Check type of arguments
         if not isinstance(value, Real):
-            raise TypeError(f"Argument 'value' should be a real number but has type '{type(value).__name__}'.")
+            raise TypeError(
+                f"Argument 'value' should be a real number but has type '{type(value).__name__}'.")
         if not isinstance(duration, Real):
-            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(t_step, Real):
             raise TypeError(
                 f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
-            raise ValueError(f"Argument 'duration' should be strictly positive but has value of {duration}.")
+            raise ValueError(
+                f"Argument 'duration' should be strictly positive but has value of {duration}.")
         if t_step <= 0:
-            raise ValueError(f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+            raise ValueError(
+                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         # Actual function
         if self._verbose:
@@ -230,7 +299,8 @@ class PWL():
 
         if duration <= t_step:
             if self._verbose:
-                print(f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
+                print(
+                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
             self._lin_edge(value, t_step, 1)
             return
 
@@ -251,11 +321,14 @@ class PWL():
 
         # Check type of arguments
         if not isinstance(start, Real):
-            raise TypeError(f"Argument 'start' should be a real number but has type '{type(start).__name__}'.")
+            raise TypeError(
+                f"Argument 'start' should be a real number but has type '{type(start).__name__}'.")
         if not isinstance(stop, Real):
-            raise TypeError(f"Argument 'stop' should be a real number but has type '{type(stop).__name__}'.")
+            raise TypeError(
+                f"Argument 'stop' should be a real number but has type '{type(stop).__name__}'.")
         if not isinstance(duration, Real):
-            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(t_step, Real):
             raise TypeError(
                 f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
@@ -283,13 +356,16 @@ class PWL():
     def lin_edge(self, target: float, duration: float) -> None:
         # Check type of arguments
         if not isinstance(target, Real):
-            raise TypeError(f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+            raise TypeError(
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
         if not isinstance(duration, Real):
-            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
-            raise ValueError(f"Argument 'duration' should be strictly positive but has value of {duration}.")
+            raise ValueError(
+                f"Argument 'duration' should be strictly positive but has value of {duration}.")
 
         # Actual function
         self._lin_edge(target, duration, 0)
@@ -297,9 +373,11 @@ class PWL():
     def _lin_edge(self, target: float, duration: float, n: int) -> None:
         if self._verbose:
             if n == 0:
-                print(f"{self._name}: Adding linear edge with target of {target} and duration of {duration}.")
+                print(
+                    f"{self._name}: Adding linear edge with target of {target} and duration of {duration}.")
             else:
-                print(n*"    "+f"Adding linear edge with target of {target} and duration of {duration}.")
+                print(
+                    n*"    "+f"Adding linear edge with target of {target} and duration of {duration}.")
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
@@ -317,22 +395,27 @@ class PWL():
 
         # Check type of arguments
         if not isinstance(target, Real):
-            raise TypeError(f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+            raise TypeError(
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
         if not isinstance(duration, Real):
-            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(tau, Real):
-            raise TypeError(f"Argument 'tau' should be a real number but has type '{type(tau).__name__}'.")
+            raise TypeError(
+                f"Argument 'tau' should be a real number but has type '{type(tau).__name__}'.")
         if not isinstance(t_step, Real):
             raise TypeError(
                 f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
-            raise ValueError(f"Argument 'duration' should be strictly positive but has value of {duration}.")
+            raise ValueError(
+                f"Argument 'duration' should be strictly positive but has value of {duration}.")
         if tau == 0:
             raise ValueError("Argument 'tau' should be non zero.")
         if t_step <= 0:
-            raise ValueError(f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+            raise ValueError(
+                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         # Actual function
         if self._verbose:
@@ -353,7 +436,8 @@ class PWL():
         last_t = self._t_list[-1]
         last_x = self._x_list[-1]
 
-        f = _exp_edge_func(tau=tau, t1=last_t, t2=last_t+duration, f1=last_x, f2=target)
+        f = _exp_edge_func(tau=tau, t1=last_t, t2=last_t +
+                           duration, f1=last_x, f2=target)
 
         for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
             self._add(t, f(t))
@@ -368,18 +452,22 @@ class PWL():
 
         # Check type of arguments
         if not isinstance(target, Real):
-            raise TypeError(f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+            raise TypeError(
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
         if not isinstance(duration, Real):
-            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(t_step, Real):
             raise TypeError(
                 f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
-            raise ValueError(f"Argument 'duration' should be strictly positive but has value of {duration}.")
+            raise ValueError(
+                f"Argument 'duration' should be strictly positive but has value of {duration}.")
         if t_step <= 0:
-            raise ValueError(f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+            raise ValueError(
+                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         # Actual function
         if self._verbose:
@@ -415,18 +503,22 @@ class PWL():
 
         # Check type of arguments
         if not isinstance(target, Real):
-            raise TypeError(f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+            raise TypeError(
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
         if not isinstance(duration, Real):
-            raise TypeError(f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
         if not isinstance(t_step, Real):
             raise TypeError(
                 f"Argument 't_step' should either be a real number or be None but has type '{type(t_step).__name__}'.")
 
         # Check value of arguments
         if duration <= 0:
-            raise ValueError(f"Argument 'duration' should be strictly positive but has value of {duration}.")
+            raise ValueError(
+                f"Argument 'duration' should be strictly positive but has value of {duration}.")
         if t_step <= 0:
-            raise ValueError(f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+            raise ValueError(
+                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         # Actual function
         if self._verbose:
@@ -447,7 +539,8 @@ class PWL():
         last_t = self._t_list[-1]
         last_x = self._x_list[-1]
 
-        f = _smoothstep_edge_func(t1=last_t, t2=last_t+duration, f1=last_x, f2=target)
+        f = _smoothstep_edge_func(
+            t1=last_t, t2=last_t+duration, f1=last_x, f2=target)
 
         for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
             self._add(t, f(t))
@@ -458,13 +551,16 @@ class PWL():
 
         # Check type of arguments
         if not isinstance(filename, str):
-            raise TypeError(f"Argument 'filename' should be a string but has type '{type(filename).__name__}'.")
+            raise TypeError(
+                f"Argument 'filename' should be a string but has type '{type(filename).__name__}'.")
         if not isinstance(precision, int):
-            raise TypeError(f"Argument 'precision' should be an integer but has type '{type(precision).__name__}'.")
+            raise TypeError(
+                f"Argument 'precision' should be an integer but has type '{type(precision).__name__}'.")
 
         # Check value of arguments
         if precision <= 0:
-            raise ValueError(f"Argument 'precision' should be strictly positive but has value of {precision}.")
+            raise ValueError(
+                f"Argument 'precision' should be strictly positive but has value of {precision}.")
 
         # Actual function
         if self._verbose:
@@ -474,13 +570,17 @@ class PWL():
         x_list = self._x_list
 
         with open(filename, "w") as file:
-            ti_str = numpy.format_float_scientific(t_list[0], precision-1, unique=False, sign=False)
-            xi_str = numpy.format_float_scientific(x_list[0], precision-1, unique=False, sign=True)
+            ti_str = numpy.format_float_scientific(
+                t_list[0], precision-1, unique=False, sign=False)
+            xi_str = numpy.format_float_scientific(
+                x_list[0], precision-1, unique=False, sign=True)
             file.write(f"{ti_str}    {xi_str}\n")
             last_t = ti_str
             for ti, xi in zip(t_list[1:], x_list[1:]):
-                ti_str = numpy.format_float_scientific(ti, precision-1, unique=False, sign=False)
-                xi_str = numpy.format_float_scientific(xi, precision-1, unique=False, sign=True)
+                ti_str = numpy.format_float_scientific(
+                    ti, precision-1, unique=False, sign=False)
+                xi_str = numpy.format_float_scientific(
+                    xi, precision-1, unique=False, sign=True)
                 if ti_str == last_t:
                     raise PrecisionError(
                         "The chosen precision level caused the written time coordinates to not be strictly increasing.")
