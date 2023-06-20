@@ -2,16 +2,14 @@
 """
 
 from numbers import Real
-import numpy
-from typing import Optional, List,  Dict, Callable, TypeVar
+import numpy  # type: ignore
+from typing import Optional, List,  Dict, Callable
 
 
 class PrecisionError(Exception):
-    """Exception class for precision related errors."""
-
+    pass
 
 def _exp_edge_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
-    """Private function that generates an exponential function passing trough 2 fixed points."""
 
     A = (f1*numpy.exp(t1/tau) - f2*numpy.exp(t2/tau)) / \
         (numpy.exp(t1/tau) - numpy.exp(t2/tau))
@@ -24,7 +22,6 @@ def _exp_edge_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Ca
 
 
 def _sin_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
-    """Private function that generates a half sine function passing trough 2 fixed points."""
 
     fm = (f1+f2)/2
     tm = (t1+t2)/2
@@ -40,7 +37,6 @@ def _sin_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[floa
 
 
 def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
-    """Private function that generates a smoothstep polynomial passing trough 2 fixed points."""
 
     Am = numpy.array([[1, t1, t1**2, t1**3],
                       [1, t2, t2**2, t2**3],
@@ -56,31 +52,10 @@ def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callabl
 
 
 class PWL():
-    """Class defining a PWL object used to create a pwl file."""
 
     _dict_of_objects: Dict = {}
 
     def __init__(self, t_step: float = 1e-9, name: Optional[str] = None, verbose: bool = False) -> None:
-        """Initializer for the PWL class.
-
-        PWL objects are a fancy way of storing a list of time coordinates and another of dependent coordinates. It also stores some additional metadata to provide syntactic sugar when adding pulses and transitions to the PWL object.
-
-        Parameters
-        ----------
-        `t_step` : float
-            Default timestep for the different types of pulses and transitions. Should be strictly positive. Defaults to `1e-9`.
-        `name` : str, optional
-            Name of the PWL object used for verbose output. If set to `None`, auto generates based on the names of already created objects. Defaults to `None`.
-        `verbose` : bool, optional
-            Flag to control if verbose output should be printed or not. Defaults to `False`.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if any of the arguments has an invalid type.
-        `ValueError`
-            Raised if `t_step` is non positive or if `name` is an empty string.
-        """
 
         # Check for nullable arguments
         if name is None:
@@ -108,8 +83,8 @@ class PWL():
             raise ValueError("Argument 'name' should not be empty.")
 
         # Actual function
-        self._t_list: list[float] = []
-        self._x_list: list[float] = []
+        self._t_list: List[float] = []
+        self._x_list: List[float] = []
         self._t_step: float = t_step
         self._name: str = name
         self._verbose: bool = verbose
@@ -120,38 +95,26 @@ class PWL():
         PWL._dict_of_objects[name] = self
 
     def __str__(self) -> str:
-        """String representation of PWL objects."""
+        
         return f"{self.name}: PWL object with {len(self.t_list)} points and duration of {self.t_list[-1]} seconds"
 
     @property
     def t_list(self) -> List[float]:
-        """This read-only property is the list of all time coordinates."""
 
         return self._t_list
 
     @property
     def x_list(self) -> List[float]:
-        """This read-only property is the list of all dependent coordinates."""
 
         return self._x_list
 
     @property
     def t_step(self) -> float:
-        """This property is the default timestep for the different types of pulses and transitions.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if the passed value is not a real number.
-        `ValueError`
-            Raised if the passed value is not strictly positive.
-        """
 
         return self._t_step
 
     @t_step.setter
     def t_step(self, new_t_step: float) -> None:
-        """Setter for the `t_step` property."""
 
         if not isinstance(new_t_step, Real):
             raise TypeError(
@@ -164,21 +127,11 @@ class PWL():
 
     @property
     def name(self) -> str:
-        """This property is the name of the PWL object used for verbose output.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if the passed name is not a string.
-        `ValueError`
-            Raised if the passed name is either empty or already in use.
-        """
 
         return self._name
 
     @name.setter
     def name(self, new_name: str) -> None:
-        """Setter for the `name` property."""
 
         if not isinstance(new_name, str):
             raise TypeError(
@@ -195,20 +148,11 @@ class PWL():
 
     @property
     def verbose(self) -> bool:
-        """This property is a flag indicating if verbose output should be printed or not.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if the passed flag is not a boolean.
-        `ValueError`
-        """
 
         return self._verbose
 
     @verbose.setter
     def verbose(self, new_verbose: bool) -> None:
-        """Setter for the `verbose` property."""
 
         if not isinstance(new_verbose, bool):
             raise TypeError(
@@ -216,7 +160,6 @@ class PWL():
         self._verbose = new_verbose
 
     def _add(self, t: float, x: float) -> None:
-        """Private method to add (t, x) points to the PWL object."""
 
         if len(self._t_list) >= 1 and t <= self._t_list[-1]:
             raise PrecisionError(
@@ -229,7 +172,6 @@ class PWL():
             self._add_with_redundancy_check(x, t)
 
     def _add_with_redundancy_check(self, x: float, t: float):
-        """Private method to add (t, x) points to the PWL object. Makes sure no 3 consecutive points are colinear."""
 
         t_n_1 = self._t_list[-1]
         t_n_2 = self._t_list[-2]
@@ -248,24 +190,6 @@ class PWL():
             self._x_list.append(x)
 
     def hold(self, duration: float) -> None:
-        """Method that takes the last dependent value and holds it for a given duration.
-
-        If the PWL object is empty, adds the (0, 0) point.
-
-        Parameters
-        ----------
-        `duration` : float
-            Duration to hold previous value for. Should be strictly positive.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if `duration` is not a real number.
-        `ValueError`
-            Raised if `duration` is not strictly positive.
-        `PrecisionError`
-            Raised if numerical noise causes the time coordinates to not be strictly increasing.
-        """
 
         # Check type of arguments
         if not isinstance(duration, Real):
@@ -292,32 +216,6 @@ class PWL():
         self._add(last_t+duration, last_x)
 
     def square_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
-        """Method that generates a square pulse with given amplitude and duration.
-
-        If `duration` is less than or equal to `t_step`, replace the square pulse by a linear edge with `lin_edge` going from the previous value to the desired amplitude with a duration of `t_step`.
-
-        Parameters
-        ----------
-        `value` : float
-            Amplitude of the square pulse.
-        `duration` : float
-            Duration of the pulse. Should be strictly positive.
-        `t_step` : float, optional
-            Rising or falling time at start of pulse. Should be strictly positive. If set to `None`, uses the `t_step` property. Defaults to 'None'.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if any argument has an invalid type.
-        `ValueError`
-            Raised if either `duration` or `t_step` is not strictly positive.
-        `PrecisionError`
-            Raised if numerical noise causes the time coordinates to not be strictly increasing.
-
-        See Also
-        --------
-        `lin_edge` : Method that generates a linear transition from the previous dependent value to a given target with given duration.
-        """
 
         # Check for nullable arguments
         if t_step is None:
@@ -363,36 +261,6 @@ class PWL():
         self._add(last_t+duration, value)
 
     def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> None:
-        """Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.
-
-        If we call `t0` the instant when the pulse begins, the pulse follows the equation `f(t) = A + B*t` with `A` and `B` chosen such that `f(t0 + t_step) = start` and `f(t_0 + duration) = end`.
-
-        If `duration` is less than or equal to `t_step`, replace the sawtooth pulse by a linear edge with `lin_edge` going from the previous value to the desired ending amplitude with a duration of `t_step`.
-
-        Parameters
-        ----------
-        `start` : float
-            Amplitude at the start of the pulse.
-        `end` : float
-            Amplitude at the end of the pulse.
-        `duration` : float
-            Duration of the pulse. Should be strictly positive.
-        `t_step` : float, optional
-            Rising or falling time at start of pulse. Should be strictly positive. If set to `None`, uses the `t_step` property. Defaults to `None`.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if any argument has an invalid type.
-        `ValueError`
-            Raised if either `duration` or `t_step` is not strictly positive.
-        `PrecisionError`
-            Raised if numerical noise causes the time coordinates to not be strictly increasing.
-
-        See Also
-        --------
-        `lin_edge` : Method that generates a linear transition from the previous dependent value to a given target with given duration.
-        """
 
         # Check for nullable arguments
         if t_step is None:
@@ -441,26 +309,6 @@ class PWL():
         self._add(last_t+duration, end)
 
     def lin_edge(self, target: float, duration: float) -> None:
-        """Generates a linear transition from the previous dependent value to a given targer with a given duration.
-        
-        If we call `t0` the instant when the pulse begins and `x0` the value the signal assumed just before that, the pulse follows the equation `f(t) = A + B*t` with `A` and `B` chosen such that `f(t0) = x0` and `f(t_0 + duration) = target`.
-
-        Parameters
-        ----------
-        `target` : float
-            Value to transition towards.
-        `duration` : float
-            Duration of the transition. Should be strictly positive.
-
-        Raises
-        ------
-        `TypeError`
-            Raised if any argument has an invalid type.
-        `ValueError`
-            Raised if either `duration` or `t_step` is not strictly positive.
-        `PrecisionError`
-            Raised if numerical noise causes the time coordinates to not be strictly increasing.
-        """
 
         # Check type of arguments
         if not isinstance(target, Real):
@@ -479,7 +327,6 @@ class PWL():
         self._lin_edge(target, duration, 0)
 
     def _lin_edge(self, target: float, duration: float, n: int) -> None:
-        """Private method to genarate linear transitions. Prints verbose output with added indendation if called inside other methods."""
 
         if self._verbose:
             if n == 0:
