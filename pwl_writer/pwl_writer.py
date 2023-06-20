@@ -1,6 +1,3 @@
-"""This module defines a PWL object menat to create pwl files in terms of pulses and transitions, considering time durations instead of time instants.
-"""
-
 from numbers import Real
 import numpy  # type: ignore
 from typing import Optional, List,  Dict, Callable
@@ -8,6 +5,7 @@ from typing import Optional, List,  Dict, Callable
 
 class PrecisionError(Exception):
     pass
+
 
 def _exp_edge_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
 
@@ -95,7 +93,7 @@ class PWL():
         PWL._dict_of_objects[name] = self
 
     def __str__(self) -> str:
-        
+
         return f"{self.name}: PWL object with {len(self.t_list)} points and duration of {self.t_list[-1]} seconds"
 
     @property
