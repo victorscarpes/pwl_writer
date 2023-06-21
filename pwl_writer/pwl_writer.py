@@ -764,7 +764,7 @@ class PWL():
 
         Summary
         -------
-        Method that generates a smoothstep from the last value of the previous event to a given target with a given duration.
+        Method that generates a smoothstep transition from the last value of the previous event to a given target with a given duration.
 
         If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
 
