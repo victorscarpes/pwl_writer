@@ -823,7 +823,7 @@
         <a class='octothorpe' href='#section-47'>#</a>
       </div>
       <h2>Summary</h2>
-<p>Generates a rectangular pulse with given amplitude and duration.</p>
+<p>Method that generates a rectangular pulse with given amplitude and duration.</p>
 <p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>value</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
 <h2>Arguments</h2>
 <ul>
@@ -926,8 +926,21 @@
         <a class='octothorpe' href='#section-51'>#</a>
       </div>
       <h2>Summary</h2>
+<p>Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.</p>
+<p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>end</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
 <h2>Arguments</h2>
+<ul>
+<li><code>start</code> (<code>float</code>) : Amplitude at the start of the pulse.</li>
+<li><code>end</code> (<code>float</code>) : Amplitude at the end of the pulse.</li>
+<li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
+<li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
 <h2>Raises</h2>
+<ul>
+<li><code>TypeError</code> : Raised if either <code>start</code>, <code>end</code>, duration<code>or</code>t_step` is not a real number.</li>
+<li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
+<li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
+</ul>
 <h2>See Also</h2>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>

@@ -379,7 +379,7 @@ class PWL():
 
         Summary
         -------
-        Generates a rectangular pulse with given amplitude and duration.
+        Method that generates a rectangular pulse with given amplitude and duration.
 
         If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `value` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
@@ -448,12 +448,22 @@ class PWL():
 
         Summary
         -------
+        Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.
+
+        If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `end` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
         Arguments
         ---------
+        * `start` (`float`) : Amplitude at the start of the pulse.
+        * `end` (`float`) : Amplitude at the end of the pulse.
+        * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
+        * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
 
         Raises
         ------
+        * `TypeError` : Raised if either `start`, `end`, duration` or `t_step` is not a real number.
+        * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
+        * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
         See Also
         --------
