@@ -3,6 +3,8 @@
 
 Tested on python version `3.6.6` with numpy version `1.19.5`. Type stubs for this numpy version for mypy checking can be found [here](https://github.com/numpy/numpy-stubs).
 
+----
+
 This package defines a class `PWL` to generate objects that represent time dependent signals `x(t)` that need to be coded in a PWL file. Those objects are built using little components such as square pulses and sawtooth pulses that can be chained together.
 
 The motivations for this package are the nuisances of writing PWL files by hand. To properly explain this, let's discuss how PWL files work.
@@ -17,9 +19,9 @@ This package solves both problems by providing an abstraction layer. They are so
 
 1. A minimal timestep is defined at the creation of the PWL object that is used to automatically generate all the needed transitions for any discontinous transition.
 
-2. The signal is built using small building blocks (such as square pulse and exponential transition) that are defined in terms of durations. That is to say, time is treated in a differential fashion. The time coordinates from a given block are all with respect to the final instant of the previous block. For example, let's assume we want to model a square pulse with amplitude 1 and duration 1 second followed by a downtime at zero for 10 seconds and then another square pulse with the same duration and amplitude. If we change the duration of the first pulse to 2 seconds, the downtime and second pulse will be both  delayed by the 1 second but retain their durations.
+2. The signal is built using small building blocks (such as square pulse and exponential transition) called events that are defined in terms of durations. That is to say, time is treated in a differential fashion. The time coordinates from a given event are all with respect to the final instant of the previous event. For example, let's assume we want to model a square pulse with amplitude 1 and duration 1 second followed by a downtime at zero for 10 seconds and then another square pulse with the same duration and amplitude. If we change the duration of the first pulse to 2 seconds, the downtime and second pulse will be both  delayed by the 1 second but retain their durations.
 
-Another advantage of using this package is not a feature per se but more a consequence of using a programing language. That advantage is simply that all those blocks can be added inside for loops, if clauses and functions, allowing for greater flexibility. For example, let's assume we want to control a system that can be in the following states:
+Another advantage of using this package is not a feature per se but more a consequence of using a programing language. That advantage is simply that all those events can be added inside for loops, if clauses and functions, allowing for greater flexibility. For example, let's assume we want to control a system that can be in the following states:
 
 * Idle
 * Mode 1
@@ -31,7 +33,7 @@ For each state, various control signals need to be at specific values. We could 
         idle_state(1)
         mode2_state(5)
 
-In this documentation, all private classes and functions will be explained briefly, but keeping it minimal as they are not intended to be used by the final user of the package.
+----
 """
 
 
@@ -39,51 +41,51 @@ from numbers import Real
 from typing import Callable, Dict, List, Optional
 import numpy
 
-# = Exceptions =
+# ----
+
+# = `PrecisionError` =
 
 
 class PrecisionError(Exception):
-    """== `PrecisionError` ==
+    """**Exception class**
 
     This class defines an exception meant to be raised when any type of rounding or loss of precision that causes the time coordinates of a PWL object to not be strictly increasing.
     """
 
+# ----
 
-# = Classes =
+# = `PWL` =
 
 
 class PWL():
-    """== `PWL` ==
+    """**Class**
 
-    This class defines an object that represnts a time dependent signal `x(t)`. Those objects can operated on by methods to build, block by block, the desired signal as described on the package introduction.
+    This class defines an object that represnts a time dependent signal `x(t)`. Those objects can operated on by methods to build, event by event, the desired signal as described on the package introduction.
     """
 
     __dict_of_objects: Dict[str, 'PWL'] = {}
 
-    def __init__(self, t_step: float, name: Optional[str] = None, verbose: bool = False) -> None:
-        """== `__init__` ==
+    # ----
 
-        **Method of `PWL` class**
+    # = `__init__` =
+
+    def __init__(self, t_step: float, name: Optional[str] = None, verbose: bool = False) -> None:
+        """**Method of `PWL` class**
 
         Summary
         -------
-        Initializer for the PWL class.
+        Initializer for the `PWL` class.
 
-        Parameters
-        ----------
-        * `t_step` : `float`
-            * Default timestep for all operations. Should be strictly positive.
-        * `name` : `str`, optional
-            * Name of the `PWL` object used for verbose output printing. Should not be empty. If not set, automatically generates a name based on already taken names.
-        * `verbose` : `bool`, optional
-            * Flag indicating if verbose output should be printed. If not set, defaults to `False`.
+        Arguments
+        ---------
+        * `t_step` (`float`) : Default timestep for all operations. Should be strictly positive.
+        * `name` (`str`, optional) : Name of the `PWL` object used for verbose output printing. Should not be empty. If not set, automatically generates a name based on already taken names.
+        * `verbose` (`bool`, optional) : Flag indicating if verbose output should be printed. If not set, defaults to `False`.
 
         Raises
         ------
-        * `TypeError`
-            * Raised if any of the arguments has an invalid type.
-        * `ValueError`
-            * Raised if `t_step` is not strictly positive or `name` is empty.
+        * `TypeError` : Raised if any of the arguments has an invalid type.
+        * `ValueError` : Raised if `t_step` is not strictly positive or `name` is empty.
         """
 
         if name is None:
@@ -119,63 +121,121 @@ class PWL():
 
         PWL. __dict_of_objects[name] = self
 
-    def __str__(self) -> str:
-        """== `__str__` ==
+    # ----
 
-        **Method of `PWL` class**
+    # = `__str__` =
+
+    def __str__(self) -> str:
+        """**Method of `PWL` class**
 
         Summary
         -------
-        String representation of `PWL` objects.
+        String representation of `PWL` instances in the form `[name]: PWL object with [# of points] and duration of [total time duration] seconds`.
 
         Returns
         -------
         * `str`
-            * Representation of the object in the form `[name]: PWL object with [# of points] and duration of [total time duration] seconds`.
         """
 
         return f"{self.name}: PWL object with {len(self.t_list)} points and duration of {self.t_list[-1]} seconds"
 
+    # ----
+
+    # = `t_list` : `list[float]` =
+
     @property
     def t_list(self) -> List[float]:
+        """**Property of `PWL` class**
+
+        Summary
+        -------
+        Read only property containing all the time coordinates of a `PWL` object.
+
+        Raises
+        ------
+        * `AttributeError` : Raised if assignment was attempetd.
+        """
 
         return self._t_list
 
+    # ----
+
+    # = `x_list` : `list[float]` =
+
     @property
     def x_list(self) -> List[float]:
+        """**Property of `PWL` class**
+
+        Summary
+        -------
+        Read only property containing all the dependent coordinates of a `PWL` object.
+
+        Raises
+        ------
+        * `AttributeError` : Raised if assignment was attempetd.
+        """
 
         return self._x_list
 
+    # ----
+
+    # = `t_step` : `float` =
+
     @property
     def t_step(self) -> float:
+        """**Property of `PWL` class**
+
+        Summary
+        -------
+        Property defining the default timestep of a `PWL` object.
+
+        Raises
+        ------
+        * `TypeError` : Raised if the assigned value is not a real number.
+        * `ValueError` : Raised if the assigned value is not strictly positive.
+        """
 
         return self._t_step
 
     @t_step.setter
     def t_step(self, new_t_step: float) -> None:
-
         if not isinstance(new_t_step, float):
             raise TypeError(
-                f"Attribute 't_step' should be a real number but has type '{type(new_t_step).__name__}'.")
+                f"Property 't_step' should be a real number but an object of type '{type(new_t_step).__name__}' was assigned to it.")
         if new_t_step <= 0:
             raise ValueError(
-                f"Attribute 't_step' should be strictly positive but has value of {new_t_step}.")
+                f"Propety 't_step' should be strictly positive but a value of {new_t_step} was assigned to it.")
 
         self._t_step = new_t_step
 
+    # ----
+
+    # = `name` : `str` =
+
     @property
     def name(self) -> str:
+        """**Property of `PWL` class**
+
+        Summary
+        -------
+        Property defining the name of a `PWL` object for verbose output printing.
+
+        Raises
+        ------
+        * `TypeError` : Raised if the assigned value is not a string.
+        * `ValueError` : Raised if the assigned value is an empty string or already in use.
+        """
 
         return self._name
 
     @name.setter
     def name(self, new_name: str) -> None:
-
         if not isinstance(new_name, str):
             raise TypeError(
-                f"Attribute 'name' should be a string but has type '{type(new_name).__name__}'.")
+                f"Property 'name' should be a string but an object of type '{type(new_name).__name__}' was assigned to it.")
         if not new_name:
-            raise ValueError("Attribute 'name' should not be an empty string.")
+            raise ValueError(
+                "An empty string cannot be assigned to the 'name' property.")
 
         if new_name in PWL. __dict_of_objects:
             raise ValueError(f"Name '{new_name}' already in use.")
@@ -184,8 +244,22 @@ class PWL():
         PWL. __dict_of_objects[new_name] = self
         self._name = new_name
 
+    # ----
+
+    # = `verbose` : `bool` =
+
     @property
     def verbose(self) -> bool:
+        """**Property of `PWL` class**
+
+        Summary
+        -------
+        Property defining if verbose output should be printed or not.
+
+        Raises
+        ------
+        * `TypeError` : Raised if the assigned value is not a boolean.
+        """
 
         return self._verbose
 
@@ -194,10 +268,32 @@ class PWL():
 
         if not isinstance(new_verbose, bool):
             raise TypeError(
-                f"Attribute 'verbose' should be a boolean but has type '{type(new_verbose).__name__}'.")
+                f"Attribute 'verbose' should be a boolean but an object of type '{type(new_verbose).__name__}' was assigned to it.")
         self._verbose = new_verbose
 
+    # ----
+
+    # = `hold` =
+
     def hold(self, duration: float) -> None:
+        """**Method of `PWL` class**
+
+        Summary
+        -------
+        Method that holds the last value from the previous event for a given duration.
+
+        If the `PWL` object is empty, adds the point `(0, 0)` and holds that.
+
+        Parameters
+        ----------
+        * `duration` (`float`) : Duration to hold the last value for. Should be strictly positive.
+
+        Raises
+        ------
+        * `TypeError` : Raised if `duration` is not a real number.
+        * `ValueError` : Raised if `duration` is not strictly positive.
+        * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
+        """
 
         if not isinstance(duration, Real):
             raise TypeError(
@@ -220,7 +316,21 @@ class PWL():
 
         self._add(last_t+duration, last_x)
 
+    # ----
+
+    # = `square_pulse` =
+
     def square_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
+        """**Method of `PWL` class**
+
+        Summary
+        -------
+        Generates a square pulse with given amplitude and duration
+
+
+
+
+        """
 
         if t_step is None:
             t_step = self._t_step
@@ -260,6 +370,10 @@ class PWL():
             self._add(last_t+t_step, value)
 
         self._add(last_t+duration, value)
+
+    # ----
+
+    # = `sawtooth_pulse` =
 
     def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> None:
 
@@ -305,6 +419,10 @@ class PWL():
 
         self._add(last_t+duration, end)
 
+    # ----
+
+    # = `lin_edge` =
+
     def lin_edge(self, target: float, duration: float) -> None:
 
         if not isinstance(target, Real):
@@ -319,6 +437,10 @@ class PWL():
                 f"Argument 'duration' should be strictly positive but has value of {duration}.")
 
         self._lin_edge(target, duration, 0)
+
+    # ----
+
+    # = `exp_edge` =
 
     def exp_edge(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
 
@@ -373,6 +495,10 @@ class PWL():
 
         self._add(last_t+duration, target)
 
+    # ----
+
+    # = `sin_edge` =
+
     def sin_edge(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
 
         if t_step is None:
@@ -421,6 +547,10 @@ class PWL():
 
         self._add(last_t+duration, target)
 
+    # ----
+
+    # = `smoothstep_edge` =
+
     def smoothstep_edge(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
 
         if t_step is None:
@@ -468,6 +598,10 @@ class PWL():
             self._add(t, f(t))
 
         self._add(last_t+duration, target)
+
+    # ----
+
+    # = `write` =
 
     def write(self, filename: str, precision: int = 10) -> None:
 
@@ -605,4 +739,3 @@ if __name__ == "__main__":
     pwl.lin_edge(0, 1)
     pwl.sin_edge(1, 0.01)
     pwl.hold(1)
-    print(pwl)
