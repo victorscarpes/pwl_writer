@@ -28,7 +28,15 @@ Tested on python version `3.6.6` with numpy version `1.19.5`. Type stubs for thi
             * [Half Sine Transition](#half-sine-transition)
             * [Smoothstep Transition](#smoothstep-transition)
             * [PWL File Writer](#pwl-file-writer)
-
+        * Private Methods *(minimal documentation)*
+            * [PWL Point Adder](#pwl-point-adder)
+            * [Colinear Points Eliminator](#colinear-points-eliminator)
+            * [Nested Linear Transition](#nested-linear-transition)
+* Private Functions *(minimal documentation)*
+        * [Exponential Function Generator](#exponential-function-generator)
+        * [Sinusoidal Function Generator](#sinusoidal-function-generator)
+        * [Smoothstep Function Generator](#smoothstep-function-generator)
+        
 ----
 
 # Package Summary
@@ -69,7 +77,7 @@ import numpy
 
 # ----
 
-# = Precision Related Exception =
+# == Precision Related Exception ==
 
 
 class PrecisionError(Exception):
@@ -80,7 +88,7 @@ class PrecisionError(Exception):
 
 # ----
 
-# = PWL Class =
+# == PWL Class ==
 
 
 class PWL():
@@ -93,7 +101,7 @@ class PWL():
 
     # ----
 
-    # = Initializer =
+    # == Initializer ==
 
     def __init__(self, t_step: float, name: Optional[str] = None, verbose: bool = False) -> None:
         """**Dunder method `__init__` of `PWL` class**
@@ -149,7 +157,7 @@ class PWL():
 
     # ----
 
-    # = String Representation =
+    # == String Representation ==
 
     def __str__(self) -> str:
         """**Dunder method `__str__` of `PWL` class**
@@ -167,7 +175,7 @@ class PWL():
 
     # ----
 
-    # = Time Coordinates =
+    # == Time Coordinates ==
 
     @property
     def t_list(self) -> List[float]:
@@ -190,7 +198,7 @@ class PWL():
 
     # ----
 
-    # = Dependent Coordinates =
+    # == Dependent Coordinates ==
 
     @property
     def x_list(self) -> List[float]:
@@ -213,7 +221,7 @@ class PWL():
 
     # ----
 
-    # = Default Timestep =
+    # == Default Timestep ==
 
     @property
     def t_step(self) -> float:
@@ -248,7 +256,7 @@ class PWL():
 
     # ----
 
-    # = Name =
+    # == Name ==
 
     @property
     def name(self) -> str:
@@ -288,7 +296,7 @@ class PWL():
 
     # ----
 
-    # = Verbose Flag =
+    # == Verbose Flag ==
 
     @property
     def verbose(self) -> bool:
@@ -319,7 +327,7 @@ class PWL():
 
     # ----
 
-    # = Last Value Holder =
+    # == Last Value Holder ==
 
     def hold(self, duration: float) -> None:
         """**`hold` method of `PWL` class**
@@ -364,7 +372,7 @@ class PWL():
 
     # ----
 
-    # = Rectangular Pulse =
+    # == Rectangular Pulse ==
 
     def rect_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
         """**`rect_pulse` method of `PWL` class**
@@ -433,9 +441,24 @@ class PWL():
 
     # ----
 
-    # = Sawtooth Pulse =
+    # == Sawtooth Pulse ==
 
     def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> None:
+        """**`sawtooth_pulse` method of ``PWL` class**
+
+        Summary
+        -------
+
+        Arguments
+        ---------
+
+        Raises
+        ------
+
+        See Also
+        --------
+        * [Linear Transition](#linear-transition)
+        """
 
         if t_step is None:
             t_step = self._t_step
@@ -481,9 +504,20 @@ class PWL():
 
     # ----
 
-    # = Linear Transition =
+    # == Linear Transition ==
 
     def lin_transition(self, target: float, duration: float) -> None:
+        """**`lin_transition` method of ``PWL` class**
+
+        Summary
+        -------
+
+        Arguments
+        ---------
+
+        Raises
+        ------
+        """
 
         if not isinstance(target, Real):
             raise TypeError(
@@ -500,9 +534,24 @@ class PWL():
 
     # ----
 
-    # = Exponential Transition =
+    # == Exponential Transition ==
 
     def exp_transition(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
+        """**`exp_transition` method of ``PWL` class**
+
+        Summary
+        -------
+
+        Arguments
+        ---------
+
+        Raises
+        ------
+
+        See Also
+        --------
+        * [Linear Transition](#linear-transition)
+        """
 
         if t_step is None:
             t_step = self._t_step
@@ -557,9 +606,24 @@ class PWL():
 
     # ----
 
-    # = Half Sine Transition =
+    # == Half Sine Transition ==
 
     def sin_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
+        """**`sin_transition` method of ``PWL` class**
+
+        Summary
+        -------
+
+        Arguments
+        ---------
+
+        Raises
+        ------
+
+        See Also
+        --------
+        * [Linear Transition](#linear-transition)
+        """
 
         if t_step is None:
             t_step = self._t_step
@@ -609,9 +673,24 @@ class PWL():
 
     # ----
 
-    # = Smoothstep Transition =
+    # == Smoothstep Transition ==
 
     def smoothstep_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
+        """**`smoothstep_transition` method of ``PWL` class**
+
+        Summary
+        -------
+
+        Arguments
+        ---------
+
+        Raises
+        ------
+
+        See Also
+        --------
+        * [Linear Transition](#linear-transition)
+        """
 
         if t_step is None:
             t_step = self._t_step
@@ -661,9 +740,20 @@ class PWL():
 
     # ----
 
-    # = PWL File Writer =
+    # == PWL File Writer ==
 
     def write(self, filename: str, precision: int = 10) -> None:
+        """**`write` method of ``PWL` class**
+
+        Summary
+        -------
+
+        Arguments
+        ---------
+
+        Raises
+        ------
+        """
 
         if not isinstance(filename, str):
             raise TypeError(
@@ -701,7 +791,22 @@ class PWL():
                     f"{ti_str}    {xi_str}\n")
                 last_t = ti_str
 
+    # ----
+
+    # = Private Methods and Functions =
+
+    # From this point forward, all listed methods and functions are not intended to be used by the user. Brief descriptions will be provided, but documentation will be kept to a minimum.
+
+    # ----
+
+    # == PWL Point Adder ==
+
     def _add(self, t: float, x: float) -> None:
+        """**`_add` private method of `PWL` class**
+
+        Private method that adds a `(t, x)` point to a `PWL` object of any size.
+        """
+
         if len(self._t_list) >= 1 and t <= self._t_list[-1]:
             raise PrecisionError(
                 f"Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to {self._name}.")
@@ -710,9 +815,18 @@ class PWL():
             self._t_list.append(t)
             self._x_list.append(x)
         else:
-            self._add_with_redundancy_check(x, t)
+            self._colinear_eliminator(x, t)
 
-    def _add_with_redundancy_check(self, x: float, t: float) -> None:
+    # ----
+
+    # == Colinear Points Eliminator ==
+
+    def _colinear_eliminator(self, x: float, t: float) -> None:
+        """**`_colinear_eliminator` private method of `PWL` class**
+
+        Private method that adds a `(t, x)` point to a `PWL` object with 2 or more points without consecutive colinear points.
+        """
+
         t_n_1 = self._t_list[-1]
         t_n_2 = self._t_list[-2]
 
@@ -729,7 +843,16 @@ class PWL():
             self._t_list.append(t)
             self._x_list.append(x)
 
+    # ----
+
+    # == Nested Linear Transition ==
+
     def _lin_transition(self, target: float, duration: float, n: int) -> None:
+        """**`_lin_transition` private method of `PWL` class**
+
+        Private method to generate a linear transition. The difference between this method and the [public linear transition](#linear-transition) method is that this method prints indented verbose output when called from within any of the public methods that revert to a linear transition in certain conditions.
+        """
+
         if self._verbose:
             if n == 0:
                 print(
@@ -746,8 +869,17 @@ class PWL():
         last_t = self._t_list[-1]
         self._add(last_t+duration, target)
 
+# ----
+
+# == Exponential Function Generator ==
+
 
 def _exp_transition_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
+    """**`_exp_transition_func` private function**
+
+    Private function that generates an exponential function passing trough 2 fixed points.
+    """
+
     A: float = (f1*numpy.exp(t1/tau) - f2*numpy.exp(t2/tau)) / \
         (numpy.exp(t1/tau) - numpy.exp(t2/tau))
     B: float = (f1 - f2)/(numpy.exp(-t1/tau) - numpy.exp(-t2/tau))
@@ -758,8 +890,17 @@ def _exp_transition_func(tau: float, t1: float, f1: float, t2: float, f2: float)
 
     return f
 
+# ----
+
+# == Sinusoidal Function Generator ==
+
 
 def _sin_transition_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
+    """**`_sin_transition_func` private function**
+
+    Private function that generates a sinusoidal function passing trough 2 fixed points.
+    """
+
     fm: float = (f1+f2)/2
     tm: float = (t1+t2)/2
     T: float = 2*(t2-t1)
@@ -773,8 +914,17 @@ def _sin_transition_func(t1: float, f1: float, t2: float, f2: float) -> Callable
 
     return f
 
+# ----
+
+# == Smoothstep Function Generator ==
+
 
 def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
+    """**`_smoothstep_transition_func` private function**
+
+    Private function that generates a smoothstep function passing trough 2 fixed points.
+    """
+
     Am = numpy.array([[1, t1, t1**2, t1**3],
                       [1, t2, t2**2, t2**3],
                       [0, 1, 2*t1, 3*t1**2],
@@ -787,6 +937,8 @@ def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> C
         return result
 
     return f
+
+# ----
 
 
 if __name__ == "__main__":
