@@ -20,15 +20,15 @@
       <p><em>by Victor Sabiá P. Carpes</em></p>
 <p>Tested on python version <code>3.6.6</code> with numpy version <code>1.19.5</code>. Type stubs for this numpy version for mypy checking can be found <a href="https://github.com/numpy/numpy-stubs">here</a>.</p>
 <hr />
-<p>This package defines a class <code>PWL</code> to generate objects that represent time dependent signals <code>x(t)</code> that need to be coded in a PWL file. Those objects are built using little components such as square pulses and sawtooth pulses that can be chained together.</p>
+<p>This package defines a class <code>PWL</code> to generate objects that represent time dependent signals <code>x(t)</code> that need to be coded in a PWL file. Those objects are built using little components such as rectangular pulses and sawtooth pulses that can be chained together.</p>
 <p>The motivations for this package are the nuisances of writing PWL files by hand. To properly explain this, let&rsquo;s discuss how PWL files work.</p>
 <p>PWL stands for piecewise linear. A PWL file is a way to represent a time dependent signal (referenced by <code>x(t)</code> from now on) for simulation softwares such as LTspice and Cadence Virtuoso. In it, points of the form <code>(t, x)</code> are stored. During simulation, those points are interpolated with first degree polynomials. This poses 2 problems:</p>
 <ol>
 <li>
-<p>Due to the linear interpolation, the resulting signal is continuous. This tends to be desirable, but if the intention is moddeling, for example, square pulses, each transition will need 2 points with very close time coordinates to approximate a discontinuous transition. This can get extremely tedious to code out by hand.</p>
+<p>Due to the linear interpolation, the resulting signal is continuous. This tends to be desirable, but if the intention is moddeling, for example, rectangular pulses, each transition will need 2 points with very close time coordinates to approximate a discontinuous transition. This can get extremely tedious to code out by hand.</p>
 </li>
 <li>
-<p>Each point has an absolute time coordinate with respect to the origin. If the desired signal is for example a series of square pulses with certain durations and for some reason the duration of the first pulse is changed, all the following points will need to have their time coordinates changed as well.</p>
+<p>Each point has an absolute time coordinate with respect to the origin. If the desired signal is for example a series of rectangular pulses with certain durations and for some reason the duration of the first pulse is changed, all the following points will need to have their time coordinates changed as well.</p>
 </li>
 </ol>
 <p>This package solves both problems by providing an abstraction layer. They are solved by the 2 following features:</p>
@@ -37,7 +37,7 @@
 <p>A minimal timestep is defined at the creation of the PWL object that is used to automatically generate all the needed transitions for any discontinous transition.</p>
 </li>
 <li>
-<p>The signal is built using small building blocks (such as square pulse and exponential transition) called events that are defined in terms of durations. That is to say, time is treated in a differential fashion. The time coordinates from a given event are all with respect to the final instant of the previous event. For example, let&rsquo;s assume we want to model a square pulse with amplitude 1 and duration 1 second followed by a downtime at zero for 10 seconds and then another square pulse with the same duration and amplitude. If we change the duration of the first pulse to 2 seconds, the downtime and second pulse will be both  delayed by the 1 second but retain their durations.</p>
+<p>The signal is built using small building blocks (such as rectangular pulse and exponential transition) called events that are defined in terms of durations. That is to say, time is treated in a differential fashion. The time coordinates from a given event are all with respect to the final instant of the previous event. For example, let&rsquo;s assume we want to model a rectangular pulse with amplitude 1 and duration 1 second followed by a downtime at zero for 10 seconds and then another rectangular pulse with the same duration and amplitude. If we change the duration of the first pulse to 2 seconds, the downtime and second pulse will be both  delayed by the 1 second but retain their durations.</p>
 </li>
 </ol>
 <p>Another advantage of using this package is not a feature per se but more a consequence of using a programing language. That advantage is simply that all those events can be added inside for loops, if clauses and functions, allowing for greater flexibility. For example, let&rsquo;s assume we want to control a system that can be in the following states:</p>
@@ -51,7 +51,6 @@
    idle_state(1)
    mode2_state(5)
 </code></pre>
-<hr />
     </div>
     <div class='code'>
       <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span>
@@ -77,7 +76,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
       </div>
-      <h1><span id="<code>precisionerror</code>" href="<code>precisionerror</code>"> <code>PrecisionError</code> </span></h1>
+      <h1><span id="precision-related-excpection" href="precision-related-excpection"> Precision Related Excpection </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -89,7 +88,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-3'>#</a>
       </div>
-      <p><strong>Exception class</strong></p>
+      <p><strong><code>PrecisionError</code> exception class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="k">class</span> <span class="nc">PrecisionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span></pre></div>
@@ -125,7 +124,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-6'>#</a>
       </div>
-      <h1><span id="<code>pwl</code>" href="<code>pwl</code>"> <code>PWL</code> </span></h1>
+      <h1><span id="pwl-class" href="pwl-class"> PWL class </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -137,7 +136,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-7'>#</a>
       </div>
-      <p><strong>Class</strong></p>
+      <p><strong><code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="k">class</span> <span class="nc">PWL</span><span class="p">():</span></pre></div>
@@ -173,7 +172,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-10'>#</a>
       </div>
-      <h1><span id="<code>__init__</code>" href="<code>__init__</code>"> <code>__init__</code> </span></h1>
+      <h1><span id="initializer" href="initializer"> Initializer </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -185,7 +184,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-11'>#</a>
       </div>
-      <p><strong>Method of <code>PWL</code> class</strong></p>
+      <p><strong>Dunder method <code>__init__</code> of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
@@ -264,7 +263,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-14'>#</a>
       </div>
-      <h1><span id="<code>__str__</code>" href="<code>__str__</code>"> <code>__str__</code> </span></h1>
+      <h1><span id="string-representation" href="string-representation"> String Representation </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -276,7 +275,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-15'>#</a>
       </div>
-      <p><strong>Method of <code>PWL</code> class</strong></p>
+      <p><strong>Dunder method <code>__str__</code> of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span></pre></div>
@@ -317,7 +316,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-18'>#</a>
       </div>
-      <h1><span id="<code>t_list</code>-:-<code>list[float]</code>" href="<code>t_list</code>-:-<code>list[float]</code>"> <code>t_list</code> : <code>list[float]</code> </span></h1>
+      <h1><span id="time-coordinates" href="time-coordinates"> Time Coordinates </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -329,7 +328,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-19'>#</a>
       </div>
-      <p><strong>Property of <code>PWL</code> class</strong></p>
+      <p><strong><code>t_list</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@property</span>
@@ -342,7 +341,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-20'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h2>Type</h2>
+<ul>
+<li><code>list[float]</code></li>
+</ul>
+<h2>Summary</h2>
 <p>Read only property containing all the time coordinates of a <code>PWL</code> object.</p>
 <h2>Raises</h2>
 <ul>
@@ -371,7 +374,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-22'>#</a>
       </div>
-      <h1><span id="<code>x_list</code>-:-<code>list[float]</code>" href="<code>x_list</code>-:-<code>list[float]</code>"> <code>x_list</code> : <code>list[float]</code> </span></h1>
+      <h1><span id="dependent-coordinates" href="dependent-coordinates"> Dependent Coordinates </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -383,7 +386,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-23'>#</a>
       </div>
-      <p><strong>Property of <code>PWL</code> class</strong></p>
+      <p><strong><code>x_list</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@property</span>
@@ -396,7 +399,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-24'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h2>Type</h2>
+<ul>
+<li><code>list[float]</code></li>
+</ul>
+<h2>Summary</h2>
 <p>Read only property containing all the dependent coordinates of a <code>PWL</code> object.</p>
 <h2>Raises</h2>
 <ul>
@@ -425,7 +432,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-26'>#</a>
       </div>
-      <h1><span id="<code>t_step</code>-:-<code>float</code>" href="<code>t_step</code>-:-<code>float</code>"> <code>t_step</code> : <code>float</code> </span></h1>
+      <h1><span id="defaukt-timestep" href="defaukt-timestep"> Defaukt Timestep </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -437,7 +444,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-27'>#</a>
       </div>
-      <p><strong>Property of <code>PWL</code> class</strong></p>
+      <p><strong><code>t_step</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@property</span>
@@ -450,7 +457,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-28'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h2>Type</h2>
+<ul>
+<li><code>float</code></li>
+</ul>
+<h2>Summary</h2>
 <p>Property defining the default timestep of a <code>PWL</code> object.</p>
 <h2>Raises</h2>
 <ul>
@@ -501,7 +512,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-31'>#</a>
       </div>
-      <h1><span id="<code>name</code>-:-<code>str</code>" href="<code>name</code>-:-<code>str</code>"> <code>name</code> : <code>str</code> </span></h1>
+      <h1><span id="name" href="name"> Name </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -513,7 +524,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-32'>#</a>
       </div>
-      <p><strong>Property of <code>PWL</code> class</strong></p>
+      <p><strong><code>name</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@property</span>
@@ -526,7 +537,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-33'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h2>Type</h2>
+<ul>
+<li><code>str</code></li>
+</ul>
+<h2>Summary</h2>
 <p>Property defining the name of a <code>PWL</code> object for verbose output printing.</p>
 <h2>Raises</h2>
 <ul>
@@ -582,7 +597,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-36'>#</a>
       </div>
-      <h1><span id="<code>verbose</code>-:-<code>bool</code>" href="<code>verbose</code>-:-<code>bool</code>"> <code>verbose</code> : <code>bool</code> </span></h1>
+      <h1><span id="verbose-flag" href="verbose-flag"> Verbose Flag </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -594,7 +609,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-37'>#</a>
       </div>
-      <p><strong>Property of <code>PWL</code> class</strong></p>
+      <p><strong><code>verbose</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@property</span>
@@ -607,7 +622,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-38'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h2>Type</h2>
+<ul>
+<li><code>bool</code></li>
+</ul>
+<h2>Summary</h2>
 <p>Property defining if verbose output should be printed or not.</p>
 <h2>Raises</h2>
 <ul>
@@ -654,7 +673,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-41'>#</a>
       </div>
-      <h1><span id="<code>hold</code>" href="<code>hold</code>"> <code>hold</code> </span></h1>
+      <h1><span id="last-value-holder" href="last-value-holder"> Last Value Holder </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -666,7 +685,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-42'>#</a>
       </div>
-      <p><strong>Method of <code>PWL</code> class</strong></p>
+      <p><strong><code>hold</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">hold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
@@ -733,7 +752,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-45'>#</a>
       </div>
-      <h1><span id="<code>square_pulse</code>" href="<code>square_pulse</code>"> <code>square_pulse</code> </span></h1>
+      <h1><span id="rectangular-pulse" href="rectangular-pulse"> Rectangular Pulse </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -745,10 +764,10 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-46'>#</a>
       </div>
-      <p><strong>Method of <code>PWL</code> class</strong></p>
+      <p><strong><code>rectangular_pulse</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">square_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rectangular_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -758,7 +777,11 @@
         <a class='octothorpe' href='#section-47'>#</a>
       </div>
       <h2>Summary</h2>
-<p>Generates a square pulse with given amplitude and duration</p>
+<p>Generates a rectangular pulse with given amplitude and duration</p>
+<h2>See Also</h2>
+<ul>
+<li><a href="#linear-transition">Linear Transition</a></li>
+</ul>
     </div>
     <div class='code'>
       <div class="highlight"><pre>        <span class="k">if</span> <span class="n">t_step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -782,13 +805,13 @@
                 <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding square pulse with value of </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding rectangular pulse with value of </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear edge.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_edge</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -819,7 +842,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-49'>#</a>
       </div>
-      <h1><span id="<code>sawtooth_pulse</code>" href="<code>sawtooth_pulse</code>"> <code>sawtooth_pulse</code> </span></h1>
+      <h1><span id="sawtooth-pulse" href="sawtooth-pulse"> Sawtooth Pulse </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -865,8 +888,8 @@
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear edge.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_edge</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -897,7 +920,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-52'>#</a>
       </div>
-      <h1><span id="<code>lin_edge</code>" href="<code>lin_edge</code>"> <code>lin_edge</code> </span></h1>
+      <h1><span id="linear-transition" href="linear-transition"> Linear Transition </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -912,7 +935,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
@@ -925,7 +948,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_edge</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -946,7 +969,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-55'>#</a>
       </div>
-      <h1><span id="<code>exp_edge</code>" href="<code>exp_edge</code>"> <code>exp_edge</code> </span></h1>
+      <h1><span id="exponential-transition" href="exponential-transition"> Exponential Transition </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -961,7 +984,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">exp_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">exp_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="n">t_step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">t_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_step</span>
@@ -989,13 +1012,13 @@
                 <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding exponential edge with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, time constant of </span><span class="si">{</span><span class="n">tau</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding exponential transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, time constant of </span><span class="si">{</span><span class="n">tau</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear edge.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_edge</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1006,8 +1029,8 @@
         <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">f</span> <span class="o">=</span> <span class="n">_exp_edge_func</span><span class="p">(</span><span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">last_t</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">last_t</span> <span class="o">+</span>
-                           <span class="n">duration</span><span class="p">,</span> <span class="n">f1</span><span class="o">=</span><span class="n">last_x</span><span class="p">,</span> <span class="n">f2</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">_exp_transition_func</span><span class="p">(</span><span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="n">last_t</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">last_t</span> <span class="o">+</span>
+                                 <span class="n">duration</span><span class="p">,</span> <span class="n">f1</span><span class="o">=</span><span class="n">last_x</span><span class="p">,</span> <span class="n">f2</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">t_step</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
@@ -1033,7 +1056,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-58'>#</a>
       </div>
-      <h1><span id="<code>sin_edge</code>" href="<code>sin_edge</code>"> <code>sin_edge</code> </span></h1>
+      <h1><span id="half-sine-transition" href="half-sine-transition"> Half Sine Transition </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -1048,7 +1071,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sin_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="n">t_step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">t_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_step</span>
@@ -1071,13 +1094,13 @@
                 <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding sinusoidal edge with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding sinusoidal transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear edge.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_edge</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1088,7 +1111,7 @@
         <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">f</span> <span class="o">=</span> <span class="n">_sin_edge_func</span><span class="p">(</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">_sin_transition_func</span><span class="p">(</span>
             <span class="n">t1</span><span class="o">=</span><span class="n">last_t</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">f1</span><span class="o">=</span><span class="n">last_x</span><span class="p">,</span> <span class="n">f2</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">t_step</span><span class="p">):</span>
@@ -1115,7 +1138,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-61'>#</a>
       </div>
-      <h1><span id="<code>smoothstep_edge</code>" href="<code>smoothstep_edge</code>"> <code>smoothstep_edge</code> </span></h1>
+      <h1><span id="smoothstep-transition" href="smoothstep-transition"> Smoothstep Transition </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -1130,7 +1153,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">smoothstep_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">smoothstep_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="n">t_step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">t_step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_step</span>
@@ -1153,13 +1176,13 @@
                 <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding smoothstep edge with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding smoothstep transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear edge.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_edge</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1170,7 +1193,7 @@
         <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">f</span> <span class="o">=</span> <span class="n">_smoothstep_edge_func</span><span class="p">(</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">_smoothstep_transition_func</span><span class="p">(</span>
             <span class="n">t1</span><span class="o">=</span><span class="n">last_t</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">f1</span><span class="o">=</span><span class="n">last_x</span><span class="p">,</span> <span class="n">f2</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">t_step</span><span class="p">):</span>
@@ -1197,7 +1220,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-64'>#</a>
       </div>
-      <h1><span id="<code>write</code>" href="<code>write</code>"> <code>write</code> </span></h1>
+      <h1><span id="pwl-file-writer" href="pwl-file-writer"> PWL File Writer </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -1308,14 +1331,14 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_lin_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding linear edge with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding linear transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="n">n</span><span class="o">*</span><span class="s2">&quot;    &quot;</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;Adding linear edge with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="n">n</span><span class="o">*</span><span class="s2">&quot;    &quot;</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;Adding linear transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
@@ -1335,7 +1358,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_exp_edge_func</span><span class="p">(</span><span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_exp_transition_func</span><span class="p">(</span><span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="n">A</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="n">f1</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">t1</span><span class="o">/</span><span class="n">tau</span><span class="p">)</span> <span class="o">-</span> <span class="n">f2</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">t2</span><span class="o">/</span><span class="n">tau</span><span class="p">))</span> <span class="o">/</span> \
         <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">t1</span><span class="o">/</span><span class="n">tau</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">t2</span><span class="o">/</span><span class="n">tau</span><span class="p">))</span>
     <span class="n">B</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="n">f1</span> <span class="o">-</span> <span class="n">f2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t1</span><span class="o">/</span><span class="n">tau</span><span class="p">)</span> <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t2</span><span class="o">/</span><span class="n">tau</span><span class="p">))</span></pre></div>
@@ -1366,7 +1389,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_sin_edge_func</span><span class="p">(</span><span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_sin_transition_func</span><span class="p">(</span><span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="n">fm</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="n">f1</span><span class="o">+</span><span class="n">f2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
     <span class="n">tm</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="p">(</span><span class="n">t1</span><span class="o">+</span><span class="n">t2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
     <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
@@ -1400,7 +1423,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_smoothstep_edge_func</span><span class="p">(</span><span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_smoothstep_transition_func</span><span class="p">(</span><span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="n">Am</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t1</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">t1</span><span class="o">**</span><span class="mi">3</span><span class="p">],</span>
                       <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">t2</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">t2</span><span class="o">**</span><span class="mi">3</span><span class="p">],</span>
                       <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">t1</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">t1</span><span class="o">**</span><span class="mi">2</span><span class="p">],</span>
@@ -1428,12 +1451,12 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">pwl</span> <span class="o">=</span> <span class="n">PWL</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">t_step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">pwl</span><span class="o">.</span><span class="n">sin_edge</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pwl</span><span class="o">.</span><span class="n">sin_transition</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">pwl</span><span class="o">.</span><span class="n">smoothstep_edge</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">pwl</span><span class="o">.</span><span class="n">square_pulse</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">pwl</span><span class="o">.</span><span class="n">lin_edge</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">pwl</span><span class="o">.</span><span class="n">sin_edge</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">pwl</span><span class="o">.</span><span class="n">smoothstep_transition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pwl</span><span class="o">.</span><span class="n">rectangular_pulse</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pwl</span><span class="o">.</span><span class="n">lin_transition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pwl</span><span class="o">.</span><span class="n">sin_transition</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 </pre></div>

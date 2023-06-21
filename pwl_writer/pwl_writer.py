@@ -5,21 +5,21 @@ Tested on python version `3.6.6` with numpy version `1.19.5`. Type stubs for thi
 
 ----
 
-This package defines a class `PWL` to generate objects that represent time dependent signals `x(t)` that need to be coded in a PWL file. Those objects are built using little components such as square pulses and sawtooth pulses that can be chained together.
+This package defines a class `PWL` to generate objects that represent time dependent signals `x(t)` that need to be coded in a PWL file. Those objects are built using little components such as rectangular pulses and sawtooth pulses that can be chained together.
 
 The motivations for this package are the nuisances of writing PWL files by hand. To properly explain this, let's discuss how PWL files work.
 
 PWL stands for piecewise linear. A PWL file is a way to represent a time dependent signal (referenced by `x(t)` from now on) for simulation softwares such as LTspice and Cadence Virtuoso. In it, points of the form `(t, x)` are stored. During simulation, those points are interpolated with first degree polynomials. This poses 2 problems:
 
-1. Due to the linear interpolation, the resulting signal is continuous. This tends to be desirable, but if the intention is moddeling, for example, square pulses, each transition will need 2 points with very close time coordinates to approximate a discontinuous transition. This can get extremely tedious to code out by hand.
+1. Due to the linear interpolation, the resulting signal is continuous. This tends to be desirable, but if the intention is moddeling, for example, rectangular pulses, each transition will need 2 points with very close time coordinates to approximate a discontinuous transition. This can get extremely tedious to code out by hand.
 
-2. Each point has an absolute time coordinate with respect to the origin. If the desired signal is for example a series of square pulses with certain durations and for some reason the duration of the first pulse is changed, all the following points will need to have their time coordinates changed as well.
+2. Each point has an absolute time coordinate with respect to the origin. If the desired signal is for example a series of rectangular pulses with certain durations and for some reason the duration of the first pulse is changed, all the following points will need to have their time coordinates changed as well.
 
 This package solves both problems by providing an abstraction layer. They are solved by the 2 following features:
 
 1. A minimal timestep is defined at the creation of the PWL object that is used to automatically generate all the needed transitions for any discontinous transition.
 
-2. The signal is built using small building blocks (such as square pulse and exponential transition) called events that are defined in terms of durations. That is to say, time is treated in a differential fashion. The time coordinates from a given event are all with respect to the final instant of the previous event. For example, let's assume we want to model a square pulse with amplitude 1 and duration 1 second followed by a downtime at zero for 10 seconds and then another square pulse with the same duration and amplitude. If we change the duration of the first pulse to 2 seconds, the downtime and second pulse will be both  delayed by the 1 second but retain their durations.
+2. The signal is built using small building blocks (such as rectangular pulse and exponential transition) called events that are defined in terms of durations. That is to say, time is treated in a differential fashion. The time coordinates from a given event are all with respect to the final instant of the previous event. For example, let's assume we want to model a rectangular pulse with amplitude 1 and duration 1 second followed by a downtime at zero for 10 seconds and then another rectangular pulse with the same duration and amplitude. If we change the duration of the first pulse to 2 seconds, the downtime and second pulse will be both  delayed by the 1 second but retain their durations.
 
 Another advantage of using this package is not a feature per se but more a consequence of using a programing language. That advantage is simply that all those events can be added inside for loops, if clauses and functions, allowing for greater flexibility. For example, let's assume we want to control a system that can be in the following states:
 
@@ -32,8 +32,6 @@ For each state, various control signals need to be at specific values. We could 
         mode1_state(3)
         idle_state(1)
         mode2_state(5)
-
-----
 """
 
 
@@ -43,22 +41,22 @@ import numpy
 
 # ----
 
-# = `PrecisionError` =
+# = Precision Related Excpection =
 
 
 class PrecisionError(Exception):
-    """**Exception class**
+    """**`PrecisionError` exception class**
 
     This class defines an exception meant to be raised when any type of rounding or loss of precision that causes the time coordinates of a PWL object to not be strictly increasing.
     """
 
 # ----
 
-# = `PWL` =
+# = PWL class =
 
 
 class PWL():
-    """**Class**
+    """**`PWL` class**
 
     This class defines an object that represnts a time dependent signal `x(t)`. Those objects can operated on by methods to build, event by event, the desired signal as described on the package introduction.
     """
@@ -67,10 +65,10 @@ class PWL():
 
     # ----
 
-    # = `__init__` =
+    # = Initializer =
 
     def __init__(self, t_step: float, name: Optional[str] = None, verbose: bool = False) -> None:
-        """**Method of `PWL` class**
+        """**Dunder method `__init__` of `PWL` class**
 
         Summary
         -------
@@ -123,10 +121,10 @@ class PWL():
 
     # ----
 
-    # = `__str__` =
+    # = String Representation =
 
     def __str__(self) -> str:
-        """**Method of `PWL` class**
+        """**Dunder method `__str__` of `PWL` class**
 
         Summary
         -------
@@ -141,11 +139,15 @@ class PWL():
 
     # ----
 
-    # = `t_list` : `list[float]` =
+    # = Time Coordinates =
 
     @property
     def t_list(self) -> List[float]:
-        """**Property of `PWL` class**
+        """**`t_list` property of `PWL` class**
+
+        Type
+        ----
+        * `list[float]`
 
         Summary
         -------
@@ -160,11 +162,15 @@ class PWL():
 
     # ----
 
-    # = `x_list` : `list[float]` =
+    # = Dependent Coordinates =
 
     @property
     def x_list(self) -> List[float]:
-        """**Property of `PWL` class**
+        """**`x_list` property of `PWL` class**
+
+        Type
+        ----
+        * `list[float]`
 
         Summary
         -------
@@ -179,11 +185,15 @@ class PWL():
 
     # ----
 
-    # = `t_step` : `float` =
+    # = Defaukt Timestep =
 
     @property
     def t_step(self) -> float:
-        """**Property of `PWL` class**
+        """**`t_step` property of `PWL` class**
+
+        Type
+        ----
+        * `float`
 
         Summary
         -------
@@ -210,11 +220,15 @@ class PWL():
 
     # ----
 
-    # = `name` : `str` =
+    # = Name =
 
     @property
     def name(self) -> str:
-        """**Property of `PWL` class**
+        """**`name` property of `PWL` class**
+
+        Type
+        ----
+        * `str`
 
         Summary
         -------
@@ -246,11 +260,15 @@ class PWL():
 
     # ----
 
-    # = `verbose` : `bool` =
+    # = Verbose Flag =
 
     @property
     def verbose(self) -> bool:
-        """**Property of `PWL` class**
+        """**`verbose` property of `PWL` class**
+
+        Type
+        ----
+        * `bool`
 
         Summary
         -------
@@ -273,10 +291,10 @@ class PWL():
 
     # ----
 
-    # = `hold` =
+    # = Last Value Holder =
 
     def hold(self, duration: float) -> None:
-        """**Method of `PWL` class**
+        """**`hold` method of `PWL` class**
 
         Summary
         -------
@@ -318,18 +336,18 @@ class PWL():
 
     # ----
 
-    # = `square_pulse` =
+    # = Rectangular Pulse =
 
-    def square_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
-        """**Method of `PWL` class**
+    def rectangular_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
+        """**`rectangular_pulse` method of `PWL` class**
 
         Summary
         -------
-        Generates a square pulse with given amplitude and duration
+        Generates a rectangular pulse with given amplitude and duration
 
-
-
-
+        See Also
+        --------
+        * [Linear Transition](#linear-transition)
         """
 
         if t_step is None:
@@ -353,13 +371,13 @@ class PWL():
                 f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         if self._verbose:
-            print(f"{self._name}: Adding square pulse with value of {value}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding rectangular pulse with value of {value}, duration of {duration} and time step of {t_step}.")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self._lin_edge(value, t_step, 1)
+                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+            self._lin_transition(value, t_step, 1)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
@@ -373,7 +391,7 @@ class PWL():
 
     # ----
 
-    # = `sawtooth_pulse` =
+    # = Sawtooth Pulse =
 
     def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> None:
 
@@ -406,8 +424,8 @@ class PWL():
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self._lin_edge(end, t_step, 1)
+                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+            self._lin_transition(end, t_step, 1)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
@@ -421,9 +439,9 @@ class PWL():
 
     # ----
 
-    # = `lin_edge` =
+    # = Linear Transition =
 
-    def lin_edge(self, target: float, duration: float) -> None:
+    def lin_transition(self, target: float, duration: float) -> None:
 
         if not isinstance(target, Real):
             raise TypeError(
@@ -436,13 +454,13 @@ class PWL():
             raise ValueError(
                 f"Argument 'duration' should be strictly positive but has value of {duration}.")
 
-        self._lin_edge(target, duration, 0)
+        self._lin_transition(target, duration, 0)
 
     # ----
 
-    # = `exp_edge` =
+    # = Exponential Transition =
 
-    def exp_edge(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
+    def exp_transition(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
 
         if t_step is None:
             t_step = self._t_step
@@ -470,13 +488,13 @@ class PWL():
                 f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         if self._verbose:
-            print(f"{self._name}: Adding exponential edge with target of {target}, time constant of {tau}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding exponential transition with target of {target}, time constant of {tau}, duration of {duration} and time step of {t_step}.")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self._lin_edge(target, t_step, 2)
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+            self._lin_transition(target, t_step, 2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
@@ -487,8 +505,8 @@ class PWL():
         last_t = self._t_list[-1]
         last_x = self._x_list[-1]
 
-        f = _exp_edge_func(tau=tau, t1=last_t, t2=last_t +
-                           duration, f1=last_x, f2=target)
+        f = _exp_transition_func(tau=tau, t1=last_t, t2=last_t +
+                                 duration, f1=last_x, f2=target)
 
         for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
             self._add(t, f(t))
@@ -497,9 +515,9 @@ class PWL():
 
     # ----
 
-    # = `sin_edge` =
+    # = Half Sine Transition =
 
-    def sin_edge(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
+    def sin_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
 
         if t_step is None:
             t_step = self._t_step
@@ -522,13 +540,13 @@ class PWL():
                 f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         if self._verbose:
-            print(f"{self._name}: Adding sinusoidal edge with target of {target}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding sinusoidal transition with target of {target}, duration of {duration} and time step of {t_step}.")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self._lin_edge(target, t_step, n=2)
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+            self._lin_transition(target, t_step, n=2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
@@ -539,7 +557,7 @@ class PWL():
         last_t = self._t_list[-1]
         last_x = self._x_list[-1]
 
-        f = _sin_edge_func(
+        f = _sin_transition_func(
             t1=last_t, t2=last_t+duration, f1=last_x, f2=target)
 
         for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
@@ -549,9 +567,9 @@ class PWL():
 
     # ----
 
-    # = `smoothstep_edge` =
+    # = Smoothstep Transition =
 
-    def smoothstep_edge(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
+    def smoothstep_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
 
         if t_step is None:
             t_step = self._t_step
@@ -574,13 +592,13 @@ class PWL():
                 f"Argument 't_step' should be strictly positive but has value of {t_step}.")
 
         if self._verbose:
-            print(f"{self._name}: Adding smoothstep edge with target of {target}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding smoothstep transition with target of {target}, duration of {duration} and time step of {t_step}.")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear edge.")
-            self._lin_edge(target, t_step, n=2)
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+            self._lin_transition(target, t_step, n=2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
@@ -591,7 +609,7 @@ class PWL():
         last_t = self._t_list[-1]
         last_x = self._x_list[-1]
 
-        f = _smoothstep_edge_func(
+        f = _smoothstep_transition_func(
             t1=last_t, t2=last_t+duration, f1=last_x, f2=target)
 
         for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
@@ -601,7 +619,7 @@ class PWL():
 
     # ----
 
-    # = `write` =
+    # = PWL File Writer =
 
     def write(self, filename: str, precision: int = 10) -> None:
 
@@ -669,14 +687,14 @@ class PWL():
             self._t_list.append(t)
             self._x_list.append(x)
 
-    def _lin_edge(self, target: float, duration: float, n: int) -> None:
+    def _lin_transition(self, target: float, duration: float, n: int) -> None:
         if self._verbose:
             if n == 0:
                 print(
-                    f"{self._name}: Adding linear edge with target of {target} and duration of {duration}.")
+                    f"{self._name}: Adding linear transition with target of {target} and duration of {duration}.")
             else:
                 print(
-                    n*"    "+f"Adding linear edge with target of {target} and duration of {duration}.")
+                    n*"    "+f"Adding linear transition with target of {target} and duration of {duration}.")
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
@@ -687,7 +705,7 @@ class PWL():
         self._add(last_t+duration, target)
 
 
-def _exp_edge_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
+def _exp_transition_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
     A: float = (f1*numpy.exp(t1/tau) - f2*numpy.exp(t2/tau)) / \
         (numpy.exp(t1/tau) - numpy.exp(t2/tau))
     B: float = (f1 - f2)/(numpy.exp(-t1/tau) - numpy.exp(-t2/tau))
@@ -699,7 +717,7 @@ def _exp_edge_func(tau: float, t1: float, f1: float, t2: float, f2: float) -> Ca
     return f
 
 
-def _sin_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
+def _sin_transition_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
     fm: float = (f1+f2)/2
     tm: float = (t1+t2)/2
     T: float = 2*(t2-t1)
@@ -714,7 +732,7 @@ def _sin_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[floa
     return f
 
 
-def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
+def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> Callable[[float], float]:
     Am = numpy.array([[1, t1, t1**2, t1**3],
                       [1, t2, t2**2, t2**3],
                       [0, 1, 2*t1, 3*t1**2],
@@ -732,10 +750,10 @@ def _smoothstep_edge_func(t1: float, f1: float, t2: float, f2: float) -> Callabl
 if __name__ == "__main__":
     pwl = PWL(verbose=True, t_step=0.1)
     pwl.hold(1)
-    pwl.sin_edge(1, 1)
+    pwl.sin_transition(1, 1)
     pwl.hold(1)
-    pwl.smoothstep_edge(0, 1)
-    pwl.square_pulse(1, 1)
-    pwl.lin_edge(0, 1)
-    pwl.sin_edge(1, 0.01)
+    pwl.smoothstep_transition(0, 1)
+    pwl.rectangular_pulse(1, 1)
+    pwl.lin_transition(0, 1)
+    pwl.sin_transition(1, 0.01)
     pwl.hold(1)
