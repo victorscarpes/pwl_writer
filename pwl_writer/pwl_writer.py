@@ -579,12 +579,35 @@ class PWL():
 
         Summary
         -------
+        Method that generates an exponential transition from the last value of the previous event to a given target with a given duration.
+
+        If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
+
+        Let's call `x0` the last value of the previous event and `t0` the instant when the transition begins. The transition will follow thw following form:
+
+            f(t) = A + B*exp(-t/tau)
+
+        The constants `A` and `B` are chosen such that the following conditions are met:
+
+            f(t0) = x0
+            f(t0 + duration) = target
+
+        The sign of `tau` defines if `f(t)` diverges or converges when `t` goes to positive infinity.
+
+        If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `end` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
         Arguments
         ---------
+        * `target` (`float`) : Value to transition to.
+        * `duration` (`float`) : Duration of the transition. Should be strictly positive.
+        * `tau` (`float`) : Time constant of the exponential. SHould be non zero.
+        * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
         Raises
         ------
+        * `TypeError` : Raised if either `target`, `duration`, tau` or `t_step` is not a real number.
+        * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive or `tau` is equal to zero.
+        * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
         See Also
         --------
