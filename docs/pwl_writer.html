@@ -243,15 +243,15 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-12'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Initializer for the <code>PWL</code> class.</p>
-<h2>Arguments</h2>
+<h3>Arguments</h3>
 <ul>
 <li><code>t_step</code> (<code>float</code>) : Default timestep for all operations. Should be strictly positive.</li>
 <li><code>name</code> (<code>str</code>, optional) : Name of the <code>PWL</code> object used for verbose output printing. Should not be empty. If not set, automatically generates a name based on already taken names.</li>
 <li><code>verbose</code> (<code>bool</code>, optional) : Flag indicating if verbose output should be printed. If not set, defaults to <code>False</code>.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if any of the arguments has an invalid type.</li>
 <li><code>ValueError</code> : Raised if <code>t_step</code> is not strictly positive or <code>name</code> is empty.</li>
@@ -334,9 +334,9 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-16'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>String representation of <code>PWL</code> instances in the form <code>[name]: PWL object with [# of points] and duration of [total time duration] seconds</code>.</p>
-<h2>Returns</h2>
+<h3>Returns</h3>
 <ul>
 <li><code>str</code></li>
 </ul>
@@ -387,9 +387,9 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-20'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Length of <code>PWL</code> instances defined as the number of <code>(t, x)</code> points they contain.</p>
-<h2>Returns</h2>
+<h3>Returns</h3>
 <ul>
 <li><code>int</code></li>
 </ul>
@@ -441,13 +441,13 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-24'>#</a>
       </div>
-      <h2>Type</h2>
+      <h3>Type</h3>
 <ul>
 <li><code>list[float]</code></li>
 </ul>
-<h2>Summary</h2>
+<h3>Summary</h3>
 <p>Read only property containing all the time coordinates of a <code>PWL</code> object.</p>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
 </ul>
@@ -499,13 +499,13 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-28'>#</a>
       </div>
-      <h2>Type</h2>
+      <h3>Type</h3>
 <ul>
 <li><code>list[float]</code></li>
 </ul>
-<h2>Summary</h2>
+<h3>Summary</h3>
 <p>Read only property containing all the dependent coordinates of a <code>PWL</code> object.</p>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
 </ul>
@@ -557,13 +557,13 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-32'>#</a>
       </div>
-      <h2>Type</h2>
+      <h3>Type</h3>
 <ul>
 <li><code>float</code></li>
 </ul>
-<h2>Summary</h2>
+<h3>Summary</h3>
 <p>Property defining the default timestep of a <code>PWL</code> object.</p>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if the assigned value is not a real number.</li>
 <li><code>ValueError</code> : Raised if the assigned value is not strictly positive.</li>
@@ -637,13 +637,13 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-37'>#</a>
       </div>
-      <h2>Type</h2>
+      <h3>Type</h3>
 <ul>
 <li><code>str</code></li>
 </ul>
-<h2>Summary</h2>
+<h3>Summary</h3>
 <p>Property defining the name of a <code>PWL</code> object for verbose output printing.</p>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if the assigned value is not a string.</li>
 <li><code>ValueError</code> : Raised if the assigned value is an empty string or already in use.</li>
@@ -722,13 +722,13 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-42'>#</a>
       </div>
-      <h2>Type</h2>
+      <h3>Type</h3>
 <ul>
 <li><code>bool</code></li>
 </ul>
-<h2>Summary</h2>
+<h3>Summary</h3>
 <p>Property defining if verbose output should be printed or not.</p>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if the assigned value is not a boolean.</li>
 </ul>
@@ -797,14 +797,14 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-47'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Method that holds the last value from the previous event for a given duration.</p>
 <p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and holds that.</p>
-<h2>Parameters</h2>
+<h3>Parameters</h3>
 <ul>
 <li><code>duration</code> (<code>float</code>) : Duration to hold the last value for. Should be strictly positive.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if <code>duration</code> is not a real number.</li>
 <li><code>ValueError</code> : Raised if <code>duration</code> is not strictly positive.</li>
@@ -876,15 +876,15 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-51'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Method that generates a linear transition from the last value of the previous event to a given target with a given duration.</p>
 <p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
-<h2>Arguments</h2>
+<h3>Arguments</h3>
 <ul>
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if either <code>target</code> or duration` is not a real number.</li>
 <li><code>ValueError</code> : Raised if <code>duration</code> is not strictly positive.</li>
@@ -948,22 +948,22 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-55'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Method that generates a rectangular pulse with given amplitude and duration.</p>
 <p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>value</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
-<h2>Arguments</h2>
+<h3>Arguments</h3>
 <ul>
 <li><code>value</code> (<code>float</code>) : Amplitude of the pulse.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if either <code>value</code>, duration<code>or</code>t_step` is not a real number.</li>
 <li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
 <li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
 </ul>
-<h2>See Also</h2>
+<h3>See Also</h3>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
 </ul>
@@ -1051,23 +1051,23 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-59'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.</p>
 <p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>end</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
-<h2>Arguments</h2>
+<h3>Arguments</h3>
 <ul>
 <li><code>start</code> (<code>float</code>) : Amplitude at the start of the pulse.</li>
 <li><code>end</code> (<code>float</code>) : Amplitude at the end of the pulse.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if either <code>start</code>, <code>end</code>, duration<code>or</code>t_step` is not a real number.</li>
 <li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
 <li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
 </ul>
-<h2>See Also</h2>
+<h3>See Also</h3>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
 </ul>
@@ -1158,7 +1158,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-63'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Method that generates an exponential transition from the last value of the previous event to a given target with a given duration.</p>
 <p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
 <p>Let&rsquo;s call <code>x0</code> the last value of the previous event and <code>t0</code> the instant when the transition begins. The transition will follow thw following form:</p>
@@ -1170,20 +1170,20 @@ f(t0 + duration) = target
 </code></pre>
 <p>The sign of <code>tau</code> defines if <code>f(t)</code> diverges or converges when <code>t</code> goes to positive infinity.</p>
 <p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>target</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
-<h2>Arguments</h2>
+<h3>Arguments</h3>
 <ul>
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>tau</code> (<code>float</code>) : Time constant of the exponential. SHould be non zero.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if either <code>target</code>, <code>duration</code>, tau<code>or</code>t_step` is not a real number.</li>
 <li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive or <code>tau</code> is equal to zero.</li>
 <li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
 </ul>
-<h2>See Also</h2>
+<h3>See Also</h3>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
 </ul>
@@ -1283,7 +1283,7 @@ f(t0 + duration) = target
       <div class='octowrap'>
         <a class='octothorpe' href='#section-67'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Method that generates a half sine transition from the last value of the previous event to a given target with a given duration.</p>
 <p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
 <p>Let&rsquo;s call <code>x0</code> the last value of the previous event and <code>t0</code> the instant when the transition begins. The transition will follow thw following form:</p>
@@ -1296,19 +1296,19 @@ f'(t0) = f'(t0 + duration) = 0
 </code></pre>
 <p>Due to the periodic nature of sine, inifinite solutions for <code>f(t)</code> that satisfy those conditions exist. The only monotonic solution is chosen. That is to say, the wavelength of the chopse solution is equal to <code>2*duration</code>.</p>
 <p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>target</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
-<h2>Arguments</h2>
+<h3>Arguments</h3>
 <ul>
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if either <code>target</code>, <code>duration</code> or <code>t_step</code> is not a real number.</li>
 <li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
 <li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
 </ul>
-<h2>See Also</h2>
+<h3>See Also</h3>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
 </ul>
@@ -1403,7 +1403,7 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-71'>#</a>
       </div>
-      <h2>Summary</h2>
+      <h3>Summary</h3>
 <p>Method that generates a smoothstep transition from the last value of the previous event to a given target with a given duration.</p>
 <p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
 <p>Let&rsquo;s call <code>x0</code> the last value of the previous event and <code>t0</code> the instant when the transition begins. The transition will follow thw following form:</p>
@@ -1415,19 +1415,19 @@ f(t0 + duration) = target
 f'(t0) = f'(t0 + duration) = 0
 </code></pre>
 <p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>target</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
-<h2>Arguments</h2>
+<h3>Arguments</h3>
 <ul>
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if either <code>target</code>, <code>duration</code> or <code>t_step</code> is not a real number.</li>
 <li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
 <li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
 </ul>
-<h2>See Also</h2>
+<h3>See Also</h3>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
 </ul>
@@ -1513,7 +1513,7 @@ f'(t0) = f'(t0 + duration) = 0
       <p><strong><code>write</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">precision</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">precision</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1522,12 +1522,26 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-75'>#</a>
       </div>
-      <h2>Summary</h2>
-<h2>Arguments</h2>
+      <h3>Summary</h3>
+<p>Method that takes a <code>PWL</code> object and writes a PWL file with it&rsquo;s <code>(t, x)</code> coordinates in scientific notation.</p>
+<p>If the specified file already exists, overwrites it.</p>
+<h3>Arguments</h3>
+<ul>
+<li><code>filename</code> (<code>str</code>, optional) : Name of file to be created. If not set, uses <code>self.name</code> if an added <code>.txt</code> extension.</li>
+<li><code>precision</code> (<code>int</code>, optional) : Number of significant figures used when writing the PWL file. Should be strictly positive. If not set, defaults to 10.</li>
+</ul>
 <h2>Raises</h2>
+<ul>
+<li><code>TypeError</code> : Raised if <code>filename</code> is not a string or <code>precision</code> is not an integer.</li>
+<li><code>ValueError</code> : Raised if <code>precision</code> is not strictly positive.</li>
+<li><code>PrecisionError</code> : Raised if <code>precision</code> is such that the rounding causes the time coordinates to not be strictly increasing.</li>
+</ul>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s1">.txt&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Argument &#39;filename&#39; should be a string but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>

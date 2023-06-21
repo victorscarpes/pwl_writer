@@ -107,18 +107,18 @@ class PWL():
     def __init__(self, t_step: float, name: Optional[str] = None, verbose: bool = False) -> None:
         """**Dunder method `__init__` of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Initializer for the `PWL` class.
 
-        Arguments
-        ---------
+        ### Arguments
+
         * `t_step` (`float`) : Default timestep for all operations. Should be strictly positive.
         * `name` (`str`, optional) : Name of the `PWL` object used for verbose output printing. Should not be empty. If not set, automatically generates a name based on already taken names.
         * `verbose` (`bool`, optional) : Flag indicating if verbose output should be printed. If not set, defaults to `False`.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if any of the arguments has an invalid type.
         * `ValueError` : Raised if `t_step` is not strictly positive or `name` is empty.
         """
@@ -163,12 +163,12 @@ class PWL():
     def __str__(self) -> str:
         """**Dunder method `__str__` of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         String representation of `PWL` instances in the form `[name]: PWL object with [# of points] and duration of [total time duration] seconds`.
 
-        Returns
-        -------
+        ### Returns
+
         * `str`
         """
 
@@ -181,12 +181,12 @@ class PWL():
     def __len__(self) -> int:
         """**Dunder method `__len__` of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Length of `PWL` instances defined as the number of `(t, x)` points they contain.
 
-        Returns
-        -------
+        ### Returns
+
         * `int`
         """
 
@@ -200,16 +200,16 @@ class PWL():
     def t_list(self) -> List[float]:
         """**`t_list` property of `PWL` class**
 
-        Type
-        ----
+        ### Type
+
         * `list[float]`
 
-        Summary
-        -------
+        ### Summary
+
         Read only property containing all the time coordinates of a `PWL` object.
 
-        Raises
-        ------
+        ### Raises
+
         * `AttributeError` : Raised if assignment was attempetd.
         """
 
@@ -223,16 +223,16 @@ class PWL():
     def x_list(self) -> List[float]:
         """**`x_list` property of `PWL` class**
 
-        Type
-        ----
+        ### Type
+
         * `list[float]`
 
-        Summary
-        -------
+        ### Summary
+
         Read only property containing all the dependent coordinates of a `PWL` object.
 
-        Raises
-        ------
+        ### Raises
+
         * `AttributeError` : Raised if assignment was attempetd.
         """
 
@@ -246,16 +246,16 @@ class PWL():
     def t_step(self) -> float:
         """**`t_step` property of `PWL` class**
 
-        Type
-        ----
+        ### Type
+
         * `float`
 
-        Summary
-        -------
+        ### Summary
+
         Property defining the default timestep of a `PWL` object.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if the assigned value is not a real number.
         * `ValueError` : Raised if the assigned value is not strictly positive.
         """
@@ -281,16 +281,16 @@ class PWL():
     def name(self) -> str:
         """**`name` property of `PWL` class**
 
-        Type
-        ----
+        ### Type
+
         * `str`
 
-        Summary
-        -------
+        ### Summary
+
         Property defining the name of a `PWL` object for verbose output printing.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if the assigned value is not a string.
         * `ValueError` : Raised if the assigned value is an empty string or already in use.
         """
@@ -321,16 +321,16 @@ class PWL():
     def verbose(self) -> bool:
         """**`verbose` property of `PWL` class**
 
-        Type
-        ----
+        ### Type
+
         * `bool`
 
-        Summary
-        -------
+        ### Summary
+
         Property defining if verbose output should be printed or not.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if the assigned value is not a boolean.
         """
 
@@ -351,18 +351,18 @@ class PWL():
     def hold(self, duration: float) -> None:
         """**`hold` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Method that holds the last value from the previous event for a given duration.
 
         If the `PWL` object is empty, adds the point `(0, 0)` and holds that.
 
-        Parameters
-        ----------
+        ### Parameters
+
         * `duration` (`float`) : Duration to hold the last value for. Should be strictly positive.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if `duration` is not a real number.
         * `ValueError` : Raised if `duration` is not strictly positive.
         * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
@@ -396,20 +396,19 @@ class PWL():
     def lin_transition(self, target: float, duration: float) -> None:
         """**`lin_transition` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
 
         Method that generates a linear transition from the last value of the previous event to a given target with a given duration.
 
         If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
 
-        Arguments
-        ---------
+        ### Arguments
+
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if either `target` or duration` is not a real number.
         * `ValueError` : Raised if `duration` is not strictly positive.
         * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
@@ -435,26 +434,26 @@ class PWL():
     def rect_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
         """**`rect_pulse` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Method that generates a rectangular pulse with given amplitude and duration.
 
         If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `value` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
-        Arguments
-        ---------
+        ### Arguments
+
         * `value` (`float`) : Amplitude of the pulse.
         * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
         * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if either `value`, duration` or `t_step` is not a real number.
         * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
         * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
-        See Also
-        --------
+        ### See Also
+
         * [Linear Transition](#linear-transition)
         """
 
@@ -504,27 +503,27 @@ class PWL():
     def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> None:
         """**`sawtooth_pulse` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.
 
         If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `end` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
-        Arguments
-        ---------
+        ### Arguments
+
         * `start` (`float`) : Amplitude at the start of the pulse.
         * `end` (`float`) : Amplitude at the end of the pulse.
         * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
         * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if either `start`, `end`, duration` or `t_step` is not a real number.
         * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
         * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
-        See Also
-        --------
+        ### See Also
+
         * [Linear Transition](#linear-transition)
         """
 
@@ -577,8 +576,8 @@ class PWL():
     def exp_transition(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
         """**`exp_transition` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Method that generates an exponential transition from the last value of the previous event to a given target with a given duration.
 
         If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
@@ -596,21 +595,21 @@ class PWL():
 
         If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `target` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
-        Arguments
-        ---------
+        ### Arguments
+
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `tau` (`float`) : Time constant of the exponential. SHould be non zero.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if either `target`, `duration`, tau` or `t_step` is not a real number.
         * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive or `tau` is equal to zero.
         * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
-        See Also
-        --------
+        ### See Also
+
         * [Linear Transition](#linear-transition)
         """
 
@@ -672,8 +671,8 @@ class PWL():
     def sin_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
         """**`sin_transition` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Method that generates a half sine transition from the last value of the previous event to a given target with a given duration.
 
         If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
@@ -692,20 +691,20 @@ class PWL():
 
         If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `target` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
-        Arguments
-        ---------
+        ### Arguments
+
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if either `target`, `duration` or `t_step` is not a real number.
         * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
         * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
-        See Also
-        --------
+        ### See Also
+
         * [Linear Transition](#linear-transition)
         """
 
@@ -762,8 +761,8 @@ class PWL():
     def smoothstep_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
         """**`smoothstep_transition` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
+
         Method that generates a smoothstep transition from the last value of the previous event to a given target with a given duration.
 
         If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
@@ -780,20 +779,20 @@ class PWL():
 
         If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `target` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
-        Arguments
-        ---------
+        ### Arguments
+
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if either `target`, `duration` or `t_step` is not a real number.
         * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
         * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
-        See Also
-        --------
+        ### See Also
+
         * [Linear Transition](#linear-transition)
         """
 
@@ -847,18 +846,29 @@ class PWL():
 
     # == PWL File Writer ==
 
-    def write(self, filename: str, precision: int = 10) -> None:
+    def write(self, filename: Optional[str] = None, precision: int = 10) -> None:
         """**`write` method of `PWL` class**
 
-        Summary
-        -------
+        ### Summary
 
-        Arguments
-        ---------
+        Method that takes a `PWL` object and writes a PWL file with it's `(t, x)` coordinates in scientific notation.
+
+        If the specified file already exists, overwrites it.
+
+        ### Arguments
+
+        * `filename` (`str`, optional) : Name of file to be created. If not set, uses `self.name` if an added `.txt` extension.
+        * `precision` (`int`, optional) : Number of significant figures used when writing the PWL file. Should be strictly positive. If not set, defaults to 10.
 
         Raises
         ------
+        * `TypeError` : Raised if `filename` is not a string or `precision` is not an integer.
+        * `ValueError` : Raised if `precision` is not strictly positive.
+        * `PrecisionError` : Raised if `precision` is such that the rounding causes the time coordinates to not be strictly increasing.
         """
+
+        if filename is None:
+            filename = f'{self._name}.txt'
 
         if not isinstance(filename, str):
             raise TypeError(
