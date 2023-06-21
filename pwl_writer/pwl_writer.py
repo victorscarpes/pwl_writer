@@ -13,6 +13,7 @@ Tested on python version `3.6.6` with numpy version `1.19.5`. Type stubs for thi
         * Dunder Methods
             * [Initializer](#initializer)
             * [String Representation](#string-representation)
+            * [Length Calculator](#length-calculator)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -172,6 +173,24 @@ class PWL():
         """
 
         return f"{self.name}: PWL object with {len(self.t_list)} points and duration of {self.t_list[-1]} seconds"
+
+    # ----
+
+    # == Length Calculator ==
+
+    def __len__(self) -> int:
+        """**Dunder method `__len__` of `PWL` class**
+
+        Summary
+        -------
+        Length of `PWL` instances defined as the number of `(t, x)` points they contain.
+
+        Returns
+        -------
+        * `int`
+        """
+
+        return len(self._t_list)
 
     # ----
 
