@@ -394,7 +394,7 @@ class PWL():
     # == Linear Transition ==
 
     def lin_transition(self, target: float, duration: float) -> None:
-        """**`lin_transition` method of ``PWL` class**
+        """**`lin_transition` method of `PWL` class**
 
         Summary
         -------
@@ -502,7 +502,7 @@ class PWL():
     # == Sawtooth Pulse ==
 
     def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> None:
-        """**`sawtooth_pulse` method of ``PWL` class**
+        """**`sawtooth_pulse` method of `PWL` class**
 
         Summary
         -------
@@ -575,7 +575,7 @@ class PWL():
     # == Exponential Transition ==
 
     def exp_transition(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
-        """**`exp_transition` method of ``PWL` class**
+        """**`exp_transition` method of `PWL` class**
 
         Summary
         -------
@@ -647,7 +647,7 @@ class PWL():
     # == Half Sine Transition ==
 
     def sin_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
-        """**`sin_transition` method of ``PWL` class**
+        """**`sin_transition` method of `PWL` class**
 
         Summary
         -------
@@ -714,7 +714,7 @@ class PWL():
     # == Smoothstep Transition ==
 
     def smoothstep_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
-        """**`smoothstep_transition` method of ``PWL` class**
+        """**`smoothstep_transition` method of `PWL` class**
 
         Summary
         -------
@@ -781,7 +781,7 @@ class PWL():
     # == PWL File Writer ==
 
     def write(self, filename: str, precision: int = 10) -> None:
-        """**`write` method of ``PWL` class**
+        """**`write` method of `PWL` class**
 
         Summary
         -------
