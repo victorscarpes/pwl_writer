@@ -5,6 +5,34 @@ Tested on python version `3.6.6` with numpy version `1.19.5`. Type stubs for thi
 
 ----
 
+# Index
+
+* [Package Summary](#package-summary)
+* [Precision Related Exception](#precision-related-exception)
+* [PWL Class](#pwl-class)
+        * Dunder Methods
+            * [Initializer](#initializer)
+            * [String Representation](#string-representation)
+        * Properties
+            * [Time Coordinates](#time-coordinates)
+            * [Dependent Coordinates](#dependent-coordinates)
+            * [Default Timestep](#default-timestep)
+            * [Name](#name)
+            * [Verbose Flag](#verbose-flag)
+        * Methods
+            * [Last Value Holder](#last-value-holder)
+            * [Rectangular Pulse](#rectangular-pulse)
+            * [Sawtooth Pulse](#sawtooth-pulse)
+            * [Linear Transition](#linear-transition)
+            * [Exponential Transition](#exponential-transition)
+            * [Half Sine Transition](#half-sine-transition)
+            * [Smoothstep Transition](#smoothstep-transition)
+            * [PWL File Writer](#pwl-file-writer)
+
+----
+
+# Package Summary
+
 This package defines a class `PWL` to generate objects that represent time dependent signals `x(t)` that need to be coded in a PWL file. Those objects are built using little components such as rectangular pulses and sawtooth pulses that can be chained together.
 
 The motivations for this package are the nuisances of writing PWL files by hand. To properly explain this, let's discuss how PWL files work.
@@ -27,7 +55,7 @@ Another advantage of using this package is not a feature per se but more a conse
 * Mode 1
 * Mode 2
 
-For each state, various control signals need to be at specific values. We could create one `PWL` object for each control signal and define 3 functions that apply all the needed values for the control signals for each state. If we nedded the system to be at mode 1 for 3 seconds, idle for 1 second and at mode 2 for 5 seconds, we could write something like the following:
+For each state, various control signals need to be at specific values. We could create a `PWL` object for each control signal and define 3 functions that apply all the needed values for the control signals for each state. If we nedded the system to be at mode 1 for 3 seconds, idle for 1 second and at mode 2 for 5 seconds, we could write something like the following:
 
         mode1_state(3)
         idle_state(1)
@@ -41,7 +69,7 @@ import numpy
 
 # ----
 
-# = Precision Related Excpection =
+# = Precision Related Exception =
 
 
 class PrecisionError(Exception):
@@ -52,7 +80,7 @@ class PrecisionError(Exception):
 
 # ----
 
-# = PWL class =
+# = PWL Class =
 
 
 class PWL():
@@ -185,7 +213,7 @@ class PWL():
 
     # ----
 
-    # = Defaukt Timestep =
+    # = Default Timestep =
 
     @property
     def t_step(self) -> float:
@@ -338,12 +366,26 @@ class PWL():
 
     # = Rectangular Pulse =
 
-    def rectangular_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
-        """**`rectangular_pulse` method of `PWL` class**
+    def rect_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
+        """**`rect_pulse` method of `PWL` class**
 
         Summary
         -------
-        Generates a rectangular pulse with given amplitude and duration
+        Generates a rectangular pulse with given amplitude and duration.
+
+        If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `value` with duration `t_step` (`self.t_step` if `t_step` is not set).
+
+        Arguments
+        ---------
+        * `value` (`float`) : Amplitude of the pulse.
+        * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
+        * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
+
+        Raises
+        ------
+        * `TypeError` : Raised if either `value`, duration` or `t_step` is not a real number.
+        * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
+        * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
         See Also
         --------
@@ -753,7 +795,7 @@ if __name__ == "__main__":
     pwl.sin_transition(1, 1)
     pwl.hold(1)
     pwl.smoothstep_transition(0, 1)
-    pwl.rectangular_pulse(1, 1)
+    pwl.rect_pulse(1, 1)
     pwl.lin_transition(0, 1)
     pwl.sin_transition(1, 0.01)
     pwl.hold(1)

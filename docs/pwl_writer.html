@@ -20,6 +20,40 @@
       <p><em>by Victor Sabiá P. Carpes</em></p>
 <p>Tested on python version <code>3.6.6</code> with numpy version <code>1.19.5</code>. Type stubs for this numpy version for mypy checking can be found <a href="https://github.com/numpy/numpy-stubs">here</a>.</p>
 <hr />
+<h1>Index</h1>
+<ul>
+<li><a href="#package-summary">Package Summary</a></li>
+<li><a href="#precision-related-exception">Precision Related Exception</a></li>
+<li><a href="#pwl-class">PWL Class</a><ul>
+<li>Dunder Methods<ul>
+<li><a href="#initializer">Initializer</a></li>
+<li><a href="#string-representation">String Representation</a></li>
+</ul>
+</li>
+<li>Properties<ul>
+<li><a href="#time-coordinates">Time Coordinates</a></li>
+<li><a href="#dependent-coordinates">Dependent Coordinates</a></li>
+<li><a href="#default-timestep">Default Timestep</a></li>
+<li><a href="#name">Name</a></li>
+<li><a href="#verbose-flag">Verbose Flag</a></li>
+</ul>
+</li>
+<li>Methods<ul>
+<li><a href="#last-value-holder">Last Value Holder</a></li>
+<li><a href="#rectangular-pulse">Rectangular Pulse</a></li>
+<li><a href="#sawtooth-pulse">Sawtooth Pulse</a></li>
+<li><a href="#linear-transition">Linear Transition</a></li>
+<li><a href="#exponential-transition">Exponential Transition</a></li>
+<li><a href="#half-sine-transition">Half Sine Transition</a></li>
+<li><a href="#smoothstep-transition">Smoothstep Transition</a></li>
+<li><a href="#pwl-file-writer">PWL File Writer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1>Package Summary</h1>
 <p>This package defines a class <code>PWL</code> to generate objects that represent time dependent signals <code>x(t)</code> that need to be coded in a PWL file. Those objects are built using little components such as rectangular pulses and sawtooth pulses that can be chained together.</p>
 <p>The motivations for this package are the nuisances of writing PWL files by hand. To properly explain this, let&rsquo;s discuss how PWL files work.</p>
 <p>PWL stands for piecewise linear. A PWL file is a way to represent a time dependent signal (referenced by <code>x(t)</code> from now on) for simulation softwares such as LTspice and Cadence Virtuoso. In it, points of the form <code>(t, x)</code> are stored. During simulation, those points are interpolated with first degree polynomials. This poses 2 problems:</p>
@@ -46,7 +80,7 @@
 <li>Mode 1</li>
 <li>Mode 2</li>
 </ul>
-<p>For each state, various control signals need to be at specific values. We could create one <code>PWL</code> object for each control signal and define 3 functions that apply all the needed values for the control signals for each state. If we nedded the system to be at mode 1 for 3 seconds, idle for 1 second and at mode 2 for 5 seconds, we could write something like the following:</p>
+<p>For each state, various control signals need to be at specific values. We could create a <code>PWL</code> object for each control signal and define 3 functions that apply all the needed values for the control signals for each state. If we nedded the system to be at mode 1 for 3 seconds, idle for 1 second and at mode 2 for 5 seconds, we could write something like the following:</p>
 <pre><code>   mode1_state(3)
    idle_state(1)
    mode2_state(5)
@@ -76,7 +110,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
       </div>
-      <h1><span id="precision-related-excpection" href="precision-related-excpection"> Precision Related Excpection </span></h1>
+      <h1><span id="precision-related-exception" href="precision-related-exception"> Precision Related Exception </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -124,7 +158,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-6'>#</a>
       </div>
-      <h1><span id="pwl-class" href="pwl-class"> PWL class </span></h1>
+      <h1><span id="pwl-class" href="pwl-class"> PWL Class </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -432,7 +466,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-26'>#</a>
       </div>
-      <h1><span id="defaukt-timestep" href="defaukt-timestep"> Defaukt Timestep </span></h1>
+      <h1><span id="default-timestep" href="default-timestep"> Default Timestep </span></h1>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -764,10 +798,10 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-46'>#</a>
       </div>
-      <p><strong><code>rectangular_pulse</code> method of <code>PWL</code> class</strong></p>
+      <p><strong><code>rect_pulse</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rectangular_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rect_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -777,7 +811,20 @@
         <a class='octothorpe' href='#section-47'>#</a>
       </div>
       <h2>Summary</h2>
-<p>Generates a rectangular pulse with given amplitude and duration</p>
+<p>Generates a rectangular pulse with given amplitude and duration.</p>
+<p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>value</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
+<h2>Arguments</h2>
+<ul>
+<li><code>value</code> (<code>float</code>) : Amplitude of the pulse.</li>
+<li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
+<li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
+<h2>Raises</h2>
+<ul>
+<li><code>TypeError</code> : Raised if either <code>value</code>, duration<code>or</code>t_step` is not a real number.</li>
+<li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
+<li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
+</ul>
 <h2>See Also</h2>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
@@ -1454,7 +1501,7 @@
     <span class="n">pwl</span><span class="o">.</span><span class="n">sin_transition</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">smoothstep_transition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">pwl</span><span class="o">.</span><span class="n">rectangular_pulse</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">pwl</span><span class="o">.</span><span class="n">rect_pulse</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">lin_transition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">sin_transition</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
     <span class="n">pwl</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
