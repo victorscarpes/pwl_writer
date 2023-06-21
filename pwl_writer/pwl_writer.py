@@ -21,9 +21,9 @@ Tested on python version `3.6.6` with numpy version `1.19.5`. Type stubs for thi
             * [Verbose Flag](#verbose-flag)
         * Methods
             * [Last Value Holder](#last-value-holder)
+            * [Linear Transition](#linear-transition)
             * [Rectangular Pulse](#rectangular-pulse)
             * [Sawtooth Pulse](#sawtooth-pulse)
-            * [Linear Transition](#linear-transition)
             * [Exponential Transition](#exponential-transition)
             * [Half Sine Transition](#half-sine-transition)
             * [Smoothstep Transition](#smoothstep-transition)
@@ -372,6 +372,45 @@ class PWL():
 
     # ----
 
+    # == Linear Transition ==
+
+    def lin_transition(self, target: float, duration: float) -> None:
+        """**`lin_transition` method of ``PWL` class**
+
+        Summary
+        -------
+
+        Method that generates a linear transition from the last value of the previous event to a given target with a given duration.
+
+        If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
+
+        Arguments
+        ---------
+        * `target` (`float`) : Value to transition to.
+        * `duration` (`float`) : Duration of the transition. Should be strictly positive.
+
+        Raises
+        ------
+        * `TypeError` : Raised if either `target` or duration` is not a real number.
+        * `ValueError` : Raised if `duration` is not strictly positive.
+        * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
+        """
+
+        if not isinstance(target, Real):
+            raise TypeError(
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+        if not isinstance(duration, Real):
+            raise TypeError(
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+
+        if duration <= 0:
+            raise ValueError(
+                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+
+        self._lin_transition(target, duration, 0)
+
+    # ----
+
     # == Rectangular Pulse ==
 
     def rect_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
@@ -511,36 +550,6 @@ class PWL():
             self._add(last_t+t_step, start)
 
         self._add(last_t+duration, end)
-
-    # ----
-
-    # == Linear Transition ==
-
-    def lin_transition(self, target: float, duration: float) -> None:
-        """**`lin_transition` method of ``PWL` class**
-
-        Summary
-        -------
-
-        Arguments
-        ---------
-
-        Raises
-        ------
-        """
-
-        if not isinstance(target, Real):
-            raise TypeError(
-                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
-        if not isinstance(duration, Real):
-            raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
-
-        if duration <= 0:
-            raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
-
-        self._lin_transition(target, duration, 0)
 
     # ----
 

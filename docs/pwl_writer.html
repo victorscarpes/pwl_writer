@@ -40,9 +40,9 @@
 </li>
 <li>Methods<ul>
 <li><a href="#last-value-holder">Last Value Holder</a></li>
+<li><a href="#linear-transition">Linear Transition</a></li>
 <li><a href="#rectangular-pulse">Rectangular Pulse</a></li>
 <li><a href="#sawtooth-pulse">Sawtooth Pulse</a></li>
-<li><a href="#linear-transition">Linear Transition</a></li>
 <li><a href="#exponential-transition">Exponential Transition</a></li>
 <li><a href="#half-sine-transition">Half Sine Transition</a></li>
 <li><a href="#smoothstep-transition">Smoothstep Transition</a></li>
@@ -798,7 +798,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-45'>#</a>
       </div>
-      <h2><span id="rectangular-pulse" href="rectangular-pulse"> Rectangular Pulse </span></h2>
+      <h2><span id="linear-transition" href="linear-transition"> Linear Transition </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -810,10 +810,10 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-46'>#</a>
       </div>
-      <p><strong><code>rect_pulse</code> method of <code>PWL</code> class</strong></p>
+      <p><strong><code>lin_transition</code> method of <code>`PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rect_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -821,6 +821,78 @@
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-47'>#</a>
+      </div>
+      <h2>Summary</h2>
+<p>Method that generates a linear transition from the last value of the previous event to a given target with a given duration.</p>
+<p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
+<h2>Arguments</h2>
+<ul>
+<li><code>target</code> (<code>float</code>) : Value to transition to.</li>
+<li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
+</ul>
+<h2>Raises</h2>
+<ul>
+<li><code>TypeError</code> : Raised if either <code>target</code> or duration` is not a real number.</li>
+<li><code>ValueError</code> : Raised if <code>duration</code> is not strictly positive.</li>
+<li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-48'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-48'>#</a>
+      </div>
+      <hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-49'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-49'>#</a>
+      </div>
+      <h2><span id="rectangular-pulse" href="rectangular-pulse"> Rectangular Pulse </span></h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-50'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-50'>#</a>
+      </div>
+      <p><strong><code>rect_pulse</code> method of <code>PWL</code> class</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rect_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-51'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-51'>#</a>
       </div>
       <h2>Summary</h2>
 <p>Method that generates a rectangular pulse with given amplitude and duration.</p>
@@ -884,10 +956,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-48'>
+  <div class='section' id='section-52'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-48'>#</a>
+        <a class='octothorpe' href='#section-52'>#</a>
       </div>
       <hr />
     </div>
@@ -896,10 +968,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-49'>
+  <div class='section' id='section-53'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-49'>#</a>
+        <a class='octothorpe' href='#section-53'>#</a>
       </div>
       <h2><span id="sawtooth-pulse" href="sawtooth-pulse"> Sawtooth Pulse </span></h2>
     </div>
@@ -908,10 +980,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-50'>
+  <div class='section' id='section-54'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-50'>#</a>
+        <a class='octothorpe' href='#section-54'>#</a>
       </div>
       <p><strong><code>sawtooth_pulse</code> method of <code>`PWL</code> class</strong></p>
     </div>
@@ -920,10 +992,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-51'>
+  <div class='section' id='section-55'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-51'>#</a>
+        <a class='octothorpe' href='#section-55'>#</a>
       </div>
       <h2>Summary</h2>
 <p>Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.</p>
@@ -988,67 +1060,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-52'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-52'>#</a>
-      </div>
-      <hr />
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-53'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-53'>#</a>
-      </div>
-      <h2><span id="linear-transition" href="linear-transition"> Linear Transition </span></h2>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-54'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-54'>#</a>
-      </div>
-      <p><strong><code>lin_transition</code> method of <code>`PWL</code> class</strong></p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-55'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-55'>#</a>
-      </div>
-      <h2>Summary</h2>
-<h2>Arguments</h2>
-<h2>Raises</h2>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
