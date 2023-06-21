@@ -594,7 +594,7 @@ class PWL():
 
         The sign of `tau` defines if `f(t)` diverges or converges when `t` goes to positive infinity.
 
-        If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `end` with duration `t_step` (`self.t_step` if `t_step` is not set).
+        If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `target` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
         Arguments
         ---------
@@ -674,12 +674,35 @@ class PWL():
 
         Summary
         -------
+        Method that generates a half sine transition from the last value of the previous event to a given target with a given duration.
+
+        If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
+
+        Let's call `x0` the last value of the previous event and `t0` the instant when the transition begins. The transition will follow thw following form:
+
+            f(t) = A + B*sin(w*t - phi)
+
+        The constants `A`, `B`, `w` and `phi` are chosen shuch that the following conditions are met:
+
+            f(t0) = x0
+            f(t0 + duration) = target
+            f'(t0) = f'(t0 + duration) = 0
+
+        Due to the periodic nature of sine, inifinite solutions for `f(t)` that satisfy those conditions exist. The only monotonic solution is chosen. That is to say, the wavelength of the chopse solution is equal to `2*duration`.
+
+        If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `target` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
         Arguments
         ---------
+        * `target` (`float`) : Value to transition to.
+        * `duration` (`float`) : Duration of the transition. Should be strictly positive.
+        * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
         Raises
         ------
+        * `TypeError` : Raised if either `target`, `duration` or `t_step` is not a real number.
+        * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
+        * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
         See Also
         --------
@@ -741,12 +764,33 @@ class PWL():
 
         Summary
         -------
+        Method that generates a smoothstep from the last value of the previous event to a given target with a given duration.
+
+        If the `PWL` object is empty, adds the point `(0, 0)` and transitions from that.
+
+        Let's call `x0` the last value of the previous event and `t0` the instant when the transition begins. The transition will follow thw following form:
+
+            f(t) = A + B*t + C*t^2 + D*t^3
+
+        The constants `A`, `B`, `C` and `D` are chosen shuch that the following conditions are met:
+
+            f(t0) = x0
+            f(t0 + duration) = target
+            f'(t0) = f'(t0 + duration) = 0
+
+        If `duration` is less than or equal to `t_step` (`self.t_step` if `t_step` is not set), substitutes the pulse by a linear transition from the last value of the previous event to `target` with duration `t_step` (`self.t_step` if `t_step` is not set).
 
         Arguments
         ---------
+        * `target` (`float`) : Value to transition to.
+        * `duration` (`float`) : Duration of the transition. Should be strictly positive.
+        * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
         Raises
         ------
+        * `TypeError` : Raised if either `target`, `duration` or `t_step` is not a real number.
+        * `ValueError` : Raised if either `duration` or `t_step` is not strictly positive.
+        * `PrecisionError` : Raised if computational noise causes the time coordinates to not be strictly increasing.
 
         See Also
         --------

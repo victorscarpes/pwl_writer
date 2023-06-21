@@ -1169,7 +1169,7 @@
 f(t0 + duration) = target
 </code></pre>
 <p>The sign of <code>tau</code> defines if <code>f(t)</code> diverges or converges when <code>t</code> goes to positive infinity.</p>
-<p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>end</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
+<p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>target</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
 <h2>Arguments</h2>
 <ul>
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
@@ -1284,8 +1284,30 @@ f(t0 + duration) = target
         <a class='octothorpe' href='#section-67'>#</a>
       </div>
       <h2>Summary</h2>
+<p>Method that generates a half sine transition from the last value of the previous event to a given target with a given duration.</p>
+<p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
+<p>Let&rsquo;s call <code>x0</code> the last value of the previous event and <code>t0</code> the instant when the transition begins. The transition will follow thw following form:</p>
+<pre><code>f(t) = A + B*sin(w*t - phi)
+</code></pre>
+<p>The constants <code>A</code>, <code>B</code>, <code>w</code> and <code>phi</code> are chosen shuch that the following conditions are met:</p>
+<pre><code>f(t0) = x0
+f(t0 + duration) = target
+f'(t0) = f'(t0 + duration) = 0
+</code></pre>
+<p>Due to the periodic nature of sine, inifinite solutions for <code>f(t)</code> that satisfy those conditions exist. The only monotonic solution is chosen. That is to say, the wavelength of the chopse solution is equal to <code>2*duration</code>.</p>
+<p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>target</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
 <h2>Arguments</h2>
+<ul>
+<li><code>target</code> (<code>float</code>) : Value to transition to.</li>
+<li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
+<li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
 <h2>Raises</h2>
+<ul>
+<li><code>TypeError</code> : Raised if either <code>target</code>, <code>duration</code> or <code>t_step</code> is not a real number.</li>
+<li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
+<li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
+</ul>
 <h2>See Also</h2>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
@@ -1382,8 +1404,29 @@ f(t0 + duration) = target
         <a class='octothorpe' href='#section-71'>#</a>
       </div>
       <h2>Summary</h2>
+<p>Method that generates a smoothstep from the last value of the previous event to a given target with a given duration.</p>
+<p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
+<p>Let&rsquo;s call <code>x0</code> the last value of the previous event and <code>t0</code> the instant when the transition begins. The transition will follow thw following form:</p>
+<pre><code>f(t) = A + B*t + C*t^2 + D*t^3
+</code></pre>
+<p>The constants <code>A</code>, <code>B</code>, <code>C</code> and <code>D</code> are chosen shuch that the following conditions are met:</p>
+<pre><code>f(t0) = x0
+f(t0 + duration) = target
+f'(t0) = f'(t0 + duration) = 0
+</code></pre>
+<p>If <code>duration</code> is less than or equal to <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set), substitutes the pulse by a linear transition from the last value of the previous event to <code>target</code> with duration <code>t_step</code> (<code>self.t_step</code> if <code>t_step</code> is not set).</p>
 <h2>Arguments</h2>
+<ul>
+<li><code>target</code> (<code>float</code>) : Value to transition to.</li>
+<li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
+<li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
 <h2>Raises</h2>
+<ul>
+<li><code>TypeError</code> : Raised if either <code>target</code>, <code>duration</code> or <code>t_step</code> is not a real number.</li>
+<li><code>ValueError</code> : Raised if either <code>duration</code> or <code>t_step</code> is not strictly positive.</li>
+<li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
+</ul>
 <h2>See Also</h2>
 <ul>
 <li><a href="#linear-transition">Linear Transition</a></li>
