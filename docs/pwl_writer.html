@@ -342,7 +342,9 @@
 </ul>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: PWL object with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">)</span><span class="si">}</span><span class="s2"> points and duration of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> seconds&quot;</span></pre></div>
+      <div class="highlight"><pre>        <span class="n">duration</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: PWL object with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span><span class="si">}</span><span class="s2"> points and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> seconds&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

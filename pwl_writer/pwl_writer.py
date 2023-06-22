@@ -173,7 +173,7 @@ class PWL():
         """
 
         duration = 0 if len(self._t_list) == 0 else max(self._t_list)
-        
+
         return f"{self.name}: PWL object with {len(self._t_list)} points and duration of {duration} seconds"
 
     # ----
