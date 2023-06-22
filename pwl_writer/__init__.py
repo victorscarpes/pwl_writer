@@ -1,1 +1,1 @@
-from .pwl_writer import PWL
+from .pwl_writer import *

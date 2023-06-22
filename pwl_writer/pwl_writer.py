@@ -71,6 +71,7 @@ For each state, various control signals need to be at specific values. We could 
         mode2_state(5)
 """
 
+__all__ = ['PrecisionError', 'PWL']
 
 from numbers import Real
 from typing import Callable, Dict, List, Optional
