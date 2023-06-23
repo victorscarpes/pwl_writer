@@ -20,6 +20,7 @@ wheels/
 *.egg
 *.manifest
 *.spec
+.pypirc
 
 # Log files
 pip-log.txt
