@@ -6,12 +6,15 @@ build-backend = "flit_core.buildapi"
 name = "pwl_writer"
 authors = [{name = "Victor Sabiá P. Carpes", email = "victorscarpes@gmail.com"}]
 readme = "README.md"
+requires-python = ">=3.6.6"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
+dependencies = ["numpy >=1.19.5"]
 
 [project.urls]
-Home = "https://github.com/victorscarpes/pwl_writer"
+Documentation = "https://htmlpreview.github.io/?https://github.com/victorscarpes/pwl_writer/blob/main/docs/pwl_writer.html"
+Source = "https://github.com/victorscarpes/pwl_writer"
 
 [tool.bumpver]
 current_version = "1.0.0"
