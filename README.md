@@ -43,8 +43,8 @@ mode2_state(5)
 To install, simply run one of the following commands:
 
 ```
-pip install git+https://github.com/victorscarpes/pwl_writer
-pip3 install git+https://github.com/victorscarpes/pwl_writer
+pip install pwl_writer
+pip3 install pwl_writer
 ```
 
 ## Documentation
