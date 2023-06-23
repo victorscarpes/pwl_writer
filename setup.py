@@ -6,5 +6,5 @@ setup(name="pwl_writer",
       author="Victor Sabiá Pereira Carpes",
       url="https://github.com/victorscarpes/pwl_writer",
       packages=find_packages(),
-      install_requires=["numpy"]
-      )
+      install_requires=["numpy>=1.19.5"],
+)
