@@ -4,9 +4,11 @@
 
 Tested on python version `3.6.6` with numpy version `1.19.5` and python version `3.11.1` with numpy version `1.25.0`. Type stubs for this numpy version for mypy checking can be found [here](https://github.com/numpy/numpy-stubs).
 
----
+## Summary
 
 This package defines a class `PWL` to generate objects that represent time dependent signals $x(t)$ that need to be coded in a PWL file. Those objects are built using little components such as rectangular pulses and sawtooth pulses that can be chained together.
+
+## Motivation
 
 The motivations for this package are the nuisances of writing PWL files by hand. To properly explain this, let's discuss how PWL files work.
 
@@ -36,4 +38,15 @@ mode2_state(5)
 
 ---
 
-[Read the documentation.](https://htmlpreview.github.io/?https://github.com/victorscarpes/pwl_writer/blob/main/docs/pwl_writer.html)
+## How to Install
+
+To install, simply run one of the following commands:
+
+```
+pip install git+https://github.com/victorscarpes/pwl_writer
+pip3 install git+https://github.com/victorscarpes/pwl_writer
+```
+
+## Documentation
+
+Full documentation for the package can be found [here](https://htmlpreview.github.io/?https://github.com/victorscarpes/pwl_writer/blob/main/docs/pwl_writer.html). It was written with [Pycco](https://github.com/pycco-docs/pycco).
