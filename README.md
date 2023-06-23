@@ -2,7 +2,7 @@
 
 *by Victor Sabiá P. Carpes*
 
-Tested on python version `3.6.6` with numpy version `1.19.5`. Type stubs for this numpy version for mypy checking can be found [here](https://github.com/numpy/numpy-stubs).
+Tested on python version `3.6.6` with numpy version `1.19.5` and python version `3.11.1` with numpy version `1.25.0`. Type stubs for this numpy version for mypy checking can be found [here](https://github.com/numpy/numpy-stubs).
 
 ---
 
