@@ -1068,4 +1068,5 @@ if __name__ == "__main__":
     pwl.rect_pulse(1, 1)
     pwl.lin_transition(0, 1)
     pwl.sin_transition(1, 0.01)
+    pwl.sawtooth_pulse(-1, 1, 1)
     pwl.hold(1)
