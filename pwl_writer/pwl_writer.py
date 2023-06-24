@@ -1,7 +1,16 @@
 """
 *by Victor Sabiá P. Carpes*
 
-Tested on python version `3.6.6` with numpy version `1.19.5` and python version `3.11.1` with numpy version `1.25.0`. Type stubs for older numpy versions for mypy checking can be found [here](https://github.com/numpy/numpy-stubs).
+Tested on:
+
+* python `3.6.6`
+        * numpy `1.19.5`
+        * matplotlib `3.3.4`
+* python `3.11.1`
+        * numpy `1.25.0`
+        * matplotlib `3.7.1`
+
+Type stubs for older numpy versions for mypy checking can be found [here](https://github.com/numpy/numpy-stubs).
 
 ----
 
