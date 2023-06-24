@@ -29,6 +29,7 @@ Tested on python version `3.6.6` with numpy version `1.19.5` and python version 
             * [Half Sine Transition](#half-sine-transition)
             * [Smoothstep Transition](#smoothstep-transition)
             * [PWL File Writer](#pwl-file-writer)
+            * [PWL Plotter](#pwl-plotter) *(optional feature: requires matplotlib)*
         * Private Methods *(minimal documentation)*
             * [PWL Point Adder](#pwl-point-adder)
             * [Colinear Points Eliminator](#colinear-points-eliminator)
@@ -73,9 +74,18 @@ For each state, various control signals need to be at specific values. We could 
 
 __all__ = ['PrecisionError', 'PWL']
 
+from warnings import warn
 from numbers import Real
 from typing import Callable, Dict, List, Optional
-import numpy
+import numpy as np
+
+try:
+    import matplotlib.pyplot as plt  # type: ignore
+except ImportError:
+    _has_matplotlib = False
+    warn("Matplotlib package not found. Optional features deactivated.", ImportWarning)
+else:
+    _has_matplotlib = True
 
 # ----
 
@@ -662,7 +672,7 @@ class PWL():
         f = _exp_transition_func(tau=tau, t1=last_t, t2=last_t +
                                  duration, f1=last_x, f2=target)
 
-        for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
+        for t in np.arange(last_t+t_step, last_t+duration, t_step):
             self._add(t, f(t))
 
         self._add(last_t+duration, target)
@@ -752,7 +762,7 @@ class PWL():
         f = _sin_transition_func(
             t1=last_t, t2=last_t+duration, f1=last_x, f2=target)
 
-        for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
+        for t in np.arange(last_t+t_step, last_t+duration, t_step):
             self._add(t, f(t))
 
         self._add(last_t+duration, target)
@@ -840,7 +850,7 @@ class PWL():
         f = _smoothstep_transition_func(
             t1=last_t, t2=last_t+duration, f1=last_x, f2=target)
 
-        for t in numpy.arange(last_t+t_step, last_t+duration, t_step):
+        for t in np.arange(last_t+t_step, last_t+duration, t_step):
             self._add(t, f(t))
 
         self._add(last_t+duration, target)
@@ -891,16 +901,16 @@ class PWL():
         x_list = self._x_list
 
         with open(filename, "w") as file:
-            ti_str = numpy.format_float_scientific(
+            ti_str = np.format_float_scientific(
                 t_list[0], precision-1, unique=False, sign=False)
-            xi_str = numpy.format_float_scientific(
+            xi_str = np.format_float_scientific(
                 x_list[0], precision-1, unique=False, sign=True)
             file.write(f"{ti_str}    {xi_str}\n")
             last_t = ti_str
             for ti, xi in zip(t_list[1:], x_list[1:]):
-                ti_str = numpy.format_float_scientific(
+                ti_str = np.format_float_scientific(
                     ti, precision-1, unique=False, sign=False)
-                xi_str = numpy.format_float_scientific(
+                xi_str = np.format_float_scientific(
                     xi, precision-1, unique=False, sign=True)
                 if ti_str == last_t:
                     raise PrecisionError(
@@ -910,6 +920,56 @@ class PWL():
                 last_t = ti_str
 
     # ----
+
+    # == PWL Plotter ==
+
+    @classmethod
+    def plot(cls, merge: bool = False) -> None:
+        """**`plot` class method of `PWL` class**
+        *Optional feature: Requires matplotlib*
+
+        ### Summary
+
+        Class method that takes all instances of the `PWL` class and plots them on the same time axis.
+
+        ### Arguments
+
+        * `merge` (`bool`, optional) : Flag indicating if all signals should be ploted on the same strip or separeted. If not set, defaults to False.
+
+        ### Raises
+
+        * `ImportError` : Raised if the matplotlib package is not installed.
+        """
+
+        if not _has_matplotlib:
+            raise ImportError(
+                "Optional features are deactivated. Install matplotlib to use.")
+
+        dict_of_objects = cls.__dict_of_objects
+
+        if not dict_of_objects:
+            return None
+
+        if merge:
+            fig, axs = plt.subplots(nrows=1, sharex=True, squeeze=False)
+            axs = np.repeat(axs, len(dict_of_objects))
+        else:
+            fig, axs = plt.subplots(
+                nrows=len(dict_of_objects), sharex=True, squeeze=False)
+            axs = axs.flatten()
+        x_max: float = 0
+
+        for key, ax in zip(dict_of_objects, axs):
+            pwl = dict_of_objects[key]
+            x_list = pwl.t_list
+            x_max = max(x_max, max(x_list))
+            y_list = pwl.x_list
+            label = pwl.name
+            ax.plot(x_list, y_list)
+            ax.set_ylabel(label)
+
+        axs[0].set_xlim(xmin=0, xmax=x_max)
+        plt.show()
 
     # = Private Methods and Functions =
 
@@ -998,12 +1058,12 @@ def _exp_transition_func(tau: float, t1: float, f1: float, t2: float, f2: float)
     Private function that generates an exponential function passing trough 2 fixed points.
     """
 
-    A: float = (f1*numpy.exp(t1/tau) - f2*numpy.exp(t2/tau)) / \
-        (numpy.exp(t1/tau) - numpy.exp(t2/tau))
-    B: float = (f1 - f2)/(numpy.exp(-t1/tau) - numpy.exp(-t2/tau))
+    A: float = (f1*np.exp(t1/tau) - f2*np.exp(t2/tau)) / \
+        (np.exp(t1/tau) - np.exp(t2/tau))
+    B: float = (f1 - f2)/(np.exp(-t1/tau) - np.exp(-t2/tau))
 
     def f(t: float) -> float:
-        result: float = A + B*numpy.exp(-t/tau)
+        result: float = A + B*np.exp(-t/tau)
         return result
 
     return f
@@ -1022,12 +1082,12 @@ def _sin_transition_func(t1: float, f1: float, t2: float, f2: float) -> Callable
     fm: float = (f1+f2)/2
     tm: float = (t1+t2)/2
     T: float = 2*(t2-t1)
-    w: float = 2*numpy.pi/T
+    w: float = 2*np.pi/T
     phi: float = w*tm
     A: float = f2-fm
 
     def f(t: float) -> float:
-        result: float = fm + A*numpy.sin(w*t - phi)
+        result: float = fm + A*np.sin(w*t - phi)
         return result
 
     return f
@@ -1043,12 +1103,12 @@ def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> C
     Private function that generates a smoothstep function passing trough 2 fixed points.
     """
 
-    Am = numpy.array([[1, t1, t1**2, t1**3],
-                      [1, t2, t2**2, t2**3],
-                      [0, 1, 2*t1, 3*t1**2],
-                      [0, 1, 2*t2, 3*t2**2]])
-    Bm = numpy.array([f1, f2, 0, 0])
-    A, B, C, D = numpy.linalg.solve(Am, Bm)
+    Am = np.array([[1, t1, t1**2, t1**3],
+                   [1, t2, t2**2, t2**3],
+                   [0, 1, 2*t1, 3*t1**2],
+                   [0, 1, 2*t2, 3*t2**2]])
+    Bm = np.array([f1, f2, 0, 0])
+    A, B, C, D = np.linalg.solve(Am, Bm)
 
     def f(t: float) -> float:
         result: float = A + B*t + C*t**2 + D*t**3
@@ -1060,13 +1120,18 @@ def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> C
 
 
 if __name__ == "__main__":
-    pwl = PWL(verbose=True, t_step=0.1)
-    pwl.hold(1)
-    pwl.sin_transition(1, 1)
-    pwl.hold(1)
-    pwl.smoothstep_transition(0, 1)
-    pwl.rect_pulse(1, 1)
-    pwl.lin_transition(0, 1)
-    pwl.sin_transition(1, 0.01)
-    pwl.sawtooth_pulse(-1, 1, 1)
-    pwl.hold(1)
+    pwl0 = PWL(0.001)
+    pwl1 = PWL(0.001)
+
+    pwl0.hold(1)
+    pwl1.hold(1)
+
+    pwl0.sin_transition(1, 1)
+    pwl1.sin_transition(-1, 1)
+
+    pwl0.hold(1)
+    pwl1.hold(1)
+
+    pwl0.sin_transition(0, 1)
+
+    PWL.plot(merge=True)
