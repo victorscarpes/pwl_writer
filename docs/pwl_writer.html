@@ -1657,6 +1657,7 @@ f'(t0) = f'(t0 + duration) = 0
 </ul>
 <h3>Raises</h3>
 <ul>
+<li><code>TypeError</code> : Raised if <code>merge</code> is not a boolean.</li>
 <li><code>ImportError</code> : Raised if the matplotlib package is not installed.</li>
 </ul>
     </div>
@@ -1664,6 +1665,10 @@ f'(t0) = f'(t0 + duration) = 0
       <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_matplotlib</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s2">&quot;Optional features are deactivated. Install matplotlib to use.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">merge</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;merge&#39; should be a boolean but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">merge</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
 
         <span class="n">dict_of_objects</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__dict_of_objects</span>
 

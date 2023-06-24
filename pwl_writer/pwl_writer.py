@@ -947,12 +947,17 @@ class PWL():
 
         ### Raises
 
+        * `TypeError` : Raised if `merge` is not a boolean.
         * `ImportError` : Raised if the matplotlib package is not installed.
         """
 
         if not _has_matplotlib:
             raise ImportError(
                 "Optional features are deactivated. Install matplotlib to use.")
+
+        if not isinstance(merge, bool):
+            raise TypeError(
+                f"Argument 'merge' should be a boolean but has type '{type(merge).__name__}'.")
 
         dict_of_objects = cls.__dict_of_objects
 
