@@ -1010,7 +1010,8 @@ class PWL():
             raise TypeError(
                 f"Argument 'merge' should be a boolean but has type '{type(merge).__name__}'.")
 
-        dict_of_objects = {key: pwl for key, pwl in cls.__dict_of_objects.items() if pwl.plot_flag}
+        dict_of_objects = {key: pwl for key,
+                           pwl in cls.__dict_of_objects.items() if pwl.plot_flag}
 
         if not dict_of_objects:
             return None
@@ -1200,7 +1201,7 @@ if __name__ == "__main__":
     pwl1.hold(1)
 
     pwl0.sin_transition(0, 1)
-    
+
     pwl1.plot_flag = False
 
     PWL.plot(merge=False)
