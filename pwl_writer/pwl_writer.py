@@ -29,6 +29,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Default Timestep](#default-timestep)
             * [Name](#name)
             * [Verbose Flag](#verbose-flag)
+            * [Plot Enable Flag](#plot-enable-flag) *(optional feature: requires matplotlib)*
         * Methods
             * [Last Value Holder](#last-value-holder)
             * [Linear Transition](#linear-transition)
@@ -92,7 +93,7 @@ try:
     import matplotlib.pyplot as plt  # type: ignore
 except ImportError:
     _has_matplotlib = False
-    warn("Matplotlib package not found. Optional features deactivated.", ImportWarning)
+    warn("Matplotlib package not found. Optional plotting features deactivated.", ImportWarning)
 else:
     _has_matplotlib = True
 
@@ -170,6 +171,7 @@ class PWL():
         self._t_step: float = t_step
         self._name: str = name
         self._verbose: bool = verbose
+        self._plot_flag: bool = True
 
         if name in PWL. __dict_of_objects:
             raise ValueError(f"Name '{name}' already in use.")
@@ -365,6 +367,51 @@ class PWL():
             raise TypeError(
                 f"Attribute 'verbose' should be a boolean but an object of type '{type(new_verbose).__name__}' was assigned to it.")
         self._verbose = new_verbose
+
+    # ----
+
+    # == Plot Enable Flag ==
+
+    @property
+    def plot_flag(self) -> bool:
+        """**`plot_flag` property of `PWL` class**
+        *Optional feature: Requires matplotlib*
+
+        ### Type
+
+        * `bool`
+
+        ### Summary
+
+        Property defining if object should be plotted by the PWL plotter method.
+
+        ### Raises
+
+        * `TypeError` : Raised if the assigned value is not a boolean.
+
+        ### See Also
+
+        * [PWL Plotter](#pwl-plotter)
+        """
+
+        if (not _has_matplotlib) and self._verbose:
+            print(
+                "Optional features deactivated. Using the plot_flag does nothing in this case.")
+
+        return self._plot_flag
+
+    @plot_flag.setter
+    def plot_flag(self, new_plot_flag: bool) -> None:
+
+        if not isinstance(new_plot_flag, bool):
+            raise TypeError(
+                f"Attribute 'plot_flag' should be a boolean but an object of type '{type(new_plot_flag).__name__}' was assigned to it.")
+
+        if (not _has_matplotlib) and self._verbose:
+            print(
+                "Optional features deactivated. Using the plot_flag does nothing in this case.")
+
+        self._plot_flag = new_plot_flag
 
     # ----
 
@@ -939,7 +986,7 @@ class PWL():
 
         ### Summary
 
-        Class method that takes all instances of the `PWL` class and plots them on the same time axis.
+        Class method that takes all instances of the `PWL` class with plot enable flag set to `True` and plots them on the same time axis.
 
         ### Arguments
 
@@ -949,32 +996,38 @@ class PWL():
 
         * `TypeError` : Raised if `merge` is not a boolean.
         * `ImportError` : Raised if the matplotlib package is not installed.
+
+        ### See Also
+
+        * [Plot Enable Flag](#plot-enable-flag)
         """
 
         if not _has_matplotlib:
             raise ImportError(
-                "Optional features are deactivated. Install matplotlib to use.")
+                "Optional plotting features are deactivated. Install matplotlib to use.")
 
         if not isinstance(merge, bool):
             raise TypeError(
                 f"Argument 'merge' should be a boolean but has type '{type(merge).__name__}'.")
 
-        dict_of_objects = cls.__dict_of_objects
+        dict_of_objects = {key: pwl for key, pwl in cls.__dict_of_objects.items() if pwl.plot_flag}
 
         if not dict_of_objects:
             return None
 
         if merge:
-            fig, axs = plt.subplots(nrows=1, sharex=True, squeeze=False)
+            axs = plt.subplots(nrows=1, sharex=True, squeeze=False)[1]
             axs = np.repeat(axs, len(dict_of_objects))
         else:
-            fig, axs = plt.subplots(
-                nrows=len(dict_of_objects), sharex=True, squeeze=False)
+            axs = plt.subplots(nrows=len(dict_of_objects),
+                               sharex=True, squeeze=False)[1]
             axs = axs.flatten()
         x_max: float = 0
 
         for key, ax in zip(dict_of_objects, axs):
             pwl = dict_of_objects[key]
+            if not pwl._plot_flag:
+                continue
             x_list = pwl.t_list
             x_max = max(x_max, max(x_list))
             y_list = pwl.x_list
@@ -1147,5 +1200,7 @@ if __name__ == "__main__":
     pwl1.hold(1)
 
     pwl0.sin_transition(0, 1)
+    
+    pwl1.plot_flag = False
 
-    PWL.plot(merge=True)
+    PWL.plot(merge=False)
