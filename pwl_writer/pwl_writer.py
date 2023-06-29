@@ -23,6 +23,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Initializer](#initializer)
             * [String Representation](#string-representation)
             * [Length Calculator](#length-calculator)
+            * [Object as a Callable](#object-as-a-callable)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -140,7 +141,7 @@ class PWL():
 
         ### Raises
 
-        * `TypeError` : Raised if any of the arguments has an invalid type.
+        * `TypeError` : Raised if either `t_step` is not a real number, `name` is not a string or `verbose` is not a boolean.
         * `ValueError` : Raised if `t_step` is not strictly positive or `name` is empty.
         """
 
@@ -215,6 +216,39 @@ class PWL():
         """
 
         return len(self._t_list)
+
+    # ----
+
+    # == Object as a Callable ==
+
+    def __call__(self, t: float) -> float:
+        """**Dunder method `__call__` of `PWL` class**
+
+        ### Summary
+
+        Call `PWL` object as a function by linearly interpolating between it's time and dependent coordinates.
+
+        ### Arguments
+
+        * `t` (`float`) : Time instant to evaluate the object at. If negative, returns zero. If bigger than the duration of the object, returns the object's last dependent coordinate.
+
+        ### Returns
+
+        * `float`
+
+        ### Raises
+
+        * `TypeError` : Raised if `t` is not a real number.
+        """
+
+        if not isinstance(t, Real):
+            raise TypeError(
+                f"Argument 't' should be a real number but has type '{type(t).__name__}'.")
+
+        t_list = self._t_list
+        x_list = self._x_list
+
+        return np.interp(x=t, xp=t_list, fp=x_list, left=0)
 
     # ----
 
@@ -1205,3 +1239,4 @@ if __name__ == "__main__":
     pwl1.plot_flag = False
 
     PWL.plot(merge=False)
+    print(pwl0(1.5))
