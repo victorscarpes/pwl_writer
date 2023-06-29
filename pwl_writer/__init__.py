@@ -1,4 +1,4 @@
-"""Package to generate PWL incrementally using little 'events' like rectangular pulses and exponential rising or falling edges."""
+"""Package to generate PWL files incrementally using little 'events' like rectangular pulses and exponential rising or falling edges."""
 
 from .pwl_writer import *
 
