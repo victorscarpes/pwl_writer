@@ -87,8 +87,10 @@ __all__ = ['PrecisionError', 'PWL']
 
 from warnings import warn
 from numbers import Real
-from typing import Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional, TYPE_CHECKING
+import weakref
 import numpy as np
+
 
 try:
     import matplotlib.pyplot as plt  # type: ignore
@@ -97,6 +99,9 @@ except ImportError:
     warn("Matplotlib package not found. Optional plotting features deactivated.", ImportWarning)
 else:
     _has_matplotlib = True
+
+if TYPE_CHECKING:
+    WeakDict = weakref.WeakValueDictionary[str, "PWL"]
 
 # ----
 
@@ -109,10 +114,10 @@ class PrecisionError(Exception):
     This class defines an exception meant to be raised when any type of rounding or loss of precision that causes the time coordinates of a PWL object to not be strictly increasing.
     """
 
+
 # ----
 
 # == PWL Class ==
-
 
 class PWL():
     """**`PWL` class**
@@ -120,7 +125,7 @@ class PWL():
     This class defines an object that represnts a time dependent signal `x(t)`. Those objects can operated on by methods to build, event by event, the desired signal as described on the package introduction.
     """
 
-    __dict_of_objects: Dict[str, 'PWL'] = {}
+    __dict_of_objects = weakref.WeakValueDictionary()  # type: WeakDict
 
     # ----
 
@@ -147,7 +152,7 @@ class PWL():
 
         if name is None:
             i: int = 0
-            while f"pwl_{i}" in PWL.__dict_of_objects:
+            while f"pwl_{i}" in PWL.__dict_of_objects.keys():
                 i += 1
             name = f"pwl_{i}"
 
@@ -174,10 +179,10 @@ class PWL():
         self._verbose: bool = verbose
         self._plot_flag: bool = True
 
-        if name in PWL. __dict_of_objects:
+        if name in PWL.__dict_of_objects.keys():
             raise ValueError(f"Name '{name}' already in use.")
 
-        PWL. __dict_of_objects[name] = self
+        PWL.__dict_of_objects[name] = self
 
     # ----
 
@@ -364,11 +369,11 @@ class PWL():
             raise ValueError(
                 "An empty string cannot be assigned to the 'name' property.")
 
-        if new_name in PWL. __dict_of_objects:
+        if new_name in PWL.__dict_of_objects.keys():
             raise ValueError(f"Name '{new_name}' already in use.")
 
-        PWL. __dict_of_objects.pop(self._name)
-        PWL. __dict_of_objects[new_name] = self
+        PWL.__dict_of_objects.pop(self._name)
+        PWL.__dict_of_objects[new_name] = self
         self._name = new_name
 
     # ----
@@ -1235,8 +1240,6 @@ if __name__ == "__main__":
     pwl1.hold(1)
 
     pwl0.sin_transition(0, 1)
-
-    pwl1.plot_flag = False
 
     PWL.plot(merge=False)
     print(pwl0(1.5))

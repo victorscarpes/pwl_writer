@@ -120,8 +120,10 @@
 
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">import</span> <span class="nn">weakref</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>  <span class="c1"># type: ignore</span>
@@ -129,7 +131,10 @@
     <span class="n">_has_matplotlib</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Matplotlib package not found. Optional plotting features deactivated.&quot;</span><span class="p">,</span> <span class="ne">ImportWarning</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">_has_matplotlib</span> <span class="o">=</span> <span class="kc">True</span></pre></div>
+    <span class="n">_has_matplotlib</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="n">WeakDict</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">WeakValueDictionary</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;PWL&quot;</span><span class="p">]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -225,7 +230,7 @@
       <p>This class defines an object that represnts a time dependent signal <code>x(t)</code>. Those objects can operated on by methods to build, event by event, the desired signal as described on the package introduction.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="n">__dict_of_objects</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;PWL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></pre></div>
+      <div class="highlight"><pre>    <span class="n">__dict_of_objects</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">WeakValueDictionary</span><span class="p">()</span>  <span class="c1"># type: WeakDict</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -287,7 +292,7 @@
     <div class='code'>
       <div class="highlight"><pre>        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">while</span> <span class="sa">f</span><span class="s2">&quot;pwl_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="p">:</span>
+            <span class="k">while</span> <span class="sa">f</span><span class="s2">&quot;pwl_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;pwl_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
 
@@ -314,10 +319,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot_flag</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span> <span class="n">__dict_of_objects</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; already in use.&quot;</span><span class="p">)</span>
 
-        <span class="n">PWL</span><span class="o">.</span> <span class="n">__dict_of_objects</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span></pre></div>
+        <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -769,11 +774,11 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;An empty string cannot be assigned to the &#39;name&#39; property.&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">new_name</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span> <span class="n">__dict_of_objects</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">new_name</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name &#39;</span><span class="si">{</span><span class="n">new_name</span><span class="si">}</span><span class="s2">&#39; already in use.&quot;</span><span class="p">)</span>
 
-        <span class="n">PWL</span><span class="o">.</span> <span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
-        <span class="n">PWL</span><span class="o">.</span> <span class="n">__dict_of_objects</span><span class="p">[</span><span class="n">new_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="p">[</span><span class="n">new_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">new_name</span></pre></div>
     </div>
   </div>
@@ -2296,8 +2301,6 @@ f'(t0) = f'(t0 + duration) = 0
     <span class="n">pwl1</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="n">pwl0</span><span class="o">.</span><span class="n">sin_transition</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-    <span class="n">pwl1</span><span class="o">.</span><span class="n">plot_flag</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="n">PWL</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">pwl0</span><span class="p">(</span><span class="mf">1.5</span><span class="p">))</span>
