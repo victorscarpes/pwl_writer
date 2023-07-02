@@ -43,6 +43,7 @@
 <li><a href="#string-representation">String Representation</a></li>
 <li><a href="#length-calculator">Length Calculator</a></li>
 <li><a href="#object-as-a-callable">Object as a Callable</a></li>
+<li><a href="#object-slicing">Object Slicing</a></li>
 </ul>
 </li>
 <li>Properties<ul>
@@ -120,7 +121,7 @@
 
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Real</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">weakref</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -298,19 +299,19 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_step</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;name&#39; should either be a string but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;name&#39; should either be a string but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;verbose&#39; should be a boolean but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;verbose&#39; should be a boolean but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">t_step</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Argument &#39;name&#39; should not be empty.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Argument &#39;name&#39; should not be empty&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -320,7 +321,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot_flag</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; already in use.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; already in use&quot;</span><span class="p">)</span>
 
         <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span></pre></div>
     </div>
@@ -493,7 +494,7 @@
     <div class='code'>
       <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="n">t_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span>
         <span class="n">x_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span>
@@ -519,7 +520,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-26'>#</a>
       </div>
-      <h2><span id="time-coordinates" href="time-coordinates"> Time Coordinates </span></h2>
+      <h2><span id="object-slicing" href="object-slicing"> Object Slicing </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -531,11 +532,10 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-27'>#</a>
       </div>
-      <p><strong><code>t_list</code> property of <code>PWL</code> class</strong></p>
+      <p><strong>Dunder method <code>__getitem__</code> of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">t_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">slice</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -544,19 +544,31 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-28'>#</a>
       </div>
-      <h3>Type</h3>
+      <h3>Summary</h3>
+<p>Slice <code>PWL</code> objects.</p>
+<h3>Arguments</h3>
 <ul>
-<li><code>list[float]</code></li>
+<li><code>index</code> (<code>int</code> or <code>slice</code>) : Index for list of <code>(t, x)</code> points.</li>
 </ul>
-<h3>Summary</h3>
-<p>Read only property containing all the time coordinates of a <code>PWL</code> object.</p>
+<h3>Returns</h3>
+<ul>
+<li><code>Tuple[float, float]</code> : Returned if single index is passed.</li>
+<li><code>List[Tuple[float, float]]</code> : Rerturned if multiple indices are passed.</li>
+</ul>
 <h3>Raises</h3>
 <ul>
-<li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
+<li><code>TypeError</code> : Raised if <code>index</code> is not an integer or slice.</li>
+<li><code>IndexError</code> : Raised if <code>index</code> is out of bounds.</li>
 </ul>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span></pre></div>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;PWL indices must be integers or slices, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">coordinates_pair</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_list</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">coordinates_pair</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -577,7 +589,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-30'>#</a>
       </div>
-      <h2><span id="dependent-coordinates" href="dependent-coordinates"> Dependent Coordinates </span></h2>
+      <h2><span id="time-coordinates" href="time-coordinates"> Time Coordinates </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -589,11 +601,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-31'>#</a>
       </div>
-      <p><strong><code>x_list</code> property of <code>PWL</code> class</strong></p>
+      <p><strong><code>t_list</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">x_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
+    <span class="k">def</span> <span class="nf">t_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -607,14 +619,14 @@
 <li><code>list[float]</code></li>
 </ul>
 <h3>Summary</h3>
-<p>Read only property containing all the dependent coordinates of a <code>PWL</code> object.</p>
+<p>Read only property containing all the time coordinates of a <code>PWL</code> object.</p>
 <h3>Raises</h3>
 <ul>
 <li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
 </ul>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span></pre></div>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -635,7 +647,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-34'>#</a>
       </div>
-      <h2><span id="default-timestep" href="default-timestep"> Default Timestep </span></h2>
+      <h2><span id="dependent-coordinates" href="dependent-coordinates"> Dependent Coordinates </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -647,6 +659,64 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-35'>#</a>
       </div>
+      <p><strong><code>x_list</code> property of <code>PWL</code> class</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-36'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-36'>#</a>
+      </div>
+      <h3>Type</h3>
+<ul>
+<li><code>list[float]</code></li>
+</ul>
+<h3>Summary</h3>
+<p>Read only property containing all the dependent coordinates of a <code>PWL</code> object.</p>
+<h3>Raises</h3>
+<ul>
+<li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-37'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-37'>#</a>
+      </div>
+      <hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-38'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-38'>#</a>
+      </div>
+      <h2><span id="default-timestep" href="default-timestep"> Default Timestep </span></h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-39'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-39'>#</a>
+      </div>
       <p><strong><code>t_step</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
@@ -655,10 +725,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-36'>
+  <div class='section' id='section-40'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-36'>#</a>
+        <a class='octothorpe' href='#section-40'>#</a>
       </div>
       <h3>Type</h3>
 <ul>
@@ -677,10 +747,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-37'>
+  <div class='section' id='section-41'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-37'>#</a>
+        <a class='octothorpe' href='#section-41'>#</a>
       </div>
       
     </div>
@@ -689,19 +759,19 @@
     <span class="k">def</span> <span class="nf">t_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_t_step</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_t_step</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Property &#39;t_step&#39; should be a real number but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Property &#39;t_step&#39; should be a real number but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">new_t_step</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Propety &#39;t_step&#39; should be strictly positive but a value of </span><span class="si">{</span><span class="n">new_t_step</span><span class="si">}</span><span class="s2"> was assigned to it.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Propety &#39;t_step&#39; should be strictly positive but a value of </span><span class="si">{</span><span class="n">new_t_step</span><span class="si">}</span><span class="s2"> was assigned to it&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_t_step</span> <span class="o">=</span> <span class="n">new_t_step</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-38'>
+  <div class='section' id='section-42'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-38'>#</a>
+        <a class='octothorpe' href='#section-42'>#</a>
       </div>
       <hr />
     </div>
@@ -710,10 +780,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-39'>
+  <div class='section' id='section-43'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-39'>#</a>
+        <a class='octothorpe' href='#section-43'>#</a>
       </div>
       <h2><span id="name" href="name"> Name </span></h2>
     </div>
@@ -722,10 +792,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-40'>
+  <div class='section' id='section-44'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-40'>#</a>
+        <a class='octothorpe' href='#section-44'>#</a>
       </div>
       <p><strong><code>name</code> property of <code>PWL</code> class</strong></p>
     </div>
@@ -735,10 +805,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-41'>
+  <div class='section' id='section-45'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-41'>#</a>
+        <a class='octothorpe' href='#section-45'>#</a>
       </div>
       <h3>Type</h3>
 <ul>
@@ -757,10 +827,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-42'>
+  <div class='section' id='section-46'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-42'>#</a>
+        <a class='octothorpe' href='#section-46'>#</a>
       </div>
       
     </div>
@@ -769,13 +839,13 @@
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Property &#39;name&#39; should be a string but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_name</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Property &#39;name&#39; should be a string but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_name</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">new_name</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;An empty string cannot be assigned to the &#39;name&#39; property.&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;An empty string cannot be assigned to the &#39;name&#39; property&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">new_name</span> <span class="ow">in</span> <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name &#39;</span><span class="si">{</span><span class="n">new_name</span><span class="si">}</span><span class="s2">&#39; already in use.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name &#39;</span><span class="si">{</span><span class="n">new_name</span><span class="si">}</span><span class="s2">&#39; already in use&quot;</span><span class="p">)</span>
 
         <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
         <span class="n">PWL</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="p">[</span><span class="n">new_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
@@ -783,10 +853,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-43'>
+  <div class='section' id='section-47'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-43'>#</a>
+        <a class='octothorpe' href='#section-47'>#</a>
       </div>
       <hr />
     </div>
@@ -795,10 +865,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-44'>
+  <div class='section' id='section-48'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-44'>#</a>
+        <a class='octothorpe' href='#section-48'>#</a>
       </div>
       <h2><span id="verbose-flag" href="verbose-flag"> Verbose Flag </span></h2>
     </div>
@@ -807,10 +877,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-45'>
+  <div class='section' id='section-49'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-45'>#</a>
+        <a class='octothorpe' href='#section-49'>#</a>
       </div>
       <p><strong><code>verbose</code> property of <code>PWL</code> class</strong></p>
     </div>
@@ -820,10 +890,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-46'>
+  <div class='section' id='section-50'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-46'>#</a>
+        <a class='octothorpe' href='#section-50'>#</a>
       </div>
       <h3>Type</h3>
 <ul>
@@ -841,10 +911,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-47'>
+  <div class='section' id='section-51'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-47'>#</a>
+        <a class='octothorpe' href='#section-51'>#</a>
       </div>
       
     </div>
@@ -854,15 +924,15 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_verbose</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Attribute &#39;verbose&#39; should be a boolean but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_verbose</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Attribute &#39;verbose&#39; should be a boolean but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_verbose</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="n">new_verbose</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-48'>
+  <div class='section' id='section-52'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-48'>#</a>
+        <a class='octothorpe' href='#section-52'>#</a>
       </div>
       <hr />
     </div>
@@ -871,10 +941,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-49'>
+  <div class='section' id='section-53'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-49'>#</a>
+        <a class='octothorpe' href='#section-53'>#</a>
       </div>
       <h2><span id="plot-enable-flag" href="plot-enable-flag"> Plot Enable Flag </span></h2>
     </div>
@@ -883,10 +953,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-50'>
+  <div class='section' id='section-54'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-50'>#</a>
+        <a class='octothorpe' href='#section-54'>#</a>
       </div>
       <p><strong><code>plot_flag</code> property of <code>PWL</code> class</strong></p>
     </div>
@@ -896,10 +966,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-51'>
+  <div class='section' id='section-55'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-51'>#</a>
+        <a class='octothorpe' href='#section-55'>#</a>
       </div>
       <p><em>Optional feature: Requires matplotlib</em></p>
 <h3>Type</h3>
@@ -920,16 +990,16 @@
     <div class='code'>
       <div class="highlight"><pre>        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">_has_matplotlib</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;Optional features deactivated. Using the plot_flag does nothing in this case.&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;Optional features deactivated. Using the plot_flag does nothing in this case&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plot_flag</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-52'>
+  <div class='section' id='section-56'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-52'>#</a>
+        <a class='octothorpe' href='#section-56'>#</a>
       </div>
       
     </div>
@@ -939,92 +1009,13 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_plot_flag</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Attribute &#39;plot_flag&#39; should be a boolean but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_plot_flag</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Attribute &#39;plot_flag&#39; should be a boolean but an object of type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">new_plot_flag</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; was assigned to it&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">_has_matplotlib</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;Optional features deactivated. Using the plot_flag does nothing in this case.&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;Optional features deactivated. Using the plot_flag does nothing in this case&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot_flag</span> <span class="o">=</span> <span class="n">new_plot_flag</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-53'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-53'>#</a>
-      </div>
-      <hr />
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-54'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-54'>#</a>
-      </div>
-      <h2><span id="last-value-holder" href="last-value-holder"> Last Value Holder </span></h2>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-55'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-55'>#</a>
-      </div>
-      <p><strong><code>hold</code> method of <code>PWL</code> class</strong></p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">hold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-56'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-56'>#</a>
-      </div>
-      <h3>Summary</h3>
-<p>Method that holds the last value from the previous event for a given duration.</p>
-<p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and holds that.</p>
-<h3>Parameters</h3>
-<ul>
-<li><code>duration</code> (<code>float</code>) : Duration to hold the last value for. Should be strictly positive.</li>
-</ul>
-<h3>Raises</h3>
-<ul>
-<li><code>TypeError</code> : Raised if <code>duration</code> is not a real number.</li>
-<li><code>ValueError</code> : Raised if <code>duration</code> is not strictly positive.</li>
-<li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
-</ul>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding hold with duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">last_x</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1045,7 +1036,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-58'>#</a>
       </div>
-      <h2><span id="linear-transition" href="linear-transition"> Linear Transition </span></h2>
+      <h2><span id="last-value-holder" href="last-value-holder"> Last Value Holder </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -1057,10 +1048,10 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-59'>#</a>
       </div>
-      <p><strong><code>lin_transition</code> method of <code>PWL</code> class</strong></p>
+      <p><strong><code>hold</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">hold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1070,33 +1061,40 @@
         <a class='octothorpe' href='#section-60'>#</a>
       </div>
       <h3>Summary</h3>
-<p>Method that generates a linear transition from the last value of the previous event to a given target with a given duration.</p>
-<p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
-<h3>Arguments</h3>
+<p>Method that holds the last value from the previous event for a given duration.</p>
+<p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and holds that.</p>
+<h3>Parameters</h3>
 <ul>
-<li><code>target</code> (<code>float</code>) : Value to transition to.</li>
-<li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
+<li><code>duration</code> (<code>float</code>) : Duration to hold the last value for. Should be strictly positive.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
-<li><code>TypeError</code> : Raised if either <code>target</code> or duration` is not a real number.</li>
+<li><code>TypeError</code> : Raised if <code>duration</code> is not a real number.</li>
 <li><code>ValueError</code> : Raised if <code>duration</code> is not strictly positive.</li>
 <li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
 </ul>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></pre></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding hold with duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">last_x</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1117,7 +1115,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-62'>#</a>
       </div>
-      <h2><span id="rectangular-pulse" href="rectangular-pulse"> Rectangular Pulse </span></h2>
+      <h2><span id="linear-transition" href="linear-transition"> Linear Transition </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -1129,10 +1127,10 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-63'>#</a>
       </div>
-      <p><strong><code>rect_pulse</code> method of <code>PWL</code> class</strong></p>
+      <p><strong><code>lin_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rect_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1140,6 +1138,78 @@
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-64'>#</a>
+      </div>
+      <h3>Summary</h3>
+<p>Method that generates a linear transition from the last value of the previous event to a given target with a given duration.</p>
+<p>If the <code>PWL</code> object is empty, adds the point <code>(0, 0)</code> and transitions from that.</p>
+<h3>Arguments</h3>
+<ul>
+<li><code>target</code> (<code>float</code>) : Value to transition to.</li>
+<li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
+</ul>
+<h3>Raises</h3>
+<ul>
+<li><code>TypeError</code> : Raised if either <code>target</code> or duration` is not a real number.</li>
+<li><code>ValueError</code> : Raised if <code>duration</code> is not strictly positive.</li>
+<li><code>PrecisionError</code> : Raised if computational noise causes the time coordinates to not be strictly increasing.</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-65'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-65'>#</a>
+      </div>
+      <hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-66'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-66'>#</a>
+      </div>
+      <h2><span id="rectangular-pulse" href="rectangular-pulse"> Rectangular Pulse </span></h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-67'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-67'>#</a>
+      </div>
+      <p><strong><code>rect_pulse</code> method of <code>PWL</code> class</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rect_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-68'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-68'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a rectangular pulse with given amplitude and duration.</p>
@@ -1167,28 +1237,28 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;value&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;value&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_step</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t_step</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding rectangular pulse with value of </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding rectangular pulse with value of </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span>
 
@@ -1203,10 +1273,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-65'>
+  <div class='section' id='section-69'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-65'>#</a>
+        <a class='octothorpe' href='#section-69'>#</a>
       </div>
       <hr />
     </div>
@@ -1215,10 +1285,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-66'>
+  <div class='section' id='section-70'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-66'>#</a>
+        <a class='octothorpe' href='#section-70'>#</a>
       </div>
       <h2><span id="sawtooth-pulse" href="sawtooth-pulse"> Sawtooth Pulse </span></h2>
     </div>
@@ -1227,10 +1297,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-67'>
+  <div class='section' id='section-71'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-67'>#</a>
+        <a class='octothorpe' href='#section-71'>#</a>
       </div>
       <p><strong><code>sawtooth_pulse</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1239,10 +1309,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-68'>
+  <div class='section' id='section-72'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-68'>#</a>
+        <a class='octothorpe' href='#section-72'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.</p>
@@ -1271,31 +1341,31 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;start&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;start&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;end&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;end&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_step</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t_step</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding sawtoth pulse from </span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2"> with duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding sawtoth pulse from </span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2"> with duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">return</span>
 
@@ -1310,10 +1380,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-69'>
+  <div class='section' id='section-73'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-69'>#</a>
+        <a class='octothorpe' href='#section-73'>#</a>
       </div>
       <hr />
     </div>
@@ -1322,10 +1392,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-70'>
+  <div class='section' id='section-74'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-70'>#</a>
+        <a class='octothorpe' href='#section-74'>#</a>
       </div>
       <h2><span id="exponential-transition" href="exponential-transition"> Exponential Transition </span></h2>
     </div>
@@ -1334,10 +1404,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-71'>
+  <div class='section' id='section-75'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-71'>#</a>
+        <a class='octothorpe' href='#section-75'>#</a>
       </div>
       <p><strong><code>exp_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1346,10 +1416,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-72'>
+  <div class='section' id='section-76'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-72'>#</a>
+        <a class='octothorpe' href='#section-76'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates an exponential transition from the last value of the previous event to a given target with a given duration.</p>
@@ -1387,39 +1457,39 @@ f(t0 + duration) = target
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;tau&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;tau&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_step</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tau</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Argument &#39;tau&#39; should be non zero.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Argument &#39;tau&#39; should be non zero&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t_step</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding exponential transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, time constant of </span><span class="si">{</span><span class="n">tau</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding exponential transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, time constant of </span><span class="si">{</span><span class="n">tau</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1435,10 +1505,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-73'>
+  <div class='section' id='section-77'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-73'>#</a>
+        <a class='octothorpe' href='#section-77'>#</a>
       </div>
       <hr />
     </div>
@@ -1447,10 +1517,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-74'>
+  <div class='section' id='section-78'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-74'>#</a>
+        <a class='octothorpe' href='#section-78'>#</a>
       </div>
       <h2><span id="half-sine-transition" href="half-sine-transition"> Half Sine Transition </span></h2>
     </div>
@@ -1459,10 +1529,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-75'>
+  <div class='section' id='section-79'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-75'>#</a>
+        <a class='octothorpe' href='#section-79'>#</a>
       </div>
       <p><strong><code>sin_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1471,10 +1541,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-76'>
+  <div class='section' id='section-80'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-76'>#</a>
+        <a class='octothorpe' href='#section-80'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a half sine transition from the last value of the previous event to a given target with a given duration.</p>
@@ -1512,34 +1582,34 @@ f'(t0) = f'(t0 + duration) = 0
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_step</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t_step</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding sinusoidal transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding sinusoidal transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1555,10 +1625,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-77'>
+  <div class='section' id='section-81'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-77'>#</a>
+        <a class='octothorpe' href='#section-81'>#</a>
       </div>
       <hr />
     </div>
@@ -1567,10 +1637,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-78'>
+  <div class='section' id='section-82'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-78'>#</a>
+        <a class='octothorpe' href='#section-82'>#</a>
       </div>
       <h2><span id="smoothstep-transition" href="smoothstep-transition"> Smoothstep Transition </span></h2>
     </div>
@@ -1579,10 +1649,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-79'>
+  <div class='section' id='section-83'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-79'>#</a>
+        <a class='octothorpe' href='#section-83'>#</a>
       </div>
       <p><strong><code>smoothstep_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1591,10 +1661,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-80'>
+  <div class='section' id='section-84'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-80'>#</a>
+        <a class='octothorpe' href='#section-84'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a smoothstep transition from the last value of the previous event to a given target with a given duration.</p>
@@ -1631,34 +1701,34 @@ f'(t0) = f'(t0 + duration) = 0
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;target&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t_step</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should either be a real number but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">t_step</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">t_step</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;t_step&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding smoothstep transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding smoothstep transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">, duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> and time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">duration</span> <span class="o">&lt;=</span> <span class="n">t_step</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition.&quot;</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    Empty PWL object. Adding initial (0, 0) point&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1674,10 +1744,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-81'>
+  <div class='section' id='section-85'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-81'>#</a>
+        <a class='octothorpe' href='#section-85'>#</a>
       </div>
       <hr />
     </div>
@@ -1686,10 +1756,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-82'>
+  <div class='section' id='section-86'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-82'>#</a>
+        <a class='octothorpe' href='#section-86'>#</a>
       </div>
       <h2><span id="pwl-file-writer" href="pwl-file-writer"> PWL File Writer </span></h2>
     </div>
@@ -1698,10 +1768,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-83'>
+  <div class='section' id='section-87'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-83'>#</a>
+        <a class='octothorpe' href='#section-87'>#</a>
       </div>
       <p><strong><code>write</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1710,10 +1780,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-84'>
+  <div class='section' id='section-88'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-84'>#</a>
+        <a class='octothorpe' href='#section-88'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that takes a <code>PWL</code> object and writes a PWL file with it&rsquo;s <code>(t, x)</code> coordinates in scientific notation.</p>
@@ -1736,17 +1806,17 @@ f'(t0) = f'(t0 + duration) = 0
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;filename&#39; should be a string but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;filename&#39; should be a string but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;precision&#39; should be an integer but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;precision&#39; should be an integer but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">precision</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">precision</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;precision&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">precision</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;precision&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">precision</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Writing PWL file to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Writing PWL file to </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">t_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span>
         <span class="n">x_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span>
@@ -1765,17 +1835,17 @@ f'(t0) = f'(t0 + duration) = 0
                     <span class="n">xi</span><span class="p">,</span> <span class="n">precision</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">ti_str</span> <span class="o">==</span> <span class="n">last_t</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">PrecisionError</span><span class="p">(</span>
-                        <span class="s2">&quot;The chosen precision level caused the written time coordinates to not be strictly increasing.&quot;</span><span class="p">)</span>
+                        <span class="s2">&quot;The chosen precision level caused the written time coordinates to not be strictly increasing&quot;</span><span class="p">)</span>
                 <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ti_str</span><span class="si">}</span><span class="s2">    </span><span class="si">{</span><span class="n">xi_str</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="n">last_t</span> <span class="o">=</span> <span class="n">ti_str</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-85'>
+  <div class='section' id='section-89'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-85'>#</a>
+        <a class='octothorpe' href='#section-89'>#</a>
       </div>
       <hr />
     </div>
@@ -1784,10 +1854,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-86'>
+  <div class='section' id='section-90'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-86'>#</a>
+        <a class='octothorpe' href='#section-90'>#</a>
       </div>
       <h2><span id="pwl-plotter" href="pwl-plotter"> PWL Plotter </span></h2>
     </div>
@@ -1796,10 +1866,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-87'>
+  <div class='section' id='section-91'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-87'>#</a>
+        <a class='octothorpe' href='#section-91'>#</a>
       </div>
       <p><strong><code>plot</code> class method of <code>PWL</code> class</strong></p>
     </div>
@@ -1809,10 +1879,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-88'>
+  <div class='section' id='section-92'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-88'>#</a>
+        <a class='octothorpe' href='#section-92'>#</a>
       </div>
       <p><em>Optional feature: Requires matplotlib</em></p>
 <h3>Summary</h3>
@@ -1834,11 +1904,11 @@ f'(t0) = f'(t0 + duration) = 0
     <div class='code'>
       <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_matplotlib</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                <span class="s2">&quot;Optional plotting features are deactivated. Install matplotlib to use.&quot;</span><span class="p">)</span>
+                <span class="s2">&quot;Optional plotting features are deactivated. Install matplotlib to use&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">merge</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Argument &#39;merge&#39; should be a boolean but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">merge</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Argument &#39;merge&#39; should be a boolean but has type &#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">merge</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="n">dict_of_objects</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">pwl</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span>
                            <span class="n">pwl</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__dict_of_objects</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">pwl</span><span class="o">.</span><span class="n">plot_flag</span><span class="p">}</span>
@@ -1871,10 +1941,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-89'>
+  <div class='section' id='section-93'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-89'>#</a>
+        <a class='octothorpe' href='#section-93'>#</a>
       </div>
       <h1><span id="private-methods-and-functions" href="private-methods-and-functions"> Private Methods and Functions </span></h1>
     </div>
@@ -1883,71 +1953,15 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-90'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-90'>#</a>
-      </div>
-      <p>From this point forward, all listed methods and functions are not intended to be used by the user. Brief descriptions will be provided, but documentation will be kept to a minimum.</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-91'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-91'>#</a>
-      </div>
-      <hr />
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-92'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-92'>#</a>
-      </div>
-      <h2><span id="pwl-point-adder" href="pwl-point-adder"> PWL Point Adder </span></h2>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-93'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-93'>#</a>
-      </div>
-      <p><strong><code>_add</code> private method of <code>PWL</code> class</strong></p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
   <div class='section' id='section-94'>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-94'>#</a>
       </div>
-      <p>Private method that adds a <code>(t, x)</code> point to a <code>PWL</code> object of any size.</p>
+      <p>From this point forward, all listed methods and functions are not intended to be used by the user. Brief descriptions will be provided, but documentation will be kept to a minimum.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="n">PrecisionError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_colinear_eliminator</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1968,7 +1982,7 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-96'>#</a>
       </div>
-      <h2><span id="colinear-points-eliminator" href="colinear-points-eliminator"> Colinear Points Eliminator </span></h2>
+      <h2><span id="pwl-point-adder" href="pwl-point-adder"> PWL Point Adder </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -1980,10 +1994,10 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-97'>#</a>
       </div>
-      <p><strong><code>_colinear_eliminator</code> private method of <code>PWL</code> class</strong></p>
+      <p><strong><code>_add</code> private method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_colinear_eliminator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1991,6 +2005,62 @@ f'(t0) = f'(t0 + duration) = 0
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-98'>#</a>
+      </div>
+      <p>Private method that adds a <code>(t, x)</code> point to a <code>PWL</code> object of any size.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">PrecisionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_colinear_eliminator</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-99'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-99'>#</a>
+      </div>
+      <hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-100'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-100'>#</a>
+      </div>
+      <h2><span id="colinear-points-eliminator" href="colinear-points-eliminator"> Colinear Points Eliminator </span></h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-101'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-101'>#</a>
+      </div>
+      <p><strong><code>_colinear_eliminator</code> private method of <code>PWL</code> class</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_colinear_eliminator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-102'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-102'>#</a>
       </div>
       <p>Private method that adds a <code>(t, x)</code> point to a <code>PWL</code> object with 2 or more points without consecutive colinear points.</p>
     </div>
@@ -2013,68 +2083,6 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-99'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-99'>#</a>
-      </div>
-      <hr />
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-100'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-100'>#</a>
-      </div>
-      <h2><span id="nested-linear-transition" href="nested-linear-transition"> Nested Linear Transition </span></h2>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-101'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-101'>#</a>
-      </div>
-      <p><strong><code>_lin_transition</code> private method of <code>PWL</code> class</strong></p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-102'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-102'>#</a>
-      </div>
-      <p>Private method to generate a linear transition. The difference between this method and the <a href="#linear-transition">public linear transition</a> method is that this method prints indented verbose output when called from within any of the public methods that revert to a linear transition in certain conditions.</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding linear transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="n">n</span><span class="o">*</span><span class="s2">&quot;    &quot;</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;Adding linear transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">((</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="s2">&quot;    &quot;</span><span class="o">+</span><span class="s2">&quot;Empty PWL object. Adding initial (0, 0) point.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
   <div class='section' id='section-103'>
     <div class='docs'>
       <div class='octowrap'>
@@ -2092,7 +2100,7 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-104'>#</a>
       </div>
-      <h2><span id="exponential-function-generator" href="exponential-function-generator"> Exponential Function Generator </span></h2>
+      <h2><span id="nested-linear-transition" href="nested-linear-transition"> Nested Linear Transition </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -2104,10 +2112,10 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-105'>#</a>
       </div>
-      <p><strong><code>_exp_transition_func</code> private function</strong></p>
+      <p><strong><code>_lin_transition</code> private method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_exp_transition_func</span><span class="p">(</span><span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -2115,6 +2123,68 @@ f'(t0) = f'(t0 + duration) = 0
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-106'>#</a>
+      </div>
+      <p>Private method to generate a linear transition. The difference between this method and the <a href="#linear-transition">public linear transition</a> method is that this method prints indented verbose output when called from within any of the public methods that revert to a linear transition in certain conditions.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Adding linear transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="n">n</span><span class="o">*</span><span class="s2">&quot;    &quot;</span><span class="o">+</span><span class="sa">f</span><span class="s2">&quot;Adding linear transition with target of </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2"> and duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">((</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="s2">&quot;    &quot;</span><span class="o">+</span><span class="s2">&quot;Empty PWL object. Adding initial (0, 0) point&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-107'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-107'>#</a>
+      </div>
+      <hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-108'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-108'>#</a>
+      </div>
+      <h2><span id="exponential-function-generator" href="exponential-function-generator"> Exponential Function Generator </span></h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-109'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-109'>#</a>
+      </div>
+      <p><strong><code>_exp_transition_func</code> private function</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">_exp_transition_func</span><span class="p">(</span><span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">f2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-110'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-110'>#</a>
       </div>
       <p>Private function that generates an exponential function passing trough 2 fixed points.</p>
     </div>
@@ -2125,10 +2195,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-107'>
+  <div class='section' id='section-111'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-107'>#</a>
+        <a class='octothorpe' href='#section-111'>#</a>
       </div>
       
     </div>
@@ -2141,10 +2211,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-108'>
+  <div class='section' id='section-112'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-108'>#</a>
+        <a class='octothorpe' href='#section-112'>#</a>
       </div>
       <hr />
     </div>
@@ -2153,10 +2223,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-109'>
+  <div class='section' id='section-113'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-109'>#</a>
+        <a class='octothorpe' href='#section-113'>#</a>
       </div>
       <h2><span id="sinusoidal-function-generator" href="sinusoidal-function-generator"> Sinusoidal Function Generator </span></h2>
     </div>
@@ -2165,10 +2235,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-110'>
+  <div class='section' id='section-114'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-110'>#</a>
+        <a class='octothorpe' href='#section-114'>#</a>
       </div>
       <p><strong><code>_sin_transition_func</code> private function</strong></p>
     </div>
@@ -2177,10 +2247,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-111'>
+  <div class='section' id='section-115'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-111'>#</a>
+        <a class='octothorpe' href='#section-115'>#</a>
       </div>
       <p>Private function that generates a sinusoidal function passing trough 2 fixed points.</p>
     </div>
@@ -2194,10 +2264,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-112'>
+  <div class='section' id='section-116'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-112'>#</a>
+        <a class='octothorpe' href='#section-116'>#</a>
       </div>
       
     </div>
@@ -2210,10 +2280,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-113'>
+  <div class='section' id='section-117'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-113'>#</a>
+        <a class='octothorpe' href='#section-117'>#</a>
       </div>
       <hr />
     </div>
@@ -2222,10 +2292,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-114'>
+  <div class='section' id='section-118'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-114'>#</a>
+        <a class='octothorpe' href='#section-118'>#</a>
       </div>
       <h2><span id="smoothstep-function-generator" href="smoothstep-function-generator"> Smoothstep Function Generator </span></h2>
     </div>
@@ -2234,10 +2304,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-115'>
+  <div class='section' id='section-119'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-115'>#</a>
+        <a class='octothorpe' href='#section-119'>#</a>
       </div>
       <p><strong><code>_smoothstep_transition_func</code> private function</strong></p>
     </div>
@@ -2246,10 +2316,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-116'>
+  <div class='section' id='section-120'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-116'>#</a>
+        <a class='octothorpe' href='#section-120'>#</a>
       </div>
       <p>Private function that generates a smoothstep function passing trough 2 fixed points.</p>
     </div>
@@ -2263,10 +2333,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-117'>
+  <div class='section' id='section-121'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-117'>#</a>
+        <a class='octothorpe' href='#section-121'>#</a>
       </div>
       
     </div>
@@ -2279,10 +2349,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-118'>
+  <div class='section' id='section-122'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-118'>#</a>
+        <a class='octothorpe' href='#section-122'>#</a>
       </div>
       <hr />
     </div>

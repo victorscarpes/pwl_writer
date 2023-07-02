@@ -24,6 +24,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [String Representation](#string-representation)
             * [Length Calculator](#length-calculator)
             * [Object as a Callable](#object-as-a-callable)
+            * [Object Slicing](#object-slicing)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -87,7 +88,7 @@ __all__ = ['PrecisionError', 'PWL']
 
 from warnings import warn
 from numbers import Real
-from typing import Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import Callable, List, Optional, TYPE_CHECKING, Union, Tuple
 import weakref
 import numpy as np
 
@@ -158,19 +159,19 @@ class PWL():
 
         if not isinstance(t_step, Real):
             raise TypeError(
-                f"Argument 't_step' should be a real number but has type '{type(t_step).__name__}'.")
+                f"Argument 't_step' should be a real number but has type '{type(t_step).__name__}'")
         if not isinstance(name, str):
             raise TypeError(
-                f"Argument 'name' should either be a string but has type '{type(name).__name__}'.")
+                f"Argument 'name' should either be a string but has type '{type(name).__name__}'")
         if not isinstance(verbose, bool):
             raise TypeError(
-                f"Argument 'verbose' should be a boolean but has type '{type(verbose).__name__}'.")
+                f"Argument 'verbose' should be a boolean but has type '{type(verbose).__name__}'")
 
         if t_step <= 0:
             raise ValueError(
-                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+                f"Argument 't_step' should be strictly positive but has value of {t_step}")
         if not name:
-            raise ValueError("Argument 'name' should not be empty.")
+            raise ValueError("Argument 'name' should not be empty")
 
         self._t_list: List[float] = []
         self._x_list: List[float] = []
@@ -180,7 +181,7 @@ class PWL():
         self._plot_flag: bool = True
 
         if name in PWL.__dict_of_objects.keys():
-            raise ValueError(f"Name '{name}' already in use.")
+            raise ValueError(f"Name '{name}' already in use")
 
         PWL.__dict_of_objects[name] = self
 
@@ -248,12 +249,46 @@ class PWL():
 
         if not isinstance(t, Real):
             raise TypeError(
-                f"Argument 't' should be a real number but has type '{type(t).__name__}'.")
+                f"Argument 't' should be a real number but has type '{type(t).__name__}'")
 
         t_list = self._t_list
         x_list = self._x_list
 
         return np.interp(x=t, xp=t_list, fp=x_list, left=0)
+
+    # ----
+
+    # == Object Slicing ==
+
+    def __getitem__(self, index: Union[int, slice]) -> Union[Tuple[float, float], List[Tuple[float, float]]]:
+        """**Dunder method `__getitem__` of `PWL` class**
+
+        ### Summary
+
+        Slice `PWL` objects.
+
+        ### Arguments
+
+        * `index` (`int` or `slice`) : Index for list of `(t, x)` points.
+
+        ### Returns
+
+        * `Tuple[float, float]` : Returned if single index is passed.
+        * `List[Tuple[float, float]]` : Rerturned if multiple indices are passed.
+
+        ### Raises
+
+        * `TypeError` : Raised if `index` is not an integer or slice.
+        * `IndexError` : Raised if `index` is out of bounds.
+        """
+
+        if not isinstance(index, (int, slice)):
+            raise TypeError(
+                f"PWL indices must be integers or slices, not {type(index).__name__}")
+
+        coordinates_pair = list(zip(self.t_list, self.x_list))
+
+        return coordinates_pair[index]
 
     # ----
 
@@ -329,10 +364,10 @@ class PWL():
     def t_step(self, new_t_step: float) -> None:
         if not isinstance(new_t_step, float):
             raise TypeError(
-                f"Property 't_step' should be a real number but an object of type '{type(new_t_step).__name__}' was assigned to it.")
+                f"Property 't_step' should be a real number but an object of type '{type(new_t_step).__name__}' was assigned to it")
         if new_t_step <= 0:
             raise ValueError(
-                f"Propety 't_step' should be strictly positive but a value of {new_t_step} was assigned to it.")
+                f"Propety 't_step' should be strictly positive but a value of {new_t_step} was assigned to it")
 
         self._t_step = new_t_step
 
@@ -364,13 +399,13 @@ class PWL():
     def name(self, new_name: str) -> None:
         if not isinstance(new_name, str):
             raise TypeError(
-                f"Property 'name' should be a string but an object of type '{type(new_name).__name__}' was assigned to it.")
+                f"Property 'name' should be a string but an object of type '{type(new_name).__name__}' was assigned to it")
         if not new_name:
             raise ValueError(
-                "An empty string cannot be assigned to the 'name' property.")
+                "An empty string cannot be assigned to the 'name' property")
 
         if new_name in PWL.__dict_of_objects.keys():
-            raise ValueError(f"Name '{new_name}' already in use.")
+            raise ValueError(f"Name '{new_name}' already in use")
 
         PWL.__dict_of_objects.pop(self._name)
         PWL.__dict_of_objects[new_name] = self
@@ -404,7 +439,7 @@ class PWL():
 
         if not isinstance(new_verbose, bool):
             raise TypeError(
-                f"Attribute 'verbose' should be a boolean but an object of type '{type(new_verbose).__name__}' was assigned to it.")
+                f"Attribute 'verbose' should be a boolean but an object of type '{type(new_verbose).__name__}' was assigned to it")
         self._verbose = new_verbose
 
     # ----
@@ -435,7 +470,7 @@ class PWL():
 
         if (not _has_matplotlib) and self._verbose:
             print(
-                "Optional features deactivated. Using the plot_flag does nothing in this case.")
+                "Optional features deactivated. Using the plot_flag does nothing in this case")
 
         return self._plot_flag
 
@@ -444,11 +479,11 @@ class PWL():
 
         if not isinstance(new_plot_flag, bool):
             raise TypeError(
-                f"Attribute 'plot_flag' should be a boolean but an object of type '{type(new_plot_flag).__name__}' was assigned to it.")
+                f"Attribute 'plot_flag' should be a boolean but an object of type '{type(new_plot_flag).__name__}' was assigned to it")
 
         if (not _has_matplotlib) and self._verbose:
             print(
-                "Optional features deactivated. Using the plot_flag does nothing in this case.")
+                "Optional features deactivated. Using the plot_flag does nothing in this case")
 
         self._plot_flag = new_plot_flag
 
@@ -478,18 +513,18 @@ class PWL():
 
         if not isinstance(duration, Real):
             raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'")
 
         if duration <= 0:
             raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+                f"Argument 'duration' should be strictly positive but has value of {duration}")
 
         if self._verbose:
-            print(f"{self._name}: Adding hold with duration of {duration}.")
+            print(f"{self._name}: Adding hold with duration of {duration}")
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print("    Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -524,14 +559,14 @@ class PWL():
 
         if not isinstance(target, Real):
             raise TypeError(
-                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'")
         if not isinstance(duration, Real):
             raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'")
 
         if duration <= 0:
             raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+                f"Argument 'duration' should be strictly positive but has value of {duration}")
 
         self._lin_transition(target, duration, 0)
 
@@ -570,28 +605,28 @@ class PWL():
 
         if not isinstance(value, Real):
             raise TypeError(
-                f"Argument 'value' should be a real number but has type '{type(value).__name__}'.")
+                f"Argument 'value' should be a real number but has type '{type(value).__name__}'")
         if not isinstance(duration, Real):
             raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'")
         if not isinstance(t_step, Real):
             raise TypeError(
-                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'.")
+                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'")
 
         if duration <= 0:
             raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+                f"Argument 'duration' should be strictly positive but has value of {duration}")
         if t_step <= 0:
             raise ValueError(
-                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+                f"Argument 't_step' should be strictly positive but has value of {t_step}")
 
         if self._verbose:
-            print(f"{self._name}: Adding rectangular pulse with value of {value}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding rectangular pulse with value of {value}, duration of {duration} and time step of {t_step}")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(value, t_step, 1)
             return
 
@@ -640,31 +675,31 @@ class PWL():
 
         if not isinstance(start, Real):
             raise TypeError(
-                f"Argument 'start' should be a real number but has type '{type(start).__name__}'.")
+                f"Argument 'start' should be a real number but has type '{type(start).__name__}'")
         if not isinstance(end, Real):
             raise TypeError(
-                f"Argument 'end' should be a real number but has type '{type(end).__name__}'.")
+                f"Argument 'end' should be a real number but has type '{type(end).__name__}'")
         if not isinstance(duration, Real):
             raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'")
         if not isinstance(t_step, Real):
             raise TypeError(
-                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'.")
+                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'")
 
         if duration <= 0:
             raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+                f"Argument 'duration' should be strictly positive but has value of {duration}")
         if t_step <= 0:
             raise ValueError(
-                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+                f"Argument 't_step' should be strictly positive but has value of {t_step}")
 
         if self._verbose:
-            print(f"{self._name}: Adding sawtoth pulse from {start} to {end} with duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding sawtoth pulse from {start} to {end} with duration of {duration} and time step of {t_step}")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+                    f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(end, t_step, 1)
             return
 
@@ -726,39 +761,39 @@ class PWL():
 
         if not isinstance(target, Real):
             raise TypeError(
-                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'")
         if not isinstance(duration, Real):
             raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'")
         if not isinstance(tau, Real):
             raise TypeError(
-                f"Argument 'tau' should be a real number but has type '{type(tau).__name__}'.")
+                f"Argument 'tau' should be a real number but has type '{type(tau).__name__}'")
         if not isinstance(t_step, Real):
             raise TypeError(
-                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'.")
+                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'")
 
         if duration <= 0:
             raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+                f"Argument 'duration' should be strictly positive but has value of {duration}")
         if tau == 0:
-            raise ValueError("Argument 'tau' should be non zero.")
+            raise ValueError("Argument 'tau' should be non zero")
         if t_step <= 0:
             raise ValueError(
-                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+                f"Argument 't_step' should be strictly positive but has value of {t_step}")
 
         if self._verbose:
-            print(f"{self._name}: Adding exponential transition with target of {target}, time constant of {tau}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding exponential transition with target of {target}, time constant of {tau}, duration of {duration} and time step of {t_step}")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(target, t_step, 2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print("    Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -821,34 +856,34 @@ class PWL():
 
         if not isinstance(target, Real):
             raise TypeError(
-                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'")
         if not isinstance(duration, Real):
             raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'")
         if not isinstance(t_step, Real):
             raise TypeError(
-                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'.")
+                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'")
 
         if duration <= 0:
             raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+                f"Argument 'duration' should be strictly positive but has value of {duration}")
         if t_step <= 0:
             raise ValueError(
-                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+                f"Argument 't_step' should be strictly positive but has value of {t_step}")
 
         if self._verbose:
-            print(f"{self._name}: Adding sinusoidal transition with target of {target}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding sinusoidal transition with target of {target}, duration of {duration} and time step of {t_step}")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(target, t_step, n=2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print("    Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -909,34 +944,34 @@ class PWL():
 
         if not isinstance(target, Real):
             raise TypeError(
-                f"Argument 'target' should be a real number but has type '{type(target).__name__}'.")
+                f"Argument 'target' should be a real number but has type '{type(target).__name__}'")
         if not isinstance(duration, Real):
             raise TypeError(
-                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'.")
+                f"Argument 'duration' should be a real number but has type '{type(duration).__name__}'")
         if not isinstance(t_step, Real):
             raise TypeError(
-                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'.")
+                f"Argument 't_step' should either be a real number but has type '{type(t_step).__name__}'")
 
         if duration <= 0:
             raise ValueError(
-                f"Argument 'duration' should be strictly positive but has value of {duration}.")
+                f"Argument 'duration' should be strictly positive but has value of {duration}")
         if t_step <= 0:
             raise ValueError(
-                f"Argument 't_step' should be strictly positive but has value of {t_step}.")
+                f"Argument 't_step' should be strictly positive but has value of {t_step}")
 
         if self._verbose:
-            print(f"{self._name}: Adding smoothstep transition with target of {target}, duration of {duration} and time step of {t_step}.")
+            print(f"{self._name}: Adding smoothstep transition with target of {target}, duration of {duration} and time step of {t_step}")
 
         if duration <= t_step:
             if self._verbose:
                 print(
-                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition.")
+                    f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(target, t_step, n=2)
             return
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print("    Empty PWL object. Adding initial (0, 0) point.")
+                print("    Empty PWL object. Adding initial (0, 0) point")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
@@ -980,17 +1015,17 @@ class PWL():
 
         if not isinstance(filename, str):
             raise TypeError(
-                f"Argument 'filename' should be a string but has type '{type(filename).__name__}'.")
+                f"Argument 'filename' should be a string but has type '{type(filename).__name__}'")
         if not isinstance(precision, int):
             raise TypeError(
-                f"Argument 'precision' should be an integer but has type '{type(precision).__name__}'.")
+                f"Argument 'precision' should be an integer but has type '{type(precision).__name__}'")
 
         if precision <= 0:
             raise ValueError(
-                f"Argument 'precision' should be strictly positive but has value of {precision}.")
+                f"Argument 'precision' should be strictly positive but has value of {precision}")
 
         if self._verbose:
-            print(f"{self._name}: Writing PWL file to {filename}.")
+            print(f"{self._name}: Writing PWL file to {filename}")
 
         t_list = self._t_list
         x_list = self._x_list
@@ -1009,7 +1044,7 @@ class PWL():
                     xi, precision-1, unique=False, sign=True)
                 if ti_str == last_t:
                     raise PrecisionError(
-                        "The chosen precision level caused the written time coordinates to not be strictly increasing.")
+                        "The chosen precision level caused the written time coordinates to not be strictly increasing")
                 file.write(
                     f"{ti_str}    {xi_str}\n")
                 last_t = ti_str
@@ -1043,11 +1078,11 @@ class PWL():
 
         if not _has_matplotlib:
             raise ImportError(
-                "Optional plotting features are deactivated. Install matplotlib to use.")
+                "Optional plotting features are deactivated. Install matplotlib to use")
 
         if not isinstance(merge, bool):
             raise TypeError(
-                f"Argument 'merge' should be a boolean but has type '{type(merge).__name__}'.")
+                f"Argument 'merge' should be a boolean but has type '{type(merge).__name__}'")
 
         dict_of_objects = {key: pwl for key,
                            pwl in cls.__dict_of_objects.items() if pwl.plot_flag}
@@ -1094,7 +1129,7 @@ class PWL():
 
         if len(self._t_list) >= 1 and t <= self._t_list[-1]:
             raise PrecisionError(
-                f"Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to {self._name}.")
+                f"Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to {self._name}")
 
         if len(self._t_list) == len(self._x_list) < 2:
             self._t_list.append(t)
@@ -1141,14 +1176,14 @@ class PWL():
         if self._verbose:
             if n == 0:
                 print(
-                    f"{self._name}: Adding linear transition with target of {target} and duration of {duration}.")
+                    f"{self._name}: Adding linear transition with target of {target} and duration of {duration}")
             else:
                 print(
-                    n*"    "+f"Adding linear transition with target of {target} and duration of {duration}.")
+                    n*"    "+f"Adding linear transition with target of {target} and duration of {duration}")
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
-                print((n+1)*"    "+"Empty PWL object. Adding initial (0, 0) point.")
+                print((n+1)*"    "+"Empty PWL object. Adding initial (0, 0) point")
             self._add(0, 0)
 
         last_t = self._t_list[-1]
