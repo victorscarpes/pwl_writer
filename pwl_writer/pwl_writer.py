@@ -357,8 +357,7 @@ class PWL():
 
         return new_pwl
 
-    def __rmul__(self, other: Union["PWL", float]) -> "PWL":
-        return self * other
+    __rmul__ = __mul__
 
     # ----
 
