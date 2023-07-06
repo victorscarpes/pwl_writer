@@ -25,6 +25,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Length Calculator](#length-calculator)
             * [PWL Object as a Callable](#pwl-object-as-a-callable)
             * [PWL Object Slicing](#pwl-object-slicing)
+            * [PWL Iterator](#pwl-iterator)
             * [PWL Multiplication](#pwl-multiplication)
         * Properties
             * [Time Coordinates](#time-coordinates)
@@ -90,7 +91,7 @@ __all__ = ['PrecisionError', 'PWL']
 
 from warnings import warn
 from numbers import Real
-from typing import Callable, List, Optional, TYPE_CHECKING, Union, Tuple
+from typing import Callable, List, Optional, TYPE_CHECKING, Union, Tuple, Iterator
 import weakref
 import numpy as np
 
@@ -294,6 +295,23 @@ class PWL():
 
     # ----
 
+    # == PWL Iterator ==
+
+    def __iter__(self) -> Iterator[Tuple[float, float]]:
+        """**Dunder method `__iter__` of `PWL` class**
+
+        ### Summary
+
+        Creates a generator object that yields all the `(t, x)` points as tuples.
+
+        ### Yields
+
+        * `Tuple[float, float]`
+        """
+        yield from list(zip(self.t_list, self.x_list))
+
+    # ----
+
     # == PWL Multiplication ==
 
     def __mul__(self, other: Union["PWL", float]) -> "PWL":
@@ -329,7 +347,7 @@ class PWL():
 
         if isinstance(other, Real):
             for t, x in self:
-                new_pwl._add(t, other*x)
+                new_pwl._add(t, float(other)*x)
 
         else:
             unsorted_t_set = set(self.t_list + other.t_list)
@@ -1322,6 +1340,6 @@ if __name__ == "__main__":
     pwl0.hold(1)
     pwl0.sin_transition(1, 1)
 
-    pwl1 = 3*pwl0
+    pwl1 = 2*pwl0
 
     PWL.plot(merge=False)
