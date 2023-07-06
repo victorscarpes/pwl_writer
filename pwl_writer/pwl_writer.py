@@ -25,6 +25,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Length Calculator](#length-calculator)
             * [PWL Object as a Callable](#pwl-object-as-a-callable)
             * [PWL Object Slicing](#pwl-object-slicing)
+            * [PWL Multiplication](#pwl-multiplication)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -293,6 +294,56 @@ class PWL():
 
     # ----
 
+    # == PWL Multiplication ==
+
+    def __mul__(self, other: Union["PWL", float]) -> "PWL":
+        """**Dunder methods `__mul__` and `__rmul__` of `PWL` class**
+
+        ### Summary
+
+        Implements point-wise multiplication of `PWL` objects with real numbers and other `PWL` objects.
+
+        The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
+
+        If one operand is longer than the other, extends the sorter one by holding it's last value.
+
+        ### Arguments
+
+        * `other` (`PWL` or `float`) : Thing to multiply the `PWL` object by.
+
+        ### Returns
+
+        * `PWL`
+
+        ### Raises
+
+        * `TypeError` : Raised if operation is not implemented between the operands.
+        """
+
+        if not isinstance(other, (Real, PWL)):
+            return NotImplemented
+
+        t_step = min(self.t_step, other.t_step) if isinstance(
+            other, PWL) else self.t_step
+        new_pwl = PWL(t_step=t_step)
+
+        if isinstance(other, Real):
+            for t, x in self:
+                new_pwl._add(t, other*x)
+
+        else:
+            unsorted_t_set = set(self.t_list + other.t_list)
+            t_list = sorted(list(unsorted_t_set))
+            for t in t_list:
+                new_pwl._add(t, self(t) * other(t))
+
+        return new_pwl
+
+    def __rmul__(self, other: Union["PWL", float]) -> "PWL":
+        return self * other
+
+    # ----
+
     # == Time Coordinates ==
 
     @property
@@ -312,7 +363,7 @@ class PWL():
         * `AttributeError` : Raised if assignment was attempetd.
         """
 
-        return self._t_list
+        return self._t_list[:]
 
     # ----
 
@@ -335,7 +386,7 @@ class PWL():
         * `AttributeError` : Raised if assignment was attempetd.
         """
 
-        return self._x_list
+        return self._x_list[:]
 
     # ----
 
@@ -1264,18 +1315,13 @@ def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> C
 
 if __name__ == "__main__":
     pwl0 = PWL(0.001)
-    pwl1 = PWL(0.001)
-
     pwl0.hold(1)
-    pwl1.hold(1)
-
     pwl0.sin_transition(1, 1)
-    pwl1.sin_transition(-1, 1)
-
     pwl0.hold(1)
-    pwl1.hold(1)
+    pwl0.sin_transition(-1, 1)
+    pwl0.hold(1)
+    pwl0.sin_transition(1, 1)
 
-    pwl0.sin_transition(0, 1)
+    pwl1 = 3*pwl0
 
     PWL.plot(merge=False)
-    print(pwl0(1.5))
