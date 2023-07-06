@@ -561,7 +561,7 @@ class PWL():
 
     # == Last Value Holder ==
 
-    def hold(self, duration: float) -> None:
+    def hold(self, duration: float) -> "PWL":
         """**`hold` method of `PWL` class**
 
         ### Summary
@@ -573,6 +573,10 @@ class PWL():
         ### Parameters
 
         * `duration` (`float`) : Duration to hold the last value for. Should be strictly positive.
+
+        ### Returns
+
+        * `PWL` : Returns the object itself.
 
         ### Raises
 
@@ -602,11 +606,13 @@ class PWL():
 
         self._add(last_t+duration, last_x)
 
+        return self
+
     # ----
 
     # == Linear Transition ==
 
-    def lin_transition(self, target: float, duration: float) -> None:
+    def lin_transition(self, target: float, duration: float) -> "PWL":
         """**`lin_transition` method of `PWL` class**
 
         ### Summary
@@ -619,6 +625,10 @@ class PWL():
 
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
+
+         ### Returns
+
+        * `PWL` : Returns the object itself.
 
         ### Raises
 
@@ -640,11 +650,13 @@ class PWL():
 
         self._lin_transition(target, duration, 0)
 
+        return self
+
     # ----
 
     # == Rectangular Pulse ==
 
-    def rect_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> None:
+    def rect_pulse(self, value: float, duration: float, t_step: Optional[float] = None) -> "PWL":
         """**`rect_pulse` method of `PWL` class**
 
         ### Summary
@@ -658,6 +670,10 @@ class PWL():
         * `value` (`float`) : Amplitude of the pulse.
         * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
         * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
+
+         ### Returns
+
+        * `PWL` : Returns the object itself.
 
         ### Raises
 
@@ -698,7 +714,7 @@ class PWL():
                 print(
                     f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(value, t_step, 1)
-            return
+            return self
 
         if len(self._t_list) == len(self._x_list) == 0:
             self._add(0, value)
@@ -709,11 +725,13 @@ class PWL():
 
         self._add(last_t+duration, value)
 
+        return self
+
     # ----
 
     # == Sawtooth Pulse ==
 
-    def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> None:
+    def sawtooth_pulse(self, start: float, end: float, duration: float, t_step: Optional[float] = None) -> "PWL":
         """**`sawtooth_pulse` method of `PWL` class**
 
         ### Summary
@@ -728,6 +746,10 @@ class PWL():
         * `end` (`float`) : Amplitude at the end of the pulse.
         * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
         * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
+
+         ### Returns
+
+        * `PWL` : Returns the object itself.
 
         ### Raises
 
@@ -771,7 +793,7 @@ class PWL():
                 print(
                     f"{self._name}: Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(end, t_step, 1)
-            return
+            return self
 
         if len(self._t_list) == len(self._x_list) == 0:
             self._add(0, start)
@@ -782,11 +804,13 @@ class PWL():
 
         self._add(last_t+duration, end)
 
+        return self
+
     # ----
 
     # == Exponential Transition ==
 
-    def exp_transition(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> None:
+    def exp_transition(self, target: float, duration: float, tau: float, t_step: Optional[float] = None) -> "PWL":
         """**`exp_transition` method of `PWL` class**
 
         ### Summary
@@ -814,6 +838,10 @@ class PWL():
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `tau` (`float`) : Time constant of the exponential. SHould be non zero.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
+
+         ### Returns
+
+        * `PWL` : Returns the object itself.
 
         ### Raises
 
@@ -859,7 +887,7 @@ class PWL():
                 print(
                     f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(target, t_step, 2)
-            return
+            return self
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
@@ -877,11 +905,13 @@ class PWL():
 
         self._add(last_t+duration, target)
 
+        return self
+
     # ----
 
     # == Half Sine Transition ==
 
-    def sin_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
+    def sin_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> "PWL":
         """**`sin_transition` method of `PWL` class**
 
         ### Summary
@@ -909,6 +939,10 @@ class PWL():
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
+
+         ### Returns
+
+        * `PWL` : Returns the object itself.
 
         ### Raises
 
@@ -949,7 +983,7 @@ class PWL():
                 print(
                     f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(target, t_step, n=2)
-            return
+            return self
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
@@ -967,11 +1001,13 @@ class PWL():
 
         self._add(last_t+duration, target)
 
+        return self
+
     # ----
 
     # == Smoothstep Transition ==
 
-    def smoothstep_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> None:
+    def smoothstep_transition(self, target: float, duration: float, t_step: Optional[float] = None) -> "PWL":
         """**`smoothstep_transition` method of `PWL` class**
 
         ### Summary
@@ -997,6 +1033,10 @@ class PWL():
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
+
+         ### Returns
+
+        * `PWL` : Returns the object itself.
 
         ### Raises
 
@@ -1037,7 +1077,7 @@ class PWL():
                 print(
                     f"    Duration of {duration} is less than or equal to time step of {t_step}. Converting to linear transition")
             self._lin_transition(target, t_step, n=2)
-            return
+            return self
 
         if len(self._t_list) == len(self._x_list) == 0:
             if self._verbose:
@@ -1054,6 +1094,8 @@ class PWL():
             self._add(t, f(t))
 
         self._add(last_t+duration, target)
+
+        return self
 
     # ----
 

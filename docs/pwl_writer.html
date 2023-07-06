@@ -1192,7 +1192,7 @@
       <p><strong><code>hold</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">hold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">hold</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1207,6 +1207,10 @@
 <h3>Parameters</h3>
 <ul>
 <li><code>duration</code> (<code>float</code>) : Duration to hold the last value for. Should be strictly positive.</li>
+</ul>
+<h3>Returns</h3>
+<ul>
+<li><code>PWL</code> : Returns the object itself.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
@@ -1235,7 +1239,9 @@
         <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">last_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">last_x</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">last_x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1271,7 +1277,7 @@
       <p><strong><code>lin_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">lin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1287,6 +1293,10 @@
 <ul>
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
+</ul>
+<p>### Returns</p>
+<ul>
+<li><code>PWL</code> : Returns the object itself.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
@@ -1307,7 +1317,9 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Argument &#39;duration&#39; should be strictly positive but has value of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1343,7 +1355,7 @@
       <p><strong><code>rect_pulse</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rect_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">rect_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1360,6 +1372,10 @@
 <li><code>value</code> (<code>float</code>) : Amplitude of the pulse.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
+<p>### Returns</p>
+<ul>
+<li><code>PWL</code> : Returns the object itself.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
@@ -1401,7 +1417,7 @@
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="bp">self</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
@@ -1410,7 +1426,9 @@
             <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1446,7 +1464,7 @@
       <p><strong><code>sawtooth_pulse</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sawtooth_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sawtooth_pulse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1464,6 +1482,10 @@
 <li><code>end</code> (<code>float</code>) : Amplitude at the end of the pulse.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
+<p>### Returns</p>
+<ul>
+<li><code>PWL</code> : Returns the object itself.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
@@ -1508,7 +1530,7 @@
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">: Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="bp">self</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
@@ -1517,7 +1539,9 @@
             <span class="n">last_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1553,7 +1577,7 @@
       <p><strong><code>exp_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">exp_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">exp_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1580,6 +1604,10 @@ f(t0 + duration) = target
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>tau</code> (<code>float</code>) : Time constant of the exponential. SHould be non zero.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
+<p>### Returns</p>
+<ul>
+<li><code>PWL</code> : Returns the object itself.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
@@ -1626,7 +1654,7 @@ f(t0 + duration) = target
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="bp">self</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
@@ -1642,7 +1670,9 @@ f(t0 + duration) = target
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">t_step</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1678,7 +1708,7 @@ f(t0 + duration) = target
       <p><strong><code>sin_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">sin_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1705,6 +1735,10 @@ f'(t0) = f'(t0 + duration) = 0
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
+<p>### Returns</p>
+<ul>
+<li><code>PWL</code> : Returns the object itself.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
@@ -1746,7 +1780,7 @@ f'(t0) = f'(t0 + duration) = 0
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="bp">self</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
@@ -1762,7 +1796,9 @@ f'(t0) = f'(t0 + duration) = 0
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">t_step</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1798,7 +1834,7 @@ f'(t0) = f'(t0 + duration) = 0
       <p><strong><code>smoothstep_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">smoothstep_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">smoothstep_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t_step</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -1824,6 +1860,10 @@ f'(t0) = f'(t0 + duration) = 0
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
+</ul>
+<p>### Returns</p>
+<ul>
+<li><code>PWL</code> : Returns the object itself.</li>
 </ul>
 <h3>Raises</h3>
 <ul>
@@ -1865,7 +1905,7 @@ f'(t0) = f'(t0 + duration) = 0
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;    Duration of </span><span class="si">{</span><span class="n">duration</span><span class="si">}</span><span class="s2"> is less than or equal to time step of </span><span class="si">{</span><span class="n">t_step</span><span class="si">}</span><span class="s2">. Converting to linear transition&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lin_transition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">t_step</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="bp">self</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
@@ -1881,7 +1921,9 @@ f'(t0) = f'(t0 + duration) = 0
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">t_step</span><span class="p">,</span> <span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">t_step</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></pre></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="n">duration</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
