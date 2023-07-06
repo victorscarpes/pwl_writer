@@ -17,7 +17,6 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
 # Index
 
 * [Package Summary](#package-summary)
-* [Precision Related Exception](#precision-related-exception)
 * [PWL Class](#pwl-class)
         * Dunder Methods
             * [Initializer](#initializer)
@@ -90,11 +89,11 @@ For each state, various control signals need to be at specific values. We could 
         mode2_state(5)
 """
 
-__all__ = ['PrecisionError', 'PWL']
+__all__ = ['PWL']
 
 from warnings import warn
 from numbers import Real
-from typing import Callable, List, Optional, TYPE_CHECKING, Union, Tuple, Iterator
+from typing import Callable, List, Optional, TYPE_CHECKING, Union, Tuple, Iterator, TypeVar, Any
 import weakref
 import numpy as np
 
@@ -110,25 +109,20 @@ else:
 if TYPE_CHECKING:
     WeakDict = weakref.WeakValueDictionary[str, "PWL"]
 
+TFun = TypeVar("TFun", bound=Callable[..., Any])
 
-def copy_doc(copy_func):
 
-    def wrapped(func):
-        func.__doc__ = copy_func.__doc__
+class copy_doc:
+    def __init__(self, copy_func: TFun) -> None:
+        self.copy_func = copy_func
+
+    def __call__(self, func: TFun) -> TFun:
+        func.__doc__ = self.copy_func.__doc__
         return func
-
-    return wrapped
-
-# ----
-
-# == Precision Related Exception ==
 
 
 class PrecisionError(Exception):
-    """**`PrecisionError` exception class**
-
-    This class defines an exception meant to be raised when any type of rounding or loss of precision that causes the time coordinates of a PWL object to not be strictly increasing.
-    """
+    pass
 
 
 # ----
@@ -1487,21 +1481,5 @@ def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> C
 
 
 if __name__ == "__main__":
-    pwl0 = PWL(0.001)
-    pwl0.hold(1)
-    pwl0.sin_transition(1, 1)
-    pwl0.hold(1)
-    pwl0.sin_transition(-1, 1)
-    pwl0.hold(1)
-    pwl0.sin_transition(1, 1)
-
-    pwl1 = PWL(0.001)
-    pwl1.lin_transition(-1, 1)
-    pwl1.sawtooth_pulse(2, 1, 1)
-    pwl1.rect_pulse(0, 1)
-    pwl1.exp_transition(2, 3, 0.5)
-
-    pwl2 = 10*pwl0
-    pwl3 = pwl0*10
-
-    PWL.plot(merge=False)
+    help(PWL.__add__)
+    help(PWL.__radd__)
