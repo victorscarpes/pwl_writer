@@ -46,6 +46,8 @@
 <li><a href="#pwl-object-slicing">PWL Object Slicing</a></li>
 <li><a href="#pwl-iterator">PWL Iterator</a></li>
 <li><a href="#pwl-multiplication">PWL Multiplication</a></li>
+<li><a href="#pwl-addition">PWL Addition</a></li>
+<li><a href="#pwl-subtraction">PWL Subtraction</a></li>
 </ul>
 </li>
 <li>Properties<ul>
@@ -756,7 +758,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-40'>#</a>
       </div>
-      <p>PWL Addition</p>
+      <h2><span id="pwl-addition" href="pwl-addition"> PWL Addition </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -768,7 +770,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-41'>#</a>
       </div>
-      <p><strong><code>__mul__</code> and <code>__rmul__</code>  dunder methods of <code>PWL</code> class</strong></p>
+      <p><strong><code>__add__</code> and <code>__radd__</code>  dunder methods of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;PWL&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span></pre></div>
@@ -838,7 +840,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-44'>#</a>
       </div>
-      <h2><span id="time-coordinates" href="time-coordinates"> Time Coordinates </span></h2>
+      <h2><span id="pwl-subtraction" href="pwl-subtraction"> PWL Subtraction </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -850,11 +852,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-45'>#</a>
       </div>
-      <p><strong><code>t_list</code> property of <code>PWL</code> class</strong></p>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">t_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;PWL&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="n">other</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -863,19 +865,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-46'>#</a>
       </div>
-      <h3>Type</h3>
-<ul>
-<li><code>list[float]</code></li>
-</ul>
-<h3>Summary</h3>
-<p>Read only property containing all the time coordinates of a <code>PWL</code> object.</p>
-<h3>Raises</h3>
-<ul>
-<li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
-</ul>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[:]</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="fm">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;PWL&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">other</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -896,7 +890,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-48'>#</a>
       </div>
-      <h2><span id="dependent-coordinates" href="dependent-coordinates"> Dependent Coordinates </span></h2>
+      <h2><span id="time-coordinates" href="time-coordinates"> Time Coordinates </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -908,11 +902,11 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-49'>#</a>
       </div>
-      <p><strong><code>x_list</code> property of <code>PWL</code> class</strong></p>
+      <p><strong><code>t_list</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">x_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
+    <span class="k">def</span> <span class="nf">t_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -926,14 +920,14 @@
 <li><code>list[float]</code></li>
 </ul>
 <h3>Summary</h3>
-<p>Read only property containing all the dependent coordinates of a <code>PWL</code> object.</p>
+<p>Read only property containing all the time coordinates of a <code>PWL</code> object.</p>
 <h3>Raises</h3>
 <ul>
 <li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
 </ul>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[:]</span></pre></div>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[:]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -954,7 +948,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-52'>#</a>
       </div>
-      <h2><span id="default-timestep" href="default-timestep"> Default Timestep </span></h2>
+      <h2><span id="dependent-coordinates" href="dependent-coordinates"> Dependent Coordinates </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -966,6 +960,64 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-53'>#</a>
       </div>
+      <p><strong><code>x_list</code> property of <code>PWL</code> class</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">x_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-54'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-54'>#</a>
+      </div>
+      <h3>Type</h3>
+<ul>
+<li><code>list[float]</code></li>
+</ul>
+<h3>Summary</h3>
+<p>Read only property containing all the dependent coordinates of a <code>PWL</code> object.</p>
+<h3>Raises</h3>
+<ul>
+<li><code>AttributeError</code> : Raised if assignment was attempetd.</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">[:]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-55'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-55'>#</a>
+      </div>
+      <hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-56'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-56'>#</a>
+      </div>
+      <h2><span id="default-timestep" href="default-timestep"> Default Timestep </span></h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-57'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-57'>#</a>
+      </div>
       <p><strong><code>t_step</code> property of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
@@ -974,10 +1026,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-54'>
+  <div class='section' id='section-58'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-54'>#</a>
+        <a class='octothorpe' href='#section-58'>#</a>
       </div>
       <h3>Type</h3>
 <ul>
@@ -996,10 +1048,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-55'>
+  <div class='section' id='section-59'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-55'>#</a>
+        <a class='octothorpe' href='#section-59'>#</a>
       </div>
       
     </div>
@@ -1017,10 +1069,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-56'>
+  <div class='section' id='section-60'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-56'>#</a>
+        <a class='octothorpe' href='#section-60'>#</a>
       </div>
       <hr />
     </div>
@@ -1029,10 +1081,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-57'>
+  <div class='section' id='section-61'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-57'>#</a>
+        <a class='octothorpe' href='#section-61'>#</a>
       </div>
       <h2><span id="name" href="name"> Name </span></h2>
     </div>
@@ -1041,10 +1093,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-58'>
+  <div class='section' id='section-62'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-58'>#</a>
+        <a class='octothorpe' href='#section-62'>#</a>
       </div>
       <p><strong><code>name</code> property of <code>PWL</code> class</strong></p>
     </div>
@@ -1054,10 +1106,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-59'>
+  <div class='section' id='section-63'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-59'>#</a>
+        <a class='octothorpe' href='#section-63'>#</a>
       </div>
       <h3>Type</h3>
 <ul>
@@ -1076,10 +1128,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-60'>
+  <div class='section' id='section-64'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-60'>#</a>
+        <a class='octothorpe' href='#section-64'>#</a>
       </div>
       
     </div>
@@ -1102,10 +1154,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-61'>
+  <div class='section' id='section-65'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-61'>#</a>
+        <a class='octothorpe' href='#section-65'>#</a>
       </div>
       <hr />
     </div>
@@ -1114,10 +1166,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-62'>
+  <div class='section' id='section-66'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-62'>#</a>
+        <a class='octothorpe' href='#section-66'>#</a>
       </div>
       <h2><span id="verbose-flag" href="verbose-flag"> Verbose Flag </span></h2>
     </div>
@@ -1126,10 +1178,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-63'>
+  <div class='section' id='section-67'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-63'>#</a>
+        <a class='octothorpe' href='#section-67'>#</a>
       </div>
       <p><strong><code>verbose</code> property of <code>PWL</code> class</strong></p>
     </div>
@@ -1139,10 +1191,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-64'>
+  <div class='section' id='section-68'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-64'>#</a>
+        <a class='octothorpe' href='#section-68'>#</a>
       </div>
       <h3>Type</h3>
 <ul>
@@ -1160,10 +1212,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-65'>
+  <div class='section' id='section-69'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-65'>#</a>
+        <a class='octothorpe' href='#section-69'>#</a>
       </div>
       
     </div>
@@ -1178,10 +1230,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-66'>
+  <div class='section' id='section-70'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-66'>#</a>
+        <a class='octothorpe' href='#section-70'>#</a>
       </div>
       <hr />
     </div>
@@ -1190,10 +1242,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-67'>
+  <div class='section' id='section-71'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-67'>#</a>
+        <a class='octothorpe' href='#section-71'>#</a>
       </div>
       <h2><span id="plot-enable-flag" href="plot-enable-flag"> Plot Enable Flag </span></h2>
     </div>
@@ -1202,10 +1254,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-68'>
+  <div class='section' id='section-72'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-68'>#</a>
+        <a class='octothorpe' href='#section-72'>#</a>
       </div>
       <p><strong><code>plot_flag</code> property of <code>PWL</code> class</strong></p>
     </div>
@@ -1215,10 +1267,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-69'>
+  <div class='section' id='section-73'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-69'>#</a>
+        <a class='octothorpe' href='#section-73'>#</a>
       </div>
       <p><em>Optional feature: Requires matplotlib</em></p>
 <h3>Type</h3>
@@ -1245,10 +1297,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-70'>
+  <div class='section' id='section-74'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-70'>#</a>
+        <a class='octothorpe' href='#section-74'>#</a>
       </div>
       
     </div>
@@ -1268,10 +1320,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-71'>
+  <div class='section' id='section-75'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-71'>#</a>
+        <a class='octothorpe' href='#section-75'>#</a>
       </div>
       <hr />
     </div>
@@ -1280,10 +1332,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-72'>
+  <div class='section' id='section-76'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-72'>#</a>
+        <a class='octothorpe' href='#section-76'>#</a>
       </div>
       <h2><span id="last-value-holder" href="last-value-holder"> Last Value Holder </span></h2>
     </div>
@@ -1292,10 +1344,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-73'>
+  <div class='section' id='section-77'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-73'>#</a>
+        <a class='octothorpe' href='#section-77'>#</a>
       </div>
       <p><strong><code>hold</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1304,10 +1356,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-74'>
+  <div class='section' id='section-78'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-74'>#</a>
+        <a class='octothorpe' href='#section-78'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that holds the last value from the previous event for a given duration.</p>
@@ -1353,10 +1405,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-75'>
+  <div class='section' id='section-79'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-75'>#</a>
+        <a class='octothorpe' href='#section-79'>#</a>
       </div>
       <hr />
     </div>
@@ -1365,10 +1417,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-76'>
+  <div class='section' id='section-80'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-76'>#</a>
+        <a class='octothorpe' href='#section-80'>#</a>
       </div>
       <h2><span id="linear-transition" href="linear-transition"> Linear Transition </span></h2>
     </div>
@@ -1377,10 +1429,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-77'>
+  <div class='section' id='section-81'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-77'>#</a>
+        <a class='octothorpe' href='#section-81'>#</a>
       </div>
       <p><strong><code>lin_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1389,10 +1441,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-78'>
+  <div class='section' id='section-82'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-78'>#</a>
+        <a class='octothorpe' href='#section-82'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a linear transition from the last value of the previous event to a given target with a given duration.</p>
@@ -1431,10 +1483,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-79'>
+  <div class='section' id='section-83'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-79'>#</a>
+        <a class='octothorpe' href='#section-83'>#</a>
       </div>
       <hr />
     </div>
@@ -1443,10 +1495,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-80'>
+  <div class='section' id='section-84'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-80'>#</a>
+        <a class='octothorpe' href='#section-84'>#</a>
       </div>
       <h2><span id="rectangular-pulse" href="rectangular-pulse"> Rectangular Pulse </span></h2>
     </div>
@@ -1455,10 +1507,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-81'>
+  <div class='section' id='section-85'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-81'>#</a>
+        <a class='octothorpe' href='#section-85'>#</a>
       </div>
       <p><strong><code>rect_pulse</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1467,10 +1519,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-82'>
+  <div class='section' id='section-86'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-82'>#</a>
+        <a class='octothorpe' href='#section-86'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a rectangular pulse with given amplitude and duration.</p>
@@ -1540,10 +1592,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-83'>
+  <div class='section' id='section-87'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-83'>#</a>
+        <a class='octothorpe' href='#section-87'>#</a>
       </div>
       <hr />
     </div>
@@ -1552,10 +1604,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-84'>
+  <div class='section' id='section-88'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-84'>#</a>
+        <a class='octothorpe' href='#section-88'>#</a>
       </div>
       <h2><span id="sawtooth-pulse" href="sawtooth-pulse"> Sawtooth Pulse </span></h2>
     </div>
@@ -1564,10 +1616,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-85'>
+  <div class='section' id='section-89'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-85'>#</a>
+        <a class='octothorpe' href='#section-89'>#</a>
       </div>
       <p><strong><code>sawtooth_pulse</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1576,10 +1628,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-86'>
+  <div class='section' id='section-90'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-86'>#</a>
+        <a class='octothorpe' href='#section-90'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a sawtooth pulse with given starting and ending amplitudes and duration.</p>
@@ -1653,10 +1705,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-87'>
+  <div class='section' id='section-91'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-87'>#</a>
+        <a class='octothorpe' href='#section-91'>#</a>
       </div>
       <hr />
     </div>
@@ -1665,10 +1717,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-88'>
+  <div class='section' id='section-92'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-88'>#</a>
+        <a class='octothorpe' href='#section-92'>#</a>
       </div>
       <h2><span id="exponential-transition" href="exponential-transition"> Exponential Transition </span></h2>
     </div>
@@ -1677,10 +1729,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-89'>
+  <div class='section' id='section-93'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-89'>#</a>
+        <a class='octothorpe' href='#section-93'>#</a>
       </div>
       <p><strong><code>exp_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1689,10 +1741,10 @@
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-90'>
+  <div class='section' id='section-94'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-90'>#</a>
+        <a class='octothorpe' href='#section-94'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates an exponential transition from the last value of the previous event to a given target with a given duration.</p>
@@ -1784,10 +1836,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-91'>
+  <div class='section' id='section-95'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-91'>#</a>
+        <a class='octothorpe' href='#section-95'>#</a>
       </div>
       <hr />
     </div>
@@ -1796,10 +1848,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-92'>
+  <div class='section' id='section-96'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-92'>#</a>
+        <a class='octothorpe' href='#section-96'>#</a>
       </div>
       <h2><span id="half-sine-transition" href="half-sine-transition"> Half Sine Transition </span></h2>
     </div>
@@ -1808,10 +1860,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-93'>
+  <div class='section' id='section-97'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-93'>#</a>
+        <a class='octothorpe' href='#section-97'>#</a>
       </div>
       <p><strong><code>sin_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1820,10 +1872,10 @@ f(t0 + duration) = target
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-94'>
+  <div class='section' id='section-98'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-94'>#</a>
+        <a class='octothorpe' href='#section-98'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a half sine transition from the last value of the previous event to a given target with a given duration.</p>
@@ -1910,10 +1962,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-95'>
+  <div class='section' id='section-99'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-95'>#</a>
+        <a class='octothorpe' href='#section-99'>#</a>
       </div>
       <hr />
     </div>
@@ -1922,10 +1974,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-96'>
+  <div class='section' id='section-100'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-96'>#</a>
+        <a class='octothorpe' href='#section-100'>#</a>
       </div>
       <h2><span id="smoothstep-transition" href="smoothstep-transition"> Smoothstep Transition </span></h2>
     </div>
@@ -1934,10 +1986,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-97'>
+  <div class='section' id='section-101'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-97'>#</a>
+        <a class='octothorpe' href='#section-101'>#</a>
       </div>
       <p><strong><code>smoothstep_transition</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -1946,10 +1998,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-98'>
+  <div class='section' id='section-102'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-98'>#</a>
+        <a class='octothorpe' href='#section-102'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that generates a smoothstep transition from the last value of the previous event to a given target with a given duration.</p>
@@ -2035,10 +2087,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-99'>
+  <div class='section' id='section-103'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-99'>#</a>
+        <a class='octothorpe' href='#section-103'>#</a>
       </div>
       <hr />
     </div>
@@ -2047,10 +2099,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-100'>
+  <div class='section' id='section-104'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-100'>#</a>
+        <a class='octothorpe' href='#section-104'>#</a>
       </div>
       <h2><span id="pwl-file-writer" href="pwl-file-writer"> PWL File Writer </span></h2>
     </div>
@@ -2059,10 +2111,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-101'>
+  <div class='section' id='section-105'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-101'>#</a>
+        <a class='octothorpe' href='#section-105'>#</a>
       </div>
       <p><strong><code>write</code> method of <code>PWL</code> class</strong></p>
     </div>
@@ -2071,10 +2123,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-102'>
+  <div class='section' id='section-106'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-102'>#</a>
+        <a class='octothorpe' href='#section-106'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that takes a <code>PWL</code> object and writes a PWL file with it&rsquo;s <code>(t, x)</code> coordinates in scientific notation.</p>
@@ -2133,10 +2185,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-103'>
+  <div class='section' id='section-107'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-103'>#</a>
+        <a class='octothorpe' href='#section-107'>#</a>
       </div>
       <hr />
     </div>
@@ -2145,10 +2197,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-104'>
+  <div class='section' id='section-108'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-104'>#</a>
+        <a class='octothorpe' href='#section-108'>#</a>
       </div>
       <h2><span id="pwl-copy" href="pwl-copy"> PWL Copy </span></h2>
     </div>
@@ -2157,10 +2209,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-105'>
+  <div class='section' id='section-109'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-105'>#</a>
+        <a class='octothorpe' href='#section-109'>#</a>
       </div>
       <p><strong><code>copy</code> class method of <code>PWL</code> class</strong></p>
     </div>
@@ -2169,10 +2221,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-106'>
+  <div class='section' id='section-110'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-106'>#</a>
+        <a class='octothorpe' href='#section-110'>#</a>
       </div>
       <h3>Summary</h3>
 <p>Method that creates a deep copy of a <code>PWL</code> object.</p>
@@ -2200,10 +2252,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-107'>
+  <div class='section' id='section-111'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-107'>#</a>
+        <a class='octothorpe' href='#section-111'>#</a>
       </div>
       <hr />
     </div>
@@ -2212,10 +2264,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-108'>
+  <div class='section' id='section-112'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-108'>#</a>
+        <a class='octothorpe' href='#section-112'>#</a>
       </div>
       <h2><span id="pwl-plotter" href="pwl-plotter"> PWL Plotter </span></h2>
     </div>
@@ -2224,10 +2276,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-109'>
+  <div class='section' id='section-113'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-109'>#</a>
+        <a class='octothorpe' href='#section-113'>#</a>
       </div>
       <p><strong><code>plot</code> class method of <code>PWL</code> class</strong></p>
     </div>
@@ -2237,10 +2289,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-110'>
+  <div class='section' id='section-114'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-110'>#</a>
+        <a class='octothorpe' href='#section-114'>#</a>
       </div>
       <p><em>Optional feature: Requires matplotlib</em></p>
 <h3>Summary</h3>
@@ -2299,10 +2351,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-111'>
+  <div class='section' id='section-115'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-111'>#</a>
+        <a class='octothorpe' href='#section-115'>#</a>
       </div>
       <h1><span id="private-methods-and-functions" href="private-methods-and-functions"> Private Methods and Functions </span></h1>
     </div>
@@ -2311,71 +2363,15 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-112'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-112'>#</a>
-      </div>
-      <p>From this point forward, all listed methods and functions are not intended to be used by the user. Brief descriptions will be provided, but documentation will be kept to a minimum.</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-113'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-113'>#</a>
-      </div>
-      <hr />
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-114'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-114'>#</a>
-      </div>
-      <h2><span id="pwl-point-adder" href="pwl-point-adder"> PWL Point Adder </span></h2>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-115'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-115'>#</a>
-      </div>
-      <p><strong><code>_add</code> private method of <code>PWL</code> class</strong></p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
   <div class='section' id='section-116'>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-116'>#</a>
       </div>
-      <p>Private method that adds a <code>(t, x)</code> point to a <code>PWL</code> object of any size.</p>
+      <p>From this point forward, all listed methods and functions are not intended to be used by the user. Brief descriptions will be provided, but documentation will be kept to a minimum.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="n">PrecisionError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_colinear_eliminator</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -2396,7 +2392,7 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-118'>#</a>
       </div>
-      <h2><span id="colinear-points-eliminator" href="colinear-points-eliminator"> Colinear Points Eliminator </span></h2>
+      <h2><span id="pwl-point-adder" href="pwl-point-adder"> PWL Point Adder </span></h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -2408,10 +2404,10 @@ f'(t0) = f'(t0 + duration) = 0
       <div class='octowrap'>
         <a class='octothorpe' href='#section-119'>#</a>
       </div>
-      <p><strong><code>_colinear_eliminator</code> private method of <code>PWL</code> class</strong></p>
+      <p><strong><code>_add</code> private method of <code>PWL</code> class</strong></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_colinear_eliminator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -2419,6 +2415,62 @@ f'(t0) = f'(t0 + duration) = 0
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-120'>#</a>
+      </div>
+      <p>Private method that adds a <code>(t, x)</code> point to a <code>PWL</code> object of any size.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">PrecisionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Internal Python rounding caused the time coordinates to not be strictly increasing when adding points to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_t_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_colinear_eliminator</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-121'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-121'>#</a>
+      </div>
+      <hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-122'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-122'>#</a>
+      </div>
+      <h2><span id="colinear-points-eliminator" href="colinear-points-eliminator"> Colinear Points Eliminator </span></h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-123'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-123'>#</a>
+      </div>
+      <p><strong><code>_colinear_eliminator</code> private method of <code>PWL</code> class</strong></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">_colinear_eliminator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-124'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-124'>#</a>
       </div>
       <p>Private method that adds a <code>(t, x)</code> point to a <code>PWL</code> object with 2 or more points without consecutive colinear points.</p>
     </div>
@@ -2441,10 +2493,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-121'>
+  <div class='section' id='section-125'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-121'>#</a>
+        <a class='octothorpe' href='#section-125'>#</a>
       </div>
       <hr />
     </div>
@@ -2453,10 +2505,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-122'>
+  <div class='section' id='section-126'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-122'>#</a>
+        <a class='octothorpe' href='#section-126'>#</a>
       </div>
       <h2><span id="nested-linear-transition" href="nested-linear-transition"> Nested Linear Transition </span></h2>
     </div>
@@ -2465,10 +2517,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-123'>
+  <div class='section' id='section-127'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-123'>#</a>
+        <a class='octothorpe' href='#section-127'>#</a>
       </div>
       <p><strong><code>_lin_transition</code> private method of <code>PWL</code> class</strong></p>
     </div>
@@ -2477,10 +2529,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-124'>
+  <div class='section' id='section-128'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-124'>#</a>
+        <a class='octothorpe' href='#section-128'>#</a>
       </div>
       <p>Private method to generate a linear transition. The difference between this method and the <a href="#linear-transition">public linear transition</a> method is that this method prints indented verbose output when called from within any of the public methods that revert to a linear transition in certain conditions.</p>
     </div>
@@ -2503,10 +2555,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-125'>
+  <div class='section' id='section-129'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-125'>#</a>
+        <a class='octothorpe' href='#section-129'>#</a>
       </div>
       <hr />
     </div>
@@ -2515,10 +2567,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-126'>
+  <div class='section' id='section-130'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-126'>#</a>
+        <a class='octothorpe' href='#section-130'>#</a>
       </div>
       <h2><span id="exponential-function-generator" href="exponential-function-generator"> Exponential Function Generator </span></h2>
     </div>
@@ -2527,10 +2579,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-127'>
+  <div class='section' id='section-131'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-127'>#</a>
+        <a class='octothorpe' href='#section-131'>#</a>
       </div>
       <p><strong><code>_exp_transition_func</code> private function</strong></p>
     </div>
@@ -2539,10 +2591,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-128'>
+  <div class='section' id='section-132'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-128'>#</a>
+        <a class='octothorpe' href='#section-132'>#</a>
       </div>
       <p>Private function that generates an exponential function passing trough 2 fixed points.</p>
     </div>
@@ -2553,10 +2605,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-129'>
+  <div class='section' id='section-133'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-129'>#</a>
+        <a class='octothorpe' href='#section-133'>#</a>
       </div>
       
     </div>
@@ -2569,10 +2621,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-130'>
+  <div class='section' id='section-134'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-130'>#</a>
+        <a class='octothorpe' href='#section-134'>#</a>
       </div>
       <hr />
     </div>
@@ -2581,10 +2633,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-131'>
+  <div class='section' id='section-135'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-131'>#</a>
+        <a class='octothorpe' href='#section-135'>#</a>
       </div>
       <h2><span id="sinusoidal-function-generator" href="sinusoidal-function-generator"> Sinusoidal Function Generator </span></h2>
     </div>
@@ -2593,10 +2645,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-132'>
+  <div class='section' id='section-136'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-132'>#</a>
+        <a class='octothorpe' href='#section-136'>#</a>
       </div>
       <p><strong><code>_sin_transition_func</code> private function</strong></p>
     </div>
@@ -2605,10 +2657,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-133'>
+  <div class='section' id='section-137'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-133'>#</a>
+        <a class='octothorpe' href='#section-137'>#</a>
       </div>
       <p>Private function that generates a sinusoidal function passing trough 2 fixed points.</p>
     </div>
@@ -2622,10 +2674,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-134'>
+  <div class='section' id='section-138'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-134'>#</a>
+        <a class='octothorpe' href='#section-138'>#</a>
       </div>
       
     </div>
@@ -2638,10 +2690,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-135'>
+  <div class='section' id='section-139'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-135'>#</a>
+        <a class='octothorpe' href='#section-139'>#</a>
       </div>
       <hr />
     </div>
@@ -2650,10 +2702,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-136'>
+  <div class='section' id='section-140'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-136'>#</a>
+        <a class='octothorpe' href='#section-140'>#</a>
       </div>
       <h2><span id="smoothstep-function-generator" href="smoothstep-function-generator"> Smoothstep Function Generator </span></h2>
     </div>
@@ -2662,10 +2714,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-137'>
+  <div class='section' id='section-141'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-137'>#</a>
+        <a class='octothorpe' href='#section-141'>#</a>
       </div>
       <p><strong><code>_smoothstep_transition_func</code> private function</strong></p>
     </div>
@@ -2674,10 +2726,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-138'>
+  <div class='section' id='section-142'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-138'>#</a>
+        <a class='octothorpe' href='#section-142'>#</a>
       </div>
       <p>Private function that generates a smoothstep function passing trough 2 fixed points.</p>
     </div>
@@ -2691,10 +2743,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-139'>
+  <div class='section' id='section-143'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-139'>#</a>
+        <a class='octothorpe' href='#section-143'>#</a>
       </div>
       
     </div>
@@ -2707,10 +2759,10 @@ f'(t0) = f'(t0 + duration) = 0
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-140'>
+  <div class='section' id='section-144'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-140'>#</a>
+        <a class='octothorpe' href='#section-144'>#</a>
       </div>
       <hr />
     </div>

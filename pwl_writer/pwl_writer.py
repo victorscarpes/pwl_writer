@@ -27,6 +27,8 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [PWL Object Slicing](#pwl-object-slicing)
             * [PWL Iterator](#pwl-iterator)
             * [PWL Multiplication](#pwl-multiplication)
+            * [PWL Addition](#pwl-addition)
+            * [PWL Subtraction](#pwl-subtraction)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -107,6 +109,15 @@ else:
 
 if TYPE_CHECKING:
     WeakDict = weakref.WeakValueDictionary[str, "PWL"]
+
+
+def copy_doc(copy_func):
+
+    def wrapped(func):
+        func.__doc__ = copy_func.__doc__
+        return func
+
+    return wrapped
 
 # ----
 
@@ -358,7 +369,9 @@ class PWL():
 
         return new_pwl
 
-    __rmul__ = __mul__
+    @copy_doc(__mul__)
+    def __rmul__(self, other: Union["PWL", float]) -> "PWL":
+        return self * other
 
     def __neg__(self) -> "PWL":
         return -1*self
@@ -368,10 +381,10 @@ class PWL():
 
     # ----
 
-    # PWL Addition
+    # == PWL Addition ==
 
     def __add__(self, other: Union["PWL", float]) -> "PWL":
-        """**`__mul__` and `__rmul__`  dunder methods of `PWL` class**
+        """**`__add__` and `__radd__`  dunder methods of `PWL` class**
 
         ### Summary
 
@@ -413,7 +426,20 @@ class PWL():
 
         return new_pwl
 
-    __radd__ = __add__
+    @copy_doc(__add__)
+    def __radd__(self, other: Union["PWL", float]) -> "PWL":
+        return self + other
+
+    # ----
+
+    # == PWL Subtraction ==
+
+    def __sub__(self, other: Union["PWL", float]) -> "PWL":
+        return self + (-other)
+
+    @copy_doc(__sub__)
+    def __rsub__(self, other: Union["PWL", float]) -> "PWL":
+        return other + (-self)
 
     # ----
 
@@ -1227,8 +1253,6 @@ class PWL():
 
         Method that creates a deep copy of a `PWL` object.
 
-
-
         ### Arguments
 
         * `name` (`str`, optional) : Name of the `PWL` object used for verbose output printing. Should not be empty. If not set, automatically generates a name based on already taken names. 
@@ -1477,6 +1501,7 @@ if __name__ == "__main__":
     pwl1.rect_pulse(0, 1)
     pwl1.exp_transition(2, 3, 0.5)
 
-    pwl2 = pwl0 + pwl1
+    pwl2 = 10*pwl0
+    pwl3 = pwl0*10
 
     PWL.plot(merge=False)
