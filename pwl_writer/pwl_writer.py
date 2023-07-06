@@ -348,7 +348,7 @@ class PWL():
 
         if isinstance(other, Real):
             for t, x in self:
-                new_pwl._add(t, float(other)*x)
+                new_pwl._add(t, float(other) * x)
 
         else:
             unsorted_t_set = set(self.t_list + other.t_list)
@@ -359,6 +359,61 @@ class PWL():
         return new_pwl
 
     __rmul__ = __mul__
+
+    def __neg__(self) -> "PWL":
+        return -1*self
+
+    def __pos__(self) -> "PWL":
+        return self
+
+    # ----
+
+    # PWL Addition
+
+    def __add__(self, other: Union["PWL", float]) -> "PWL":
+        """**`__mul__` and `__rmul__`  dunder methods of `PWL` class**
+
+        ### Summary
+
+        Implements point-wise addition of `PWL` objects with real numbers and other `PWL` objects.
+
+        The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
+
+        If one operand is longer than the other, extends the sorter one by holding it's last value.
+
+        ### Arguments
+
+        * `other` (`PWL` or `float`) : Thing to add the `PWL` object to.
+
+        ### Returns
+
+        * `PWL`
+
+        ### Raises
+
+        * `TypeError` : Raised if operation is not implemented between the operands.
+        """
+
+        if not isinstance(other, (Real, PWL)):
+            return NotImplemented
+
+        t_step = min(self.t_step, other.t_step) if isinstance(
+            other, PWL) else self.t_step
+        new_pwl = PWL(t_step=t_step)
+
+        if isinstance(other, Real):
+            for t, x in self:
+                new_pwl._add(t, float(other)+x)
+
+        else:
+            unsorted_t_set = set(self.t_list + other.t_list)
+            t_list = sorted(list(unsorted_t_set))
+            for t in t_list:
+                new_pwl._add(t, self(t) + other(t))
+
+        return new_pwl
+
+    __radd__ = __add__
 
     # ----
 
@@ -1415,5 +1470,13 @@ if __name__ == "__main__":
     pwl0.sin_transition(-1, 1)
     pwl0.hold(1)
     pwl0.sin_transition(1, 1)
+
+    pwl1 = PWL(0.001)
+    pwl1.lin_transition(-1, 1)
+    pwl1.sawtooth_pulse(2, 1, 1)
+    pwl1.rect_pulse(0, 1)
+    pwl1.exp_transition(2, 3, 0.5)
+
+    pwl2 = pwl0 + pwl1
 
     PWL.plot(merge=False)
