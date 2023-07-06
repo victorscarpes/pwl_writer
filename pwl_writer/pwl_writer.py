@@ -23,8 +23,8 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Initializer](#initializer)
             * [String Representation](#string-representation)
             * [Length Calculator](#length-calculator)
-            * [Object as a Callable](#object-as-a-callable)
-            * [Object Slicing](#object-slicing)
+            * [PWL Object as a Callable](#pwl-object-as-a-callable)
+            * [PWL Object Slicing](#pwl-object-slicing)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -32,7 +32,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Name](#name)
             * [Verbose Flag](#verbose-flag)
             * [Plot Enable Flag](#plot-enable-flag) *(optional feature: requires matplotlib)*
-        * Methods
+        * Instance Methods
             * [Last Value Holder](#last-value-holder)
             * [Linear Transition](#linear-transition)
             * [Rectangular Pulse](#rectangular-pulse)
@@ -41,6 +41,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Half Sine Transition](#half-sine-transition)
             * [Smoothstep Transition](#smoothstep-transition)
             * [PWL File Writer](#pwl-file-writer)
+        * Class Methods
             * [PWL Plotter](#pwl-plotter) *(optional feature: requires matplotlib)*
         * Private Methods *(minimal documentation)*
             * [PWL Point Adder](#pwl-point-adder)
@@ -225,7 +226,7 @@ class PWL():
 
     # ----
 
-    # == Object as a Callable ==
+    # == PWL Object as a Callable ==
 
     def __call__(self, t: float) -> float:
         """**Dunder method `__call__` of `PWL` class**
@@ -258,7 +259,7 @@ class PWL():
 
     # ----
 
-    # == Object Slicing ==
+    # == PWL Object Slicing ==
 
     def __getitem__(self, index: Union[int, slice]) -> Union[Tuple[float, float], List[Tuple[float, float]]]:
         """**Dunder method `__getitem__` of `PWL` class**
