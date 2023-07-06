@@ -43,6 +43,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Half Sine Transition](#half-sine-transition)
             * [Smoothstep Transition](#smoothstep-transition)
             * [PWL File Writer](#pwl-file-writer)
+            * [PWL Copy](#pwl-copy)
         * Class Methods
             * [PWL Plotter](#pwl-plotter) *(optional feature: requires matplotlib)*
         * Private Methods *(minimal documentation)*
@@ -136,7 +137,7 @@ class PWL():
     # == Initializer ==
 
     def __init__(self, t_step: float, name: Optional[str] = None, verbose: bool = False) -> None:
-        """**Dunder method `__init__` of `PWL` class**
+        """**`__init__` dunder method of `PWL` class**
 
         ### Summary
 
@@ -151,7 +152,7 @@ class PWL():
         ### Raises
 
         * `TypeError` : Raised if either `t_step` is not a real number, `name` is not a string or `verbose` is not a boolean.
-        * `ValueError` : Raised if `t_step` is not strictly positive or `name` is empty.
+        * `ValueError` : Raised if `t_step` is not strictly positive or `name` is either empty or already taken.
         """
 
         if name is None:
@@ -193,7 +194,7 @@ class PWL():
     # == String Representation ==
 
     def __str__(self) -> str:
-        """**Dunder method `__str__` of `PWL` class**
+        """**`__str__` dunder method of `PWL` class**
 
         ### Summary
 
@@ -213,7 +214,7 @@ class PWL():
     # == Length Calculator ==
 
     def __len__(self) -> int:
-        """**Dunder method `__len__` of `PWL` class**
+        """**`__len__` dunder method of `PWL` class**
 
         ### Summary
 
@@ -231,7 +232,7 @@ class PWL():
     # == PWL Object as a Callable ==
 
     def __call__(self, t: float) -> float:
-        """**Dunder method `__call__` of `PWL` class**
+        """**`__call__` dunder method of `PWL` class**
 
         ### Summary
 
@@ -264,7 +265,7 @@ class PWL():
     # == PWL Object Slicing ==
 
     def __getitem__(self, index: Union[int, slice]) -> Union[Tuple[float, float], List[Tuple[float, float]]]:
-        """**Dunder method `__getitem__` of `PWL` class**
+        """**`__getitem__` dunder method of `PWL` class**
 
         ### Summary
 
@@ -298,7 +299,7 @@ class PWL():
     # == PWL Iterator ==
 
     def __iter__(self) -> Iterator[Tuple[float, float]]:
-        """**Dunder method `__iter__` of `PWL` class**
+        """**`__iter__` dunder method of `PWL` class**
 
         ### Summary
 
@@ -315,7 +316,7 @@ class PWL():
     # == PWL Multiplication ==
 
     def __mul__(self, other: Union["PWL", float]) -> "PWL":
-        """**Dunder methods `__mul__` and `__rmul__` of `PWL` class**
+        """**`__mul__` and `__rmul__`  dunder methods of `PWL` class**
 
         ### Summary
 
@@ -1120,6 +1121,40 @@ class PWL():
 
     # ----
 
+    # == PWL Copy ==
+
+    def copy(self, name: Optional[str] = None) -> "PWL":
+        """**`copy` class method of `PWL` class**
+
+        ### Summary
+
+        Method that creates a deep copy of a `PWL` object.
+
+
+
+        ### Arguments
+
+        * `name` (`str`, optional) : Name of the `PWL` object used for verbose output printing. Should not be empty. If not set, automatically generates a name based on already taken names. 
+
+        ### Returns
+
+        * `PWL`
+
+        ### Raises
+
+        * `TypeError` : Raised if `name` is not a string.
+        * `ValueError` : Raised if `name` is either empty or already taken.
+        """
+
+        new_pwl = PWL(t_step=self.t_step, name=name, verbose=self.verbose)
+
+        new_pwl._t_list = self.t_list
+        new_pwl._x_list = self.x_list
+
+        return new_pwl
+
+    # ----
+
     # == PWL Plotter ==
 
     @classmethod
@@ -1338,7 +1373,5 @@ if __name__ == "__main__":
     pwl0.sin_transition(-1, 1)
     pwl0.hold(1)
     pwl0.sin_transition(1, 1)
-
-    pwl1 = 2*pwl0
 
     PWL.plot(merge=False)
