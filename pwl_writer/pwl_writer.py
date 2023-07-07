@@ -329,15 +329,15 @@ class PWL():
 
         The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
 
-        If one operand is longer than the other, extends the sorter one by holding it's last value.
+        If one operand is longer than the other, extends the shorter one by holding it's last value.
 
         ### Arguments
 
-        * `other` (`PWL` or `float`) : Thing to multiply the `PWL` object by.
+        * Factors (`PWL` or `float`) : Things being multiplied together.
 
         ### Returns
 
-        * `PWL`
+        * `PWL` : The product of the factors.
 
         ### Raises
 
@@ -371,7 +371,7 @@ class PWL():
         return -1*self
 
     def __pos__(self) -> "PWL":
-        return self
+        return self.copy()
 
     # ----
 
@@ -386,15 +386,15 @@ class PWL():
 
         The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
 
-        If one operand is longer than the other, extends the sorter one by holding it's last value.
+        If one operand is longer than the other, extends the shorter one by holding it's last value.
 
         ### Arguments
 
-        * `other` (`PWL` or `float`) : Thing to add the `PWL` object to.
+        * Addends (`PWL` or `float`) : Things being added together.
 
         ### Returns
 
-        * `PWL`
+        * `PWL` : The sum of the addends.
 
         ### Raises
 
@@ -429,6 +429,30 @@ class PWL():
     # == PWL Subtraction ==
 
     def __sub__(self, other: Union["PWL", float]) -> "PWL":
+        """**`__add__` and `__radd__`  dunder methods of `PWL` class**
+
+        ### Summary
+
+        Implements point-wise subtraction of `PWL` objects with real numbers and other `PWL` objects.
+
+        The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
+
+        If one operand is longer than the other, extends the shorter one by holding it's last value.
+
+        ### Arguments
+
+        * Minuend (`PWL` or `float`) : Thing from which we subtract the subtrahend.
+        * Subtrahend (`PWL` or `float`) : Thing being subtracted from the minuend.
+
+        ### Returns
+
+        * `PWL` : The difference of the minuend an subtrahend.
+
+        ### Raises
+
+        * `TypeError` : Raised if operation is not implemented between the operands.
+        """
+
         return self + (-other)
 
     @copy_doc(__sub__)
@@ -1283,7 +1307,7 @@ class PWL():
 
         ### Arguments
 
-        * `merge` (`bool`, optional) : Flag indicating if all signals should be ploted on the same strip or separeted. If not set, defaults to False.
+        * `merge` (`bool`, optional) : Flag indicating if all signals should be ploted on the same strip or separeted. If not set, defaults to `False`.
 
         ### Raises
 
@@ -1481,5 +1505,13 @@ def _smoothstep_transition_func(t1: float, f1: float, t2: float, f2: float) -> C
 
 
 if __name__ == "__main__":
-    help(PWL.__add__)
-    help(PWL.__radd__)
+    pwl0 = PWL(0.001)
+    pwl0.sin_transition(2, 1).sin_transition(0, 1).sin_transition(
+        2, 1).sin_transition(0, 1).sin_transition(2, 1)
+
+    pwl1 = -pwl0
+    pwl2 = +pwl0
+
+    pwl3 = pwl2 - pwl1
+
+    PWL.plot(merge=False)
