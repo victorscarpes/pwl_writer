@@ -29,6 +29,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [PWL Additive Inverse](#pwl-additive-inverse)
             * [PWL Addition](#pwl-addition)
             * [PWL Subtraction](#pwl-subtraction)
+            * [PWL Exponentiation](#pwl-exponentiation)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -94,7 +95,7 @@ __all__ = ['PWL']
 
 from warnings import warn
 from numbers import Real
-from typing import Callable, List, Optional, TYPE_CHECKING, Union, Tuple, Iterator, TypeVar, Any
+from typing import Callable, List, Optional, TYPE_CHECKING, Union, Tuple, Iterator, TypeVar, Any, cast
 import weakref
 import numpy as np
 
@@ -353,8 +354,9 @@ class PWL():
         new_pwl = PWL(t_step=t_step)
 
         if isinstance(other, Real):
+            other = cast(float, other)
             for t, x in self:
-                new_pwl._add(t, float(other) * x)
+                new_pwl._add(t, other * x)
 
         else:
             unsorted_t_set = set(self.t_list + other.t_list)
@@ -434,8 +436,9 @@ class PWL():
         new_pwl = PWL(t_step=t_step)
 
         if isinstance(other, Real):
+            other = cast(float, other)
             for t, x in self:
-                new_pwl._add(t, float(other)+x)
+                new_pwl._add(t, other+x)
 
         else:
             unsorted_t_set = set(self.t_list + other.t_list)
@@ -490,6 +493,68 @@ class PWL():
     @copy_doc(__sub__)
     def __rsub__(self, other: Union["PWL", float]) -> "PWL":
         return other + (-self)
+
+    # ----
+
+    # == PWL Exponentiation ==
+
+    def __pow__(self, other: Union["PWL", float]) -> "PWL":
+        """**`__pow__` and `__rpow__`  dunder methods of `PWL` class**
+
+        ### Summary
+
+        Implements point-wise exponentiation of `PWL` objects with real numbers and other `PWL` objects.
+
+        If the result of the exponentiation ends up being a complex number, returns the real part of it.
+
+        The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
+
+        If one operand is longer than the other, extends the shorter one by holding it's last value.
+
+        ### Arguments
+
+        * Base (`PWL` or `float`) : Thing being raised to the exponent.
+        * Exponent (`PWL` or `float`) : Thing to raise the base to.
+
+        ### Returns
+
+        * `PWL` : The power with the given base and exponent.
+
+        ### Raises
+
+        * `TypeError` : Raised if operation is not implemented between the operands.
+        """
+
+        if not isinstance(other, (Real, PWL)):
+            return NotImplemented
+
+        t_step = min(self.t_step, other.t_step) if isinstance(
+            other, PWL) else self.t_step
+        new_pwl = PWL(t_step=t_step)
+
+        if isinstance(other, Real):
+            other = cast(float, other)
+            for t, x in self:
+                new_pwl._add(t, complex(x**other).real)
+
+        else:
+            unsorted_t_set = set(self.t_list + other.t_list)
+            t_list = sorted(list(unsorted_t_set))
+            for t in t_list:
+                new_pwl._add(t, complex(self(t)**other(t)).real)
+
+        return new_pwl
+
+    @copy_doc(__pow__)
+    def __rpow__(self, other: float) -> "PWL":
+        if not isinstance(other, Real):
+            return NotImplemented
+
+        t_step = self.t_step
+        new_pwl = PWL(t_step=t_step)
+
+        for t, x in self:
+            new_pwl._add(t, complex(other**x).real)
 
     # ----
 
