@@ -948,7 +948,6 @@
       </div>
       <h3>Summary</h3>
 <p>Implements point-wise subtraction of <code>PWL</code> objects with real numbers and other <code>PWL</code> objects.</p>
-<p>It&rsquo;s equivalent to adding the minuend to the additive inverse of the subtrahend.</p>
 <p>The new <code>PWL</code> objects created has <code>t_step</code> equal to the lower <code>t_step</code> between the operands.</p>
 <p>If one operand is longer than the other, extends the shorter one by holding it&rsquo;s last value.</p>
 <h3>Arguments</h3>
@@ -964,14 +963,27 @@
 <ul>
 <li><code>TypeError</code> : Raised if operation is not implemented between the operands.</li>
 </ul>
-<h3>See Also</h3>
-<ul>
-<li><a href="#pwl-addition">PWL Addition</a></li>
-<li><a href="#pwl-additive-inverse">PWL Additive Inverse</a></li>
-</ul>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="n">other</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">Real</span><span class="p">,</span> <span class="n">PWL</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+
+        <span class="n">t_step</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_step</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">t_step</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">other</span><span class="p">,</span> <span class="n">PWL</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_step</span>
+        <span class="n">new_pwl</span> <span class="o">=</span> <span class="n">PWL</span><span class="p">(</span><span class="n">t_step</span><span class="o">=</span><span class="n">t_step</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Real</span><span class="p">):</span>
+            <span class="n">other</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="n">new_pwl</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="o">-</span><span class="n">other</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">unsorted_t_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_list</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">t_list</span><span class="p">)</span>
+            <span class="n">t_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">unsorted_t_set</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_list</span><span class="p">:</span>
+                <span class="n">new_pwl</span><span class="o">.</span><span class="n">_add</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="n">other</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">new_pwl</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -985,7 +997,7 @@
     <div class='code'>
       <div class="highlight"><pre>    <span class="nd">@copy_doc</span><span class="p">(</span><span class="fm">__sub__</span><span class="p">)</span>
     <span class="k">def</span> <span class="fm">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;PWL&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;PWL&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">other</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="p">)</span></pre></div>
+        <span class="k">return</span> <span class="n">other</span> <span class="o">-</span> <span class="bp">self</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

@@ -463,8 +463,6 @@ class PWL():
 
         Implements point-wise subtraction of `PWL` objects with real numbers and other `PWL` objects.
 
-        It's equivalent to adding the minuend to the additive inverse of the subtrahend.
-
         The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
 
         If one operand is longer than the other, extends the shorter one by holding it's last value.
@@ -481,18 +479,31 @@ class PWL():
         ### Raises
 
         * `TypeError` : Raised if operation is not implemented between the operands.
-
-        ### See Also
-
-        * [PWL Addition](#pwl-addition)
-        * [PWL Additive Inverse](#pwl-additive-inverse)
         """
 
-        return self + (-other)
+        if not isinstance(other, (Real, PWL)):
+            return NotImplemented
+
+        t_step = min(self.t_step, other.t_step) if isinstance(
+            other, PWL) else self.t_step
+        new_pwl = PWL(t_step=t_step)
+
+        if isinstance(other, Real):
+            other = cast(float, other)
+            for t, x in self:
+                new_pwl._add(t, x-other)
+
+        else:
+            unsorted_t_set = set(self.t_list + other.t_list)
+            t_list = sorted(list(unsorted_t_set))
+            for t in t_list:
+                new_pwl._add(t, self(t) - other(t))
+
+        return new_pwl
 
     @copy_doc(__sub__)
     def __rsub__(self, other: Union["PWL", float]) -> "PWL":
-        return other + (-self)
+        return other - self
 
     # ----
 
