@@ -26,6 +26,7 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [PWL Object Slicing](#pwl-object-slicing)
             * [PWL Iterator](#pwl-iterator)
             * [PWL Multiplication](#pwl-multiplication)
+            * [PWL Additive Inverse](#pwl-additive-inverse)
             * [PWL Addition](#pwl-addition)
             * [PWL Subtraction](#pwl-subtraction)
         * Properties
@@ -367,7 +368,31 @@ class PWL():
     def __rmul__(self, other: Union["PWL", float]) -> "PWL":
         return self * other
 
+    # ----
+
+    # == PWL Additive Inverse ==
+
     def __neg__(self) -> "PWL":
+        """**`__neg__` dunder method of `PWL` class**
+
+        ### Summary
+
+        Implements point-wise additive inversion (multiplying by -1).
+
+        The new `PWL` objects created has `t_step` equal to the operand's `t_step`.
+
+        ### Arguments
+
+        * Operand (`PWL` or `float`) : Thing being additivly inverted.
+
+        ### Returns
+
+        * `PWL` : The Additive inverse of the operand.
+
+        ### See Also
+
+        * [PWL Multiplication](#pwl-multiplication)
+        """
         return -1*self
 
     def __pos__(self) -> "PWL":
@@ -429,11 +454,13 @@ class PWL():
     # == PWL Subtraction ==
 
     def __sub__(self, other: Union["PWL", float]) -> "PWL":
-        """**`__add__` and `__radd__`  dunder methods of `PWL` class**
+        """**`__sub__` and `__rsub__`  dunder methods of `PWL` class**
 
         ### Summary
 
         Implements point-wise subtraction of `PWL` objects with real numbers and other `PWL` objects.
+
+        It's equivalent to adding the minuend to the additive inverse of the subtrahend.
 
         The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
 
@@ -451,6 +478,11 @@ class PWL():
         ### Raises
 
         * `TypeError` : Raised if operation is not implemented between the operands.
+
+        ### See Also
+
+        * [PWL Addition](#pwl-addition)
+        * [PWL Additive Inverse](#pwl-additive-inverse)
         """
 
         return self + (-other)
