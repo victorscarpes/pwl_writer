@@ -25,10 +25,13 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [PWL Object as a Callable](#pwl-object-as-a-callable)
             * [PWL Object Slicing](#pwl-object-slicing)
             * [PWL Iterator](#pwl-iterator)
-            * [PWL Multiplication](#pwl-multiplication)
+        * Mathematical Unary Operators
             * [PWL Additive Inverse](#pwl-additive-inverse)
+            * [PWL Absolute Value](#pwl-absolute-value)
+        * Mathematical Binary Operators
             * [PWL Addition](#pwl-addition)
             * [PWL Subtraction](#pwl-subtraction)
+            * [PWL Multiplication](#pwl-multiplication)
             * [PWL Exponentiation](#pwl-exponentiation)
         * Properties
             * [Time Coordinates](#time-coordinates)
@@ -320,58 +323,6 @@ class PWL():
 
     # ----
 
-    # == PWL Multiplication ==
-
-    def __mul__(self, other: Union["PWL", float]) -> "PWL":
-        """**`__mul__` and `__rmul__`  dunder methods of `PWL` class**
-
-        ### Summary
-
-        Implements point-wise multiplication of `PWL` objects with real numbers and other `PWL` objects.
-
-        The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
-
-        If one operand is longer than the other, extends the shorter one by holding it's last value.
-
-        ### Arguments
-
-        * Factors (`PWL` or `float`) : Things being multiplied together.
-
-        ### Returns
-
-        * `PWL` : The product of the factors.
-
-        ### Raises
-
-        * `TypeError` : Raised if operation is not implemented between the operands.
-        """
-
-        if not isinstance(other, (Real, PWL)):
-            return NotImplemented
-
-        t_step = min(self.t_step, other.t_step) if isinstance(
-            other, PWL) else self.t_step
-        new_pwl = PWL(t_step=t_step)
-
-        if isinstance(other, Real):
-            other = cast(float, other)
-            for t, x in self:
-                new_pwl._add(t, other * x)
-
-        else:
-            unsorted_t_set = set(self.t_list + other.t_list)
-            t_list = sorted(list(unsorted_t_set))
-            for t in t_list:
-                new_pwl._add(t, self(t) * other(t))
-
-        return new_pwl
-
-    @copy_doc(__mul__)
-    def __rmul__(self, other: Union["PWL", float]) -> "PWL":
-        return self * other
-
-    # ----
-
     # == PWL Additive Inverse ==
 
     def __neg__(self) -> "PWL":
@@ -389,7 +340,7 @@ class PWL():
 
         ### Returns
 
-        * `PWL` : The Additive inverse of the operand.
+        * `PWL` : The additive inverse of the operand.
 
         ### See Also
 
@@ -399,6 +350,35 @@ class PWL():
 
     def __pos__(self) -> "PWL":
         return self.copy()
+
+    # ----
+
+    # == PWL Absolute Value ==
+
+    def __abs__(self) -> "PWL":
+        """**`__abs__` dunder method of `PWL` class**
+
+        ### Summary
+
+        Implements point-wise absolute value operation.
+
+        The new `PWL` objects created has `t_step` equal to the operand's `t_step`.
+
+        ### Arguments
+
+        * Operand (`PWL` or `float`) : Thing whose absolute value is being taken.
+
+        ### Returns
+
+        * `PWL` : The absolute value of the operand.
+        """
+
+        new_pwl = PWL(t_step=self.t_step)
+
+        for t, x in self:
+            new_pwl._add(t, abs(x))
+
+        return new_pwl
 
     # ----
 
@@ -504,6 +484,58 @@ class PWL():
     @copy_doc(__sub__)
     def __rsub__(self, other: Union["PWL", float]) -> "PWL":
         return other - self
+
+    # ----
+
+    # == PWL Multiplication ==
+
+    def __mul__(self, other: Union["PWL", float]) -> "PWL":
+        """**`__mul__` and `__rmul__`  dunder methods of `PWL` class**
+
+        ### Summary
+
+        Implements point-wise multiplication of `PWL` objects with real numbers and other `PWL` objects.
+
+        The new `PWL` objects created has `t_step` equal to the lower `t_step` between the operands.
+
+        If one operand is longer than the other, extends the shorter one by holding it's last value.
+
+        ### Arguments
+
+        * Factors (`PWL` or `float`) : Things being multiplied together.
+
+        ### Returns
+
+        * `PWL` : The product of the factors.
+
+        ### Raises
+
+        * `TypeError` : Raised if operation is not implemented between the operands.
+        """
+
+        if not isinstance(other, (Real, PWL)):
+            return NotImplemented
+
+        t_step = min(self.t_step, other.t_step) if isinstance(
+            other, PWL) else self.t_step
+        new_pwl = PWL(t_step=t_step)
+
+        if isinstance(other, Real):
+            other = cast(float, other)
+            for t, x in self:
+                new_pwl._add(t, other * x)
+
+        else:
+            unsorted_t_set = set(self.t_list + other.t_list)
+            t_list = sorted(list(unsorted_t_set))
+            for t in t_list:
+                new_pwl._add(t, self(t) * other(t))
+
+        return new_pwl
+
+    @copy_doc(__mul__)
+    def __rmul__(self, other: Union["PWL", float]) -> "PWL":
+        return self * other
 
     # ----
 
