@@ -22,17 +22,17 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Initializer](#initializer)
             * [String Representation](#string-representation)
             * [Length Calculator](#length-calculator)
-            * [PWL Object as a Callable](#pwl-object-as-a-callable)
-            * [PWL Object Slicing](#pwl-object-slicing)
-            * [PWL Iterator](#pwl-iterator)
+            * [Object Calling](#object-calling)
+            * [Object Slicing](#object-slicing)
+            * [Object Iteration](#object-iteration)
         * Mathematical Unary Operators
-            * [PWL Additive Inverse](#pwl-additive-inverse)
-            * [PWL Absolute Value](#pwl-absolute-value)
+            * [Additive Inverse](#additive-inverse)
+            * [Absolute Value](#absolute-value)
         * Mathematical Binary Operators
-            * [PWL Addition](#pwl-addition)
-            * [PWL Subtraction](#pwl-subtraction)
-            * [PWL Multiplication](#pwl-multiplication)
-            * [PWL Exponentiation](#pwl-exponentiation)
+            * [Addition](#addition)
+            * [Subtraction](#subtraction)
+            * [Multiplication](#multiplication)
+            * [Exponentiation](#exponentiation)
         * Properties
             * [Time Coordinates](#time-coordinates)
             * [Dependent Coordinates](#dependent-coordinates)
@@ -48,8 +48,8 @@ Type stubs for older numpy versions for mypy checking can be found [here](https:
             * [Exponential Transition](#exponential-transition)
             * [Half Sine Transition](#half-sine-transition)
             * [Smoothstep Transition](#smoothstep-transition)
-            * [PWL File Writer](#pwl-file-writer)
-            * [PWL Copy](#pwl-copy)
+            * [File Writer](#file-writer)
+            * [Object Copy](#object-copy)
         * Class Methods
             * [PWL Plotter](#pwl-plotter) *(optional feature: requires matplotlib)*
         * Private Methods *(minimal documentation)*
@@ -239,7 +239,7 @@ class PWL():
 
     # ----
 
-    # == PWL Object as a Callable ==
+    # == Object Calling ==
 
     def __call__(self, t: float) -> float:
         """**`__call__` dunder method of `PWL` class**
@@ -272,7 +272,7 @@ class PWL():
 
     # ----
 
-    # == PWL Object Slicing ==
+    # == Object Slicing ==
 
     def __getitem__(self, index: Union[int, slice]) -> Union[Tuple[float, float], List[Tuple[float, float]]]:
         """**`__getitem__` dunder method of `PWL` class**
@@ -306,7 +306,7 @@ class PWL():
 
     # ----
 
-    # == PWL Iterator ==
+    # == Object Iteration ==
 
     def __iter__(self) -> Iterator[Tuple[float, float]]:
         """**`__iter__` dunder method of `PWL` class**
@@ -323,7 +323,7 @@ class PWL():
 
     # ----
 
-    # == PWL Additive Inverse ==
+    # == Additive Inverse ==
 
     def __neg__(self) -> "PWL":
         """**`__neg__` dunder method of `PWL` class**
@@ -344,7 +344,7 @@ class PWL():
 
         ### See Also
 
-        * [PWL Multiplication](#pwl-multiplication)
+        * [Multiplication](#multiplication)
         """
         return -1*self
 
@@ -353,7 +353,7 @@ class PWL():
 
     # ----
 
-    # == PWL Absolute Value ==
+    # == Absolute Value ==
 
     def __abs__(self) -> "PWL":
         """**`__abs__` dunder method of `PWL` class**
@@ -382,7 +382,7 @@ class PWL():
 
     # ----
 
-    # == PWL Addition ==
+    # == Addition ==
 
     def __add__(self, other: Union["PWL", float]) -> "PWL":
         """**`__add__` and `__radd__`  dunder methods of `PWL` class**
@@ -434,7 +434,7 @@ class PWL():
 
     # ----
 
-    # == PWL Subtraction ==
+    # == Subtraction ==
 
     def __sub__(self, other: Union["PWL", float]) -> "PWL":
         """**`__sub__` and `__rsub__`  dunder methods of `PWL` class**
@@ -487,7 +487,7 @@ class PWL():
 
     # ----
 
-    # == PWL Multiplication ==
+    # == Multiplication ==
 
     def __mul__(self, other: Union["PWL", float]) -> "PWL":
         """**`__mul__` and `__rmul__`  dunder methods of `PWL` class**
@@ -539,7 +539,7 @@ class PWL():
 
     # ----
 
-    # == PWL Exponentiation ==
+    # == Exponentiation ==
 
     def __pow__(self, other: Union["PWL", float]) -> "PWL":
         """**`__pow__` and `__rpow__`  dunder methods of `PWL` class**
@@ -1338,7 +1338,7 @@ class PWL():
 
     # ----
 
-    # == PWL File Writer ==
+    # == File Writer ==
 
     def write(self, filename: Optional[str] = None, precision: int = 10) -> None:
         """**`write` method of `PWL` class**
@@ -1402,7 +1402,7 @@ class PWL():
 
     # ----
 
-    # == PWL Copy ==
+    # == Object Copy ==
 
     def copy(self, name: Optional[str] = None) -> "PWL":
         """**`copy` class method of `PWL` class**
