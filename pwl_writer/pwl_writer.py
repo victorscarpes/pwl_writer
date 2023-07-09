@@ -609,14 +609,27 @@ class PWL():
         t_step = self.t_step
         t_max = self._t_list[-1]
         t_list = np.arange(0, t_max, t_step)
-        x_last = np.true_divide(self(t_max), other)
+        x_last = np.true_divide(other, self(t_max))
 
         new_pwl = PWL(t_step=t_step)
 
         with warnings.catch_warnings():
             warnings.simplefilter('ignore')
             for t in t_list:
-                new_pwl._insert(t, np.true_divide(other, self(t)))
+                left_x = cast(float, np.true_divide(other, self(t-t_step/2)))
+                center_x = cast(float, np.true_divide(other, self(t)))
+                rigth_x = cast(float, np.true_divide(other, self(t+t_step/2)))
+
+                if np.isfinite(center_x):
+                    new_pwl._insert(t, center_x)
+                elif np.isfinite(left_x) and np.isfinite(rigth_x):
+                    new_pwl._insert(t, (left_x+rigth_x)/2)
+                elif np.isfinite(left_x):
+                    new_pwl._insert(t, left_x)
+                elif np.isfinite(rigth_x):
+                    new_pwl._insert(t, rigth_x)
+                else:
+                    new_pwl._insert(t, 0)
 
         if t_max > new_pwl._t_list[-1]:
             new_pwl._insert(t_max, x_last)
@@ -1668,9 +1681,8 @@ def is_within(x: float, y: float, tol: float = 0.01) -> float:
 
 
 if __name__ == "__main__":
-    pwl0 = PWL(0.001).initial(-1).sin_transition(1, 1).sin_transition(-1, 1).sin_transition(1, 1).sin_transition(-1, 1)
-    pwl1 = (pwl0*10)/pwl0
-
-    print(list(pwl1))
+    t = PWL(0.01, name="t").lin_transition(10, 10)
+    x = -(1/3)*(t**3)+5*(t**2)-15*t
+    x.name = "x"
 
     PWL.plot()
