@@ -1974,7 +1974,7 @@
 <li><code>target</code> (<code>float</code>) : Value to transition to.</li>
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 </ul>
-<p>### Returns</p>
+<h3>Returns</h3>
 <ul>
 <li><code>PWL</code> : Returns the object itself.</li>
 </ul>
@@ -2050,7 +2050,7 @@
 <li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<p>### Returns</p>
+<h3>Returns</h3>
 <ul>
 <li><code>PWL</code> : Returns the object itself.</li>
 </ul>
@@ -2154,7 +2154,7 @@
 <li><code>duration</code> (<code>float</code>) : Duration of the pulse. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<p>### Returns</p>
+<h3>Returns</h3>
 <ul>
 <li><code>PWL</code> : Returns the object itself.</li>
 </ul>
@@ -2269,7 +2269,7 @@ f(t0 + duration) = target
 <li><code>tau</code> (<code>float</code>) : Time constant of the exponential. SHould be non zero.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<p>### Returns</p>
+<h3>Returns</h3>
 <ul>
 <li><code>PWL</code> : Returns the object itself.</li>
 </ul>
@@ -2392,7 +2392,7 @@ f'(t0) = f'(t0 + duration) = 0
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<p>### Returns</p>
+<h3>Returns</h3>
 <ul>
 <li><code>PWL</code> : Returns the object itself.</li>
 </ul>
@@ -2511,7 +2511,7 @@ f'(t0) = f'(t0 + duration) = 0
 <li><code>duration</code> (<code>float</code>) : Duration of the transition. Should be strictly positive.</li>
 <li><code>t_step</code> (<code>float</code>, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses <code>self.t_step</code>.</li>
 </ul>
-<p>### Returns</p>
+<h3>Returns</h3>
 <ul>
 <li><code>PWL</code> : Returns the object itself.</li>
 </ul>
@@ -2620,7 +2620,7 @@ f'(t0) = f'(t0 + duration) = 0
 <li><code>filename</code> (<code>str</code>, optional) : Name of file to be created. If not set, uses <code>self.name</code> if an added <code>.txt</code> extension.</li>
 <li><code>precision</code> (<code>int</code>, optional) : Number of significant figures used when writing the PWL file. Should be strictly positive. If not set, defaults to 10.</li>
 </ul>
-<h2>Raises</h2>
+<h3>Raises</h3>
 <ul>
 <li><code>TypeError</code> : Raised if <code>filename</code> is not a string or <code>precision</code> is not an integer.</li>
 <li><code>ValueError</code> : Raised if <code>precision</code> is not strictly positive.</li>

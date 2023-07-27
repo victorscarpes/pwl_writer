@@ -1000,7 +1000,7 @@ class PWL():
         * `target` (`float`) : Value to transition to.
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
 
-         ### Returns
+        ### Returns
 
         * `PWL` : Returns the object itself.
 
@@ -1042,7 +1042,7 @@ class PWL():
         * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
         * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
 
-         ### Returns
+        ### Returns
 
         * `PWL` : Returns the object itself.
 
@@ -1112,7 +1112,7 @@ class PWL():
         * `duration` (`float`) : Duration of the pulse. Should be strictly positive.
         * `t_step` (`float`, optional) : Transition time for the discontinuity. Should be strictly positive. If not set, uses `self.t_step`.
 
-         ### Returns
+        ### Returns
 
         * `PWL` : Returns the object itself.
 
@@ -1197,7 +1197,7 @@ class PWL():
         * `tau` (`float`) : Time constant of the exponential. SHould be non zero.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
-         ### Returns
+        ### Returns
 
         * `PWL` : Returns the object itself.
 
@@ -1290,7 +1290,7 @@ class PWL():
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
-         ### Returns
+        ### Returns
 
         * `PWL` : Returns the object itself.
 
@@ -1378,7 +1378,7 @@ class PWL():
         * `duration` (`float`) : Duration of the transition. Should be strictly positive.
         * `t_step` (`float`, optional) : Timestep between consecutive points inside the transition. Should be strictly positive. If not set, uses `self.t_step`.
 
-         ### Returns
+        ### Returns
 
         * `PWL` : Returns the object itself.
 
@@ -1453,8 +1453,8 @@ class PWL():
         * `filename` (`str`, optional) : Name of file to be created. If not set, uses `self.name` if an added `.txt` extension.
         * `precision` (`int`, optional) : Number of significant figures used when writing the PWL file. Should be strictly positive. If not set, defaults to 10.
 
-        Raises
-        ------
+        ### Raises
+
         * `TypeError` : Raised if `filename` is not a string or `precision` is not an integer.
         * `ValueError` : Raised if `precision` is not strictly positive.
         * `PrecisionError` : Raised if `precision` is such that the rounding causes the time coordinates to not be strictly increasing.
